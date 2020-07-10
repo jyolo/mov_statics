@@ -1,8 +1,8 @@
-// var host = 'https://api.yy8.pw'
+var host = 'https://api.yy8.pw'
 var ws_host = 'ws://ws.yy8.pw'
 var cover_host = 'http://cstatic.yy8.pw/'
 
-var host = 'http://api.m.com'
+//var host = 'http://api.m.com'
 // var ws_host = 'ws://ws.m.com:2345'
 // var cover_host = 'http://img.i3tp.cn:66/'
 var chooseTag = Function()
