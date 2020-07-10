@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html style="background-color: #e2e2e2;">
+<head>
+  <meta charset="utf-8">
+  <meta name="keywords" content="{{ lay.base.keywords }}">
+  <meta name="description" content="{{ lay.base.description }}">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Layui</title>
+  <link rel="stylesheet" href="./static/layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/global.css">
+  <link rel="stylesheet" href="./static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="./static/player/video-js.min.css">
+  <script src="static/swiper/swiper.min.js"></script>
+  <script src="static/mui/mui.min.js"></script>
+  <style>
+  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
+  .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
+  .fly-main{min-height: auto;}
+  .layui-btn-normal{float: left;margin: 0.5rem;}
+  .search{margin-top:3rem;}
+  .search-history .layui-btn{margin: 0.2rem;}
+  .layui-colla-title{background-color: #FFFFFF;}
+  /* .search-tag{width: calc(22.2222%);display: inline-block;padding-bottom: 0.5rem;} */
+  .search-tag{display: inline-block;padding-bottom: 0.5rem;}
+  .layui-card-header{height: 24px;text-align: left;}
+  .layui-card-body{height: 105px;}
+  .watch_rate{
+	  /* position: relative; */
+	  /* top: -1.1rem; */
+	  /* left: -10px; */
+	 /* background-color: white; */
+	  width: 100%;
+	  display: block;
+	  /* opacity: 0.6; */
+	  /* text-align: center; */
+	  /* font-size: 12px; */
+  }
+  .layui-card-body img{
+	  width: 100%;
+	  height: 7.01rem;
+	  display: block;
+  }
+  .layui-card-body a{display: block;}
+  .layui-progress-text{color: #EFEFF4;}
+  </style>
+</head>
+<body class="fly-full">
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="./static/images/logo2.png" alt="layui">
+    </a>
+
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item user_info">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <!-- <cite class="layui-hide-xs">贤心</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i> -->
+          <img src="./static/images/avatar/default.png">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;" class="layui-bg-black">
+          <dd><a href="javascript:;" class="loginOut" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    
+    </ul>
+  </div>
+</div>
+
+
+
+<div class="fly-main" style="overflow: hidden;">
+  
+	<div class="layui-row search" >
+		 <form action="" class="layui-form search-form">
+			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
+				<input type="text" name="kw" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input keyword">    
+			 </div>
+			 <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+			 	<button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit">搜索</button>
+			 </div>
+		 </form>
+	</div>
+	
+	<!-- <fieldset class="layui-elem-field search-history" style="background: #FFFFFF;margin-top: 1rem;">
+	  <legend>搜索历史</legend>
+	  <div class="layui-field-box" id="search-history-box">
+	    <script type="text/html" id="searchTpl">
+			{{# if(d.length > 0){ }}
+				{{#  layui.each(d, function(index, item){ }}
+					<button type="button" class="layui-btn layui-btn-xs layui-btn-primary">{{ item }}</button>
+				{{# }) }}
+			{{# }else{ }}
+				<div class="layui-flow-more">暂无数据</div>
+			{{# } }}
+		</script>
+	  </div>
+	</fieldset> -->
+	
+	<div class="layui-row " style="background: #FFFFFF;margin-top: 1rem;">
+	  <div class="layui-collapse" lay-accordion>
+	    <div class="layui-colla-item ">
+	      <h2 class="layui-colla-title ">搜索历史</h2>
+	      <div class="layui-colla-content search-history-content">
+			  
+			  <div  id="search-history-box">
+			    <script type="text/html" id="searchTpl">
+			  			{{# if(d.length > 0){ }}
+			  				{{#  layui.each(d, function(index, item){ }}
+			  					<div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius ">{{ item }}</button></div>
+			  				{{# }) }}
+			  			{{# }else{ }}
+			  				<div class="layui-flow-more">暂无数据</div>
+			  			{{# } }}
+			  		</script>
+			  </div>
+			  
+		  </div>
+	    </div>
+		
+	    <div class="layui-colla-item">
+	      <h2 class="layui-colla-title">观看记录 <span style="float: right;font-size: 5px;color: #9e9e9e;">更多 ></span></h2>
+	      <div class="layui-colla-content watch-log-content">
+			  <div class="swiper-container watchlog">
+			    <div class="swiper-wrapper"></div>
+			  </div>
+			  <div class="layui-flow-more" style="display: none;">暂无数据</div>
+		  </div>
+	    </div>
+		<div class="layui-colla-item " style="display: none;">
+			<h2 class="layui-colla-title" id="search_result">搜索结果 <span style="float: right;font-size: 5px;color: #9e9e9e;">更多 ></span></h2>
+			<div class="layui-colla-content ">
+				<ul class="fly-case-list" id="vlistView" style="display: none;">
+					
+					<script type="text/html" id="vlistScript">
+						
+						 {{#  layui.each(d, function(index, item){ }}
+							<li>
+								<a href="#" class="vlist" data="{{ item.id }}">
+									<div class="layui-row ">
+										<div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
+										  <img lay-src="{{ cover_host + item.cover_id }}" >
+										</div>
+										<div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
+										 <h5 class="title">{{ item.title }}</h5>
+										 {{# if (item.year && item.year != ''){ }}
+											 <p>年份: {{ item.year }}</p>
+										 {{# }else{  }}
+											<p>年份: 未知</p>	
+										 {{# }  }}
+										 
+										 {{# if (item.area && item.area != ''){ }}
+											 <p>地区: {{ item.area }}</p>
+										 {{# }else{  }}
+											 <p>地区: 未知</p>	
+										 {{# }  }}
+										 
+										 {{# if (item.director && item.director != ''){ }}
+											 <p>导演: {{ item.director }}</p>
+										 {{# }else{  }}
+											 <p>导演: 未知</p>	
+										 {{# }  }}
+										 						 
+										 {{# if (item.actor && item.actor != ''){ }}
+											 <p>演员: {{ item.actor }}</p>
+										 {{# }else{  }}
+											 <p>演员: 未知</p>	
+										 {{# }  }}
+										 
+										 
+										 {{# if (item.desc && item.desc != ''){ }}
+											  <p>简介: {{ item.desc }}</p>
+										 {{# }else{  }}
+											  <p>简介: 未知</p>	
+										 {{# }  }}
+										</div>
+									</div>
+								</a>
+							</li>
+						{{# }) }}
+						
+					</script>
+				
+				</ul>
+				
+			</div>
+		</div>
+	   
+	</div>
+	
+
+</div>
+
+
+
+<script src="./static/layui/layui.js"></script>
+<script>
+	layui.config({
+	  version: "3.0.0"
+	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
+	}).extend({
+	  fly: 'index'
+	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
+		var backNum = 0
+		mui.init({
+			beforeback: function() {
+				backNum++;
+				if(backNum > 1) {
+					plus.runtime.quit();
+				} else {
+					mui.toast("再按一次退出应用");
+				}
+				setTimeout(function() {
+					backNum = 0
+				}, 2000);
+				return false;
+				
+			}
+		})
+		console.log(window.plus)
+		var $ = layui.jquery
+		var form = layui.form
+		var element = layui.element
+		var laytpl = layui.laytpl
+		var layer = layui.layer
+		var custom = layui.custom
+		var util = layui.util
+		var flow = layui.flow
+		flow.lazyimg()
+
+		//获取搜索历史
+		var search_tpl = searchTpl.innerHTML
+		var search_history = function(tpl){
+			mui.ajax(custom.host + '/v1/search/history',{
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Authorization':localStorage.authToken},
+				success:function(msg){
+					laytpl(tpl).render(msg.data, function(html){
+					  // view.innerHTML = html;
+					  $('#search-history-box').append(html)
+					});
+					
+					// 搜索历史点击后直接触发 搜索
+					$('#search-history-box').find('button').on('click',function(){
+						$('.search-form').find('input[name=kw]').attr('value',$(this).text())
+						$('.search-form').find('.submit').trigger('click')
+		
+					})
+					
+					$('.search-history-content').addClass('layui-show')
+				},
+				error:function(xhr,type,errorThrown){
+					custom.ajaxErrorHandler(xhr)
+				}
+			});
+		}
+		
+		search_history(search_tpl)
+		
+		mui.ajax(custom.host + '/v1/getWatchLoggerList',{
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			headers:{'Authorization':localStorage.authToken},
+			success:function(msg){
+				if(msg.data.length > 0){
+					$('.watch-log-content').addClass('layui-show')
+					
+					let _list = []
+					$.each(msg.data,function(k,v){
+						let _dom = '<div class="layui-card watch_log_item">' + 
+										'<div class="layui-card-header">'+v.title+'</div>'+
+										'<div class="layui-card-body">'+
+											'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-id="'+v.watch_log_id+'"><img src="'+cover_host + v.cover+'" /></a>'+
+											'<span class="watch_rate">'+
+												'<div class="layui-progress" lay-showPercent="true">'+
+													'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
+												'</div>' +
+											'</span>'+
+										'</div>'+
+									'</div>'
+									
+						_list.push(_dom)
+					})
+					window.swiper_watchlog = new Swiper('.watchlog', {
+						  slidesPerView: 3,
+						  slidesPerGroup:3,
+						  centeredSlides: false,
+						  spaceBetween: 1,
+						  virtual: {
+							slides: [],
+						  },
+					});
+					window.swiper_watchlog.virtual.removeAllSlides()
+					window.swiper_watchlog.virtual.appendSlide(_list)
+					window.swiper_watchlog.virtual.update()
+					//初始化 进度条
+					element.init()
+					
+					
+					mui('.watch_log_item').on('tap','a',function(){
+						detail_id = this.getAttribute('data')
+						watch_log_id = this.getAttribute('watch-log-id')
+						data_index = this.getAttribute('data-index')
+						
+						mui.openWindow({
+							id:'detail' ,
+							url:'detail.html?id=' + detail_id +'&watch_log_id=' + watch_log_id
+						  });
+						
+						
+					})
+					
+				}else{
+					$('.watchlog').fadeOut();
+					$('.watchlog').next().fadeIn();
+					$('.watchlog').parent().removeClass('layui-show')
+				}
+				
+			},
+			error:function(xhr,type,errorThrown){
+				custom.ajaxErrorHandler(xhr)
+			}
+		});
+		
+		//固定Bar
+		util.fixbar({
+		  bar1: '&#xe68e;'
+		  ,bgcolor: '#009688'
+		  ,click: function(type){
+			if(type === 'bar1'){
+			  mui.openWindow({
+			      id:'index' ,
+			      url:'index.html'
+			    });
+			}
+		  }
+		});
+		
+		
+		var toend = false
+		var getListData = function(ListTpl,requestUrl,params){
+			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
+			params.page = params.page ? params.page : 0
+			
+			layui.cache.getListDataFuncArgs = {
+				'ListTpl':ListTpl,
+				'requestUrl' : requestUrl,
+				'params' : params
+			} 
+			
+			mui.ajax(custom.host + requestUrl,{
+				data:params,
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Authorization':localStorage.authToken},
+				beforeSend:function(){
+					$('#vlistView').append(loading_dom)
+				},
+				success:function(msg){
+					if(msg.data.list.length > 0){
+						layui.laytpl(ListTpl).render(msg.data.list, function(html){
+							$('#vlistView').find('.layui-flow-more').remove()
+							$('#vlistView').append(html)
+							toend = true
+						});
+					}else{
+						toend = false
+						$('#vlistView').find('.layui-flow-more').remove()
+						$('#vlistView').append('<div class="layui-flow-more">没有更多了</div>')
+						
+					}
+					
+					
+					flow.lazyimg()
+				},
+				error:function(xhr,type,errorThrown){
+					console.log(xhr)
+				}
+			});
+		}
+		
+		$(window).scroll(
+			function () {
+				var scrollTop = $(this).scrollTop();
+				var scrollHeight = $(document).height();
+				var windowHeight = $(this).height();
+				if (scrollTop + windowHeight+100 >= scrollHeight && toend == true) {
+					// 分页 + 1
+					layui.cache.getListDataFuncArgs.params.page = layui.cache.getListDataFuncArgs.params.page + 1
+					getListData(
+						layui.cache.getListDataFuncArgs.ListTpl,
+						layui.cache.getListDataFuncArgs.requestUrl,
+						layui.cache.getListDataFuncArgs.params,
+						)
+					toend=false;
+				}
+			}
+		);
+		
+		var getTpl = vlistScript.innerHTML
+		form.on('submit(seachSubmit)', function(data){
+		  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+		  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+		  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+			let view = $('#vlistView').empty()
+			//显示 搜索结果折叠面板
+			
+			if($('#search_result').next().hasClass('layui-show') == false){
+				$('#search_result').parent('.layui-colla-item').fadeIn()
+				$('#search_result').trigger('click')
+				$('#vlistView').fadeIn()
+			}
+			
+			getListData(getTpl,'/v1/search' ,data.field)
+			// custom.flow(getTpl,'/v1/search',data.field)
+			
+			
+			mui('#vlistView').on('tap','.vlist',function(){
+				detail_id = this.getAttribute('data')
+				mui.ajax(custom.host + '/v1/watchLogger',{
+					data:{'id':detail_id},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					headers:{'Authorization':localStorage.authToken},
+					success:function(msg){
+						if(msg.code == 1){
+							mui.openWindow({
+								id:'detail' ,
+								url:'detail.html?id=' + detail_id
+							  });
+						}else{
+							layer.msg(msg.msg)
+						}
+					},
+				});
+				
+				
+				
+			})
+		  
+		  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		});
+
+		
+		
+	});
+	
+	
+</script>
+</body>
+</html>

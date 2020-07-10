@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登入</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="../static/layui/css/layui.css">
+  <link rel="stylesheet" href="../static/css/global.css">
+  <link rel="stylesheet" href="../static/swiper/swiper.min.css">
+  <script src="../static/swiper/swiper.min.js"></script>
+  <script src="../static/mui/mui.min.js"></script>
+  <style type="text/css">
+  	.swiper-pagination{position: relative;}
+  </style>
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="../static/images/logo1.png" alt="layui">
+    </a>
+
+    
+
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief " lay-filter="user">
+      <ul class="layui-tab-title swiper-pagination"></ul>
+      <div class="layui-form layui-tab-content swiper-container" id="reglogin" style="padding: 20px 0;">
+		<div class="swiper-wrapper">
+			<!--登录-->
+			<div class="layui-tab-item layui-show swiper-slide">
+			  <div class="layui-form layui-form-pane">
+				<form method="post" lay-filter="login_form">
+				  <div class="layui-form-item">
+					<label for="L_mobile" class="layui-form-label">手机号</label>
+					<div class="layui-input-inline">
+					  <input type="text"  name="login_mobile"  autocomplete="off" class="layui-input">
+					</div>
+				  </div>
+				  <div class="layui-form-item">
+					<label for="L_pass" class="layui-form-label">密码</label>
+					<div class="layui-input-inline">
+					  <input type="password"  name="login_pass"  autocomplete="off" class="layui-input">
+					</div>
+				  </div>
+				  <div class="layui-form-item" style="text-align: center;">
+					<button class="layui-btn" lay-filter="login" lay-submit>立即登录</button>
+					<span style="padding-left:20px;">
+					  <a href="forget.html">忘记密码？</a>
+					</span>
+				  </div>
+				</form>
+			  </div>
+			</div>
+			<!--注册-->
+			<div class="layui-tab-item layui-show swiper-slide">
+				<div class="layui-form layui-form-pane">
+					<form method="post"  lay-filter="reg_form">
+					  <div class="layui-form-item">
+						<label for="L_mobile" class="layui-form-label">手机号</label>
+						<div class="layui-input-inline">
+						  <input type="text"  name="reg_mobile"  autocomplete="off" class="layui-input">
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label for="L_password" class="layui-form-label">登录密码</label>
+						<div class="layui-input-inline">
+						  <input type="password"  name="reg_pwd" autocomplete="off" class="layui-input">
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label for="L_repassword" class="layui-form-label">确认密码</label>
+						<div class="layui-input-inline">
+						  <input type="password"  name="reg_repwd"  autocomplete="off" class="layui-input">
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label for="L_verify_code" class="layui-form-label">短信验证码</label>
+						<div class="layui-input-inline">
+							<div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
+							  <input type="text" id="L_verify_code" name="reg_verify_code"  autocomplete="off" class="layui-input">
+							</div>
+							<div class="layui-col-xs1 layui-col-sm1 layui-col-md1">&nbsp;</div>
+							<div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
+							  <button class="layui-btn" id="send_verify_code">发送验证码</button>
+							</div>
+						</div>
+					  </div>
+					  <div class="layui-form-item" style="text-align: center;">
+						<button class="layui-btn" lay-filter="reg" lay-submit>立即注册</button>
+					  </div>
+					</form>
+				</div>
+			</div>
+		
+		</div>
+	  </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">友影</a></p>
+</div> -->
+
+<script src="../static/layui/layui.js"></script>
+<script>
+	
+	mui.init(function(){
+		var page = mui.preload({
+		    url:'index.html',
+		    id:'index',//默认使用当前页面的url作为id
+		});
+		console.log(page)
+		console.log(1111111111)
+	})
+
+
+layui.config({
+  version: "3.0.0"
+  ,base: '../static/mods/'
+}).extend({
+  fly: 'index'
+}).use(['fly','custom','form','jquery','layer'],function(){
+	var form = layui.form
+	var $ = layui.jquery
+	var custom = layui.custom
+	var layer = layui.layer
+	
+	var backNum = 0;
+	mui.init({
+		beforeback: function() {
+			backNum++;
+			if(backNum > 1) {
+				plus.runtime.quit();
+			} else {
+				mui.toast("再按一次退出应用");
+			}
+			setTimeout(function() {
+				backNum = 0
+			}, 2000);
+			return false;
+			
+		}
+	})
+	
+	
+	
+	window.toggletab = function(indexNumber){
+		window.swiper.slideTo(indexNumber)
+	}
+	window.swiper = new Swiper('#reglogin',{
+		// 如果需要分页器
+		pagination: {
+			el: '.swiper-pagination',
+			clickable:true,
+			clickableClass : 'pagination-clickable',
+			type: 'custom',
+			  renderCustom: function (swiper, current, total) {
+				  if(current == 1){
+					  return '<li class="layui-this"><a onclick="javascript:toggletab(0)">登录</a></li><li ><a onclick="javascript:toggletab(1)">注册</a></li>'  
+				  }else{
+					  return '<li ><a onclick="javascript:toggletab(0)">登录</a></li><li class="layui-this"><a onclick="javascript:toggletab(1)">注册</a></li>'
+				  }
+			  }
+		},
+	});
+	$('#send_verify_code').click(function(){
+		let _this = $(this)
+		let mobile = $(this).parents('form').find('input[name="reg_mobile"]').val().trim() 
+		// 防止重复点击触发事件
+		if ($(this).hasClass('layui-btn-disabled')){return false}
+		if(mobile.length == 0) {
+			layer.msg('请输入手机号')
+			return false
+		}
+		
+		
+		var timer
+		mui.ajax(custom.host + '/v1/auth/sendVerifyCode',{
+			data:{'account':mobile,'account_type':'mobile'},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			beforeSend:function(){loading = layer.load()},
+			success:function(msg){
+				if(msg.code == 0) {
+					layer.msg(msg.msg)
+					layer.close(loading);  
+					return false
+				}else{
+					layer.msg('短信发送成功，注意查收!')
+					// 倒计时
+					_this.addClass('layui-btn-disabled')
+					let old_text = _this.html()
+					let waittime = 60
+					_this.html(waittime)
+					timer = setInterval(function(){
+						waittime = waittime-1
+						if (waittime <= 0 ){
+							_this.html(old_text)
+							_this.removeClass('layui-btn-disabled')
+							clearInterval(timer)
+						}else{
+							_this.html(waittime)
+						}
+					},1000)
+					layer.msg('短信发送成功，注意查收!')
+				}
+				
+				layer.close(loading);  
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				clearInterval(timer)
+			}
+		});
+		
+		return false
+	})
+	
+	form.on('submit(reg)',function(data){
+		if(isApp == false){
+			data.field.client_type = 'h5' 
+			data.field.device_id = '' 
+		}else{
+			data.field.client_type = 'android'
+			data.field.device_id = plus.device.imei
+		}
+		let loading
+		mui.ajax(custom.host + '/v1/auth/register',{
+			data:data.field,
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			beforeSend:function(){loading = layer.load()},
+			success:function(msg){
+				console.log(msg.data)
+				if(msg.data.register == 'ok'){
+					localStorage.authToken = msg.data.Authorization
+					mui.openWindow({
+					    id:'index' ,
+					    url:'../index.html' 
+					  });
+				}else{
+					layer.msg(msg.msg,{
+						icon: 5,
+						time:2000
+					})
+				}
+				layer.close(loading);  
+				
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+			}
+		});
+		console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+		return false
+	})
+	
+	form.on('submit(login)',function(data){
+		
+		if(isApp == false){
+			data.field.client_type = 'h5' 
+			data.field.device_id = '' 
+		}else{
+			data.field.client_type = 'android' 
+			data.field.device_id = plus.device.imei
+		}
+		
+		let loading
+		mui.ajax(custom.host + '/v1/auth/login',{
+			data:data.field,
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			beforeSend:function(){loading = layer.load()},
+			success:function(msg){
+				if(msg.data.login == 'ok'){
+					localStorage.authToken = msg.data.Authorization
+					mui.openWindow({
+					    id:'index' ,
+					    url:'../index.html' 
+					  });
+				}else{
+					layer.msg(msg.msg,{
+						icon: 5,
+						time:2000
+					})
+				}
+				
+				layer.close(loading)
+					
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				layer.msg('系统繁忙！请稍后再试')
+				layer.close(loading)
+			}
+		});
+		return false
+	})
+	
+	
+	
+	
+	
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html style="background-color: #e2e2e2;">
+<head>
+  <meta charset="utf-8">
+  <meta name="keywords" content="{{ lay.base.keywords }}">
+  <meta name="description" content="{{ lay.base.description }}">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Layui</title>
+  <link rel="stylesheet" href="./static/layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/global.css">
+  <link rel="stylesheet" href="./static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="./static/player/video-js.min.css">
+  <script src="static/swiper/swiper.min.js"></script>
+  <script src="static/mui/mui.min.js"></script>
+  <style>
+  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
+  .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
+  /* .fly-column{padding: 0px;} */
+  .fly-panel{background: none;}
+  .fly-column{margin-top: 1rem;}
+  .fly-main{min-height: auto;}
+  .layui-btn-normal{float: left;margin: 0.5rem;}
+  </style>
+</head>
+<body class="fly-full">
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="./static/images/logo2.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="/"><i class="iconfont icon-jiaoliu"></i>电影</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="case/case.html"><i class="iconfont icon-iconmingxinganli"></i>电视剧</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>综艺</a>
+      </li>
+	  <li class="layui-nav-item">
+	    <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>动漫</a>
+	  </li>
+	  <li class="layui-nav-item">
+	    <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>福利</a>
+	  </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item user_info">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">贤心</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+          <img src="./static/images/avatar/default.png">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;" class="layui-bg-black">
+          <dd><a href="javascript:;" class="loginOut" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+    
+    </ul>
+  </div>
+</div>
+
+<div class="fly-panel fly-column">
+  <div class="layui-container" >
+	  
+	<div class="layui-row" >
+		<div class="layui-col-xs12 layui-col-sm12 layui-col-md12" id="playbox"></div>
+	</div>
+    
+  </div>
+</div>
+
+<div class="fly-main" style="overflow: hidden;">
+
+	<div class="layui-row" style="background: #f2f2f2;">
+		<!-- <blockquote class="layui-elem-quote  swiper-pagination" style="position: unset;">引用区域的文字</blockquote> -->
+		<div class="swiper-pagination" style="position: unset;padding: 1rem;"></div>
+		<hr>
+		<div class="swiper-container play-line">
+		  <div class="swiper-wrapper" id="playwrapper">
+				
+				<script type="text/html" id="playitem">
+					{{#  layui.each(d, function(index, item){ }}
+						<div class="swiper-slide">
+							{{#  layui.each(item, function(k, v){ }}
+								<button type="button" class="layui-btn layui-btn-radius layui-btn-normal play-botton" data="{{ v.value }}">{{ v.name }}</button>
+							{{# }) }}
+						</div>
+					{{# }) }}
+				</script>
+		  </div>
+		</div>
+		
+	</div>
+  
+
+  <!-- <blockquote class="layui-elem-quote layui-quote-nm">暂无数据</blockquote> -->
+
+<!--  <div style="text-align: center;">
+    <div class="laypage-main">
+      <span class="laypage-curr">1</span>
+      <a href="">2</a><a href="">3</a>
+      <a href="">4</a>
+      <a href="">5</a>
+      <span>…</span>
+      <a href="" class="laypage-last" title="尾页">尾页</a>
+      <a href="" class="laypage-next">下一页</a>
+    </div>
+  </div> -->
+
+</div>
+
+<!-- <div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div> -->
+
+<script src="./static/player/hls.min.js"></script>
+<script src="./static/player/DPlayer.min.js"></script>
+<script src="./static/layui/layui.js"></script>
+<script>
+
+	window.dp = new DPlayer({
+	    container: document.getElementById('playbox'),
+	    autoplay: true,
+		airplay:true,
+		video: {
+			pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
+			thumbnails: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara_thumbnails.jpg',
+			type: 'customHls',
+			customType: {
+				customHls: function (video, player) {
+					window.hls = new Hls();
+					hls.loadSource(video.src);
+					hls.attachMedia(video);
+				},
+			},
+		},
+		
+	    theme: '#FADFA3',
+	    loop: false,
+	    lang: 'zh-cn',
+	    preload: 'none',
+		
+	});
+	
+	
+	
+	layui.config({
+	  version: "3.0.0"
+	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
+	}).extend({
+	  fly: 'index'
+	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
+		mui.init()
+		var $ = layui.jquery
+		var laytpl = layui.laytpl
+		var custom = layui.custom
+		var layer = layui.layer
+		var util = layui.util
+		
+		var isopen_ws = false
+		
+		//固定Bar
+		util.fixbar({
+		  bar1: '&#xe603;'
+		  ,bgcolor: '#009688'
+		  ,click: function(type){
+			if(type === 'bar1'){
+			  mui.back()
+			}
+		  }
+		});
+		
+		if(custom.params.watch_log_id != undefined){
+			
+			mui.ajax(custom.host + '/v1/getWatchLoggerDetail',{
+				data:{'id':custom.params.watch_log_id},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型,
+				async:false,  //同步
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Authorization':localStorage.authToken},
+				success:function(msg){
+					window.wath_log_info = msg.data
+					layui.cache.play_info = {
+						'auth_token':localStorage.authToken,
+						'play_detail_id':custom.params.id,
+						'play_line_index': msg.data.play_line_index ,
+						'play_item_index' : msg.data.play_item_index ,
+						'play_time': msg.data.play_time ,
+						'video_total_time' : 0,
+					}
+				},
+			});
+			
+		}else{
+			window.wath_log_info = undefined
+			//初始化 play_info 信息
+			layui.cache.play_info = {
+				'auth_token':localStorage.authToken,
+				'play_detail_id':custom.params.id,
+				'play_line_index': 0,
+				'play_item_index' : 0 ,
+				'play_time':0,
+				'video_total_time' : 0,
+			}
+		}
+		
+
+		
+		
+		
+		
+		// 修改播放器样式
+		$('.dplayer-bar').css('height','7px')
+		$('.dplayer-loaded').css('height','7px')
+		$('.dplayer-played').css('height','7px')
+		$('.dplayer-thumb').css('margin-top','-2px')
+		
+		if(("WebSocket" in window) == false){
+			layer.open({
+			  title: '友情提醒',
+			  btn:[],
+			  closeBtn:0,
+			  content: '您的浏览器版本过低！请升级您的浏览器 或 换Chrome内核的浏览器访问！'
+			});     
+		}
+		else
+		{
+			
+			var ws = new WebSocket(custom.ws_host);
+			// var ws = new WebSocket("ws://websocket.i3tp.cn:66");
+			ws.onopen = function()
+			{
+				isopen_ws = true
+				console.log("ws connected...");
+			};
+			 
+			ws.onmessage = function (evt) 
+			{ 
+			   var received_msg = evt.data;
+			   // console.log(received_msg)
+			   switch(received_msg){
+				    case 'hear_beat':
+						ws.send(JSON.stringify({'auth_token':localStorage.authToken,'heart_beat':1}))
+					break;
+					case 'auth_fail':
+						layer.open({
+						  title: '友情提醒',
+						  btn:[],
+						  closeBtn:1,
+						  content: '异常访问',
+						  cancel:function(){
+							  mui.back()
+						  }
+						});
+					break;
+					
+			   }
+			   // console.log("ws data recived ...");
+			};
+			 
+			ws.onclose = function()
+			{ 
+			   // 关闭 websocket
+			   isopen_ws = false
+			   console.log("ws close..."); 
+			   layer.open({
+			     title: '友情提醒',
+			     btn:[],
+			     closeBtn:1,
+			     content: 'ws网络异常',
+			     cancel:function(){
+			   	  mui.back()
+			     }
+			   });
+			};
+			
+			ws.onerror = function()
+			{ 
+			   // 关闭 websocket
+			   isopen_ws = false
+			   console.log("ws error..."); 
+			};
+			
+			
+		}
+		
+		if (custom.params == false){
+			layer.open({
+			  title: '友情提醒',
+			  btn:[],
+			  closeBtn:0,
+			  content: '参数缺失！'
+			});
+			return
+		}
+		
+		
+		
+		mui.ajax(host + '/v1/getDetail',{
+			data:{id:custom.params.id},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			async:false,  //同步
+			timeout:10000,//超时时间设置为10秒；
+			headers:{'Authorization':localStorage.authToken},
+			success:function(msg){
+				
+				let getTpl = playitem.innerHTML
+				let view = document.getElementById('playwrapper');
+				layui.laytpl(getTpl).render(msg.data['play_m3u8'], function(html){
+					view.innerHTML = html;
+				});
+				
+				//遍历线路
+				window.swiper_play_line = new Swiper('.play-line', {
+				     slidesPerView: 1,
+					 slidesPerGroup:1,
+				     centeredSlides: true,
+				     spaceBetween: 5,
+					 pagination: {
+					     el: '.swiper-pagination',
+						type: 'custom',
+						renderCustom: function (swiper, current, total) {
+							   return '当前线路：' + current + ' ；共 ' + total + '条线路';
+							 }
+					   },
+				});
+				
+				// 有播放记录
+				if(wath_log_info != null && wath_log_info.play_time > 0){
+					layer.msg('开始继续播放')
+					// 预加载播放记录中的线路 和 item
+					dp.switchVideo({
+					    url: msg.data['play_m3u8'][wath_log_info.play_line_index][wath_log_info.play_item_index]['value'],
+						type: 'customHls',
+					    pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
+					    thumbnails: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara_thumbnails.jpg'
+					})
+					dp.seek(wath_log_info.play_time); //跳转到指定时间位置
+					
+					pli = wath_log_info.play_line_index
+					pii = wath_log_info.play_item_index
+				}else{
+					// 预加载第一个
+					dp.switchVideo({
+					    url: msg.data['play_m3u8'][0][0]['value'],
+						type: 'customHls',
+					    pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
+					    thumbnails: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara_thumbnails.jpg',
+					})
+					
+					
+					pli = layui.cache.play_info.play_line_index = 0 
+					pii = layui.cache.play_info.play_item_index = 0 
+					
+				}
+				
+				dp.play()
+				// hls error info https://github.com/video-dev/hls.js/blob/master/docs/API.md#Errors
+				hls.on(Hls.Events.ERROR,function(event,data){
+					
+					if(data.type == 'mediaError' && data.details == 'bufferStalledError'){
+						dp.notice('视频缓冲中.....')
+						return
+					}
+					if(data.type == 'networkError' && data.details == 'manifestLoadError'){
+						custom.hlsNetWrokerErrorHandler(msg)
+					}
+				})
+				
+				window.swiper_play_line.slideTo(pli)
+				$(window.swiper_play_line.slides[pli]).find('.play-botton').eq(pii).addClass('layui-btn-disabled')
+				
+	
+				//切换线路播放 只更新 play_line_index 和 play_item_index
+				mui('#playwrapper').on('tap','.play-botton',function(){
+					if($(this).hasClass('layui-btn-disabled')) {
+						return
+					}else{
+						$('#playwrapper').find('.play-botton').removeClass('layui-btn-disabled')
+						$(this).addClass('layui-btn-disabled')
+					}
+					
+					
+					playurl = this.getAttribute('data')
+					
+					layui.cache.play_info['play_detail_id'] = custom.params.id
+					layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
+					
+					dp.switchVideo({
+					    url: playurl,
+						type: 'customHls',
+					    pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
+					    thumbnails: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara_thumbnails.jpg'
+					})
+					
+					
+					hls.on(Hls.Events.ERROR,function(event,data){
+						console.log()
+						if(data.type == 'mediaError' && data.details == 'bufferStalledError'){
+							dp.notice('视频缓冲中.....')
+							return
+						}
+						if(data.type == 'networkError' && data.details == 'manifestLoadError'){
+							custom.hlsNetWrokerErrorHandler(msg)
+						}
+					})
+					
+					// 如果之前有在其它线路 "同一个索引的 play_botton" 播放过，切换线路的时候 依然按照之前的 播放进度 播放
+					if(layui.cache.play_info['play_time'] > 0 && layui.cache.play_info['play_item_index'] == $(this).index()){
+						dp.seek(layui.cache.play_info.play_time)
+						
+					}else{
+						layui.cache.play_info['play_item_index'] = $(this).index()
+					}
+					
+					
+					dp.pause()
+					dp.play()
+					
+					
+				})
+				
+						
+				
+				
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				custom.ajaxErrorHandler(xhr)
+			},
+			
+			
+		});
+
+		
+		
+		// 获取播放的时候 当前的时间
+		dp.on('timeupdate', function () {
+			
+			// 更新cache 里面的 play_time
+			layui.cache.play_info['play_time'] = dp.video.currentTime
+			layui.cache.play_info['video_total_time'] = dp.video.duration
+			
+			// 定时间没有初始化 则初始化定时器
+			if (window.send_watch_info_interval == undefined && dp.video.currentTime > 0){
+				console.log('init interval')
+				window.send_watch_info_interval = setInterval(function(){
+					if (isopen_ws == true){
+						// 删除 enter_page_time 属性
+						ws.send(JSON.stringify(layui.cache.play_info) );
+					}else{
+						console.log("stop interval"); 
+						ws.close()
+						clearInterval(send_watch_info_interval)
+					}
+				},1500)
+			}
+			
+			
+		});
+		
+		window.isplayed = false
+		
+		dp.on('play',function(){
+			console.log(layui.cache.play_item_index)
+			//播放开始的时候 获取当前的 线路
+			layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
+			window.isplayed = true
+			
+		})
+		
+		dp.on('seeked',function(){
+			console.log('seeked')
+			dp.play()
+			// var check_isplay = setInterval(function(){
+			// 	if(window.isplayed == false){
+			// 		console.log(window.isplayed)
+			// 		dp.pause()
+			// 		dp.play()
+			// 	}else{
+			// 		clearInterval(check_isplay)
+			// 	}
+				
+			// },2000)
+			
+			
+		})
+		
+		// 加载视频第一帧 成功后触发 得到 获取第一帧的 总时间 /秒
+		dp.on('loadedmetadata',function(a,b){
+			console.log('loadedmetadata----------s')
+			
+			console.log('loadedmetadata----------e')
+		})
+		
+		
+		dp.on('loadstart',function(a,b){
+			console.log('loadstart----------s')
+			// layui.cache.play_info['loadstart'] = 1
+			// console.log(layui.cache.play_info)
+			console.log('loadstart----------e')
+		})
+		
+		dp.on('error',function(){
+			console.log('error----------s')
+			// clearInterval(loadCount)
+			// console.log(dp)
+			
+			
+			console.log(JSON.stringify(this))
+			
+			console.log('error----------e')
+		})
+		
+		// 播放结束开始下一集
+		dp.on('ended', function () {
+			current_slide = window.swiper_play_line.slides[layui.cache.play_info.play_line_index]
+			current_play_botton = $(current_slide).find('.play-botton').eq(layui.cache.play_info.play_item_index)
+			
+			// 当前播放线路有下一集
+			if(current_play_botton.next().length >= 1){
+				playurl = current_play_botton.next().attr('data')
+				dp.switchVideo({
+				    url: playurl,
+					type: 'customHls',
+				    pic: 'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg',
+				    thumbnails: 'https://moeplayer.b0.upaiyun.com/dplayer/hikarunara_thumbnails.jpg'
+				})
+				dp.play()
+				
+				$('#playwrapper').find('.play-botton').removeClass('layui-btn-disabled')
+				current_play_botton.next().addClass('layui-btn-disabled')
+				layer.msg('开始为您自动播放下一集',{'time':3000})
+				
+				// 更新播放记录
+				layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
+				layui.cache.play_info['play_item_index'] = layui.cache.play_info.play_item_index + 1
+				ws.send(JSON.stringify(layui.cache.play_info))
+				
+			}else{
+				layer.msg('播放结束',{'time':3000})
+				// 清除定时器
+				clearInterval(window.send_watch_info_interval)
+			}
+			
+		});
+		
+		
+		
+	});
+	
+	
+	
+	
+</script>
+</body>
+</html>
