@@ -1,6 +1,6 @@
 var host = 'https://api.yy8.pw'
 var ws_host = 'ws://ws.yy8.pw'
-var cover_host = 'http://cstatic.yy8.pw/'
+var cover_host = 'https://cdn.jsdelivr.net/gh/zenhiss/mov_img/cover/'
 
 //var host = 'http://api.m.com'
 // var ws_host = 'ws://ws.m.com:2345'
