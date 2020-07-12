@@ -181,8 +181,8 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 			  content: '抱歉视频加载失败！当前暂无其它线路切换，看看其它的吧~',
 			  cancel: function(index, layero){ 
 			    mui.openWindow({
-			        id:'search' ,
-			        url:'search.html'
+			        id:'index' ,
+			        url:'index.html'
 			      });
 			    return false; 
 			  }   
