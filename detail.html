@@ -296,10 +296,12 @@
 			{ 
 				var max_retry_time = 0
 			   // 关闭 websocket
-			   setInterval(function(){
+			   var retry_timmer = setInterval(function(){
 				   if(max_retry_time == 60){
 					   ws.close()
+					   clearInterval(retry_timmer)
 				   }else{
+					   layer.msg('ws error')
 					   ws.send(JSON.stringify(layui.cache.play_info) );
 				   }
 				   
