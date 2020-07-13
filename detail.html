@@ -245,7 +245,7 @@
 		{
 			
 			var ws = new WebSocket(custom.ws_host);
-			// var ws = new WebSocket("ws://websocket.i3tp.cn:66");
+			// var ws = new WebSocket("ws://127.0.0.1:2345");
 			ws.onopen = function()
 			{
 				isopen_ws = true
@@ -294,8 +294,16 @@
 			
 			ws.onerror = function()
 			{ 
+				var max_retry_time = 0
 			   // 关闭 websocket
-			   isopen_ws = false
+			   setInterval(function(){
+				   if(max_retry_time == 60){
+					   ws.close()
+				   }else{
+					   ws.send(JSON.stringify(layui.cache.play_info) );
+				   }
+				   
+			   },1000)
 			   console.log("ws error..."); 
 			};
 			
