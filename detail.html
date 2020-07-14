@@ -145,7 +145,11 @@
 			type: 'customHls',
 			customType: {
 				customHls: function (video, player) {
-					window.hls = new Hls();
+					window.hls = new Hls({
+						xhrSetup: (xhr, url) => {
+							xhr.open('GET', url.replace('http://', 'https://'))
+						}
+					});
 					hls.loadSource(video.src);
 					hls.attachMedia(video);
 				},
