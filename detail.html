@@ -131,7 +131,10 @@
 				customHls: function (video, player) {
 					window.hls = new Hls({
 						xhrSetup: (xhr, url) => {
-							xhr.open('GET', url.replace('http://', 'https://'))
+							//不对当页面发起请求
+							if(url.indexOf('mov_statics/detail.html?id=') == -1) {
+								xhr.open('GET', url.replace('http://', 'https://'))
+							}
 						}
 					});
 					hls.loadSource(video.src);
