@@ -1,7 +1,7 @@
 {
     "@platforms" : [ "android", "iPhone", "iPad" ],
     "id" : "mov_v1", /*应用的标识*/
-    "name" : "movies", /*应用名称，程序桌面图标名称*/
+    "name" : "有影8", /*应用名称，程序桌面图标名称*/
     "version" : {
         "name" : "1.0", /*应用版本名称*/
         "code" : ""
@@ -225,5 +225,12 @@
             }
         },
         "screenOrientation" : [ "portrait-primary" ]
-    }
+    },
+    "screenOrientation" : [
+        "portrait-primary",
+        "portrait-secondary",
+        "landscape-primary",
+        "landscape-secondary"
+    ],
+    "fullscreen" : true
 }
