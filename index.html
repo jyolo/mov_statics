@@ -8,13 +8,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Layui</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/layui/css/layui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/css/global.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/swiper/swiper.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/player/video-js.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/layui/layui.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/swiper/swiper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/mui/mui.min.js"></script>
+  <link rel="stylesheet" href="./static/layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/global.css">
+  <link rel="stylesheet" href="./static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="./static/player/video-js.min.css">
+  <script src="./static/layui/layui.js"></script>
+  <script src="./static/swiper/swiper.min.js"></script>
+  <script src="./static/mui/mui.min.js"></script>
   <style>
   .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
   .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
@@ -52,7 +52,7 @@
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
     <a class="fly-logo" href="/">
-      <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/images/logo2.png" alt="layui">
+      <img src="./static/images/logo2.png" alt="layui">
     </a>
 
     
@@ -63,7 +63,7 @@
           <!-- <cite class="layui-hide-xs">贤心</cite>
           <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i> -->
-          <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/images/avatar/default.png">
+          <img src="./static/images/avatar/default.png">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -204,11 +204,11 @@
 
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>
 <script>
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@028a4e7613b52dda53d2fcb11121d771b763ab45/static/mods/' //这里实际使用时，建议改成绝对路径
+	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
 	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
@@ -281,10 +281,20 @@
 					
 					let _list = []
 					$.each(msg.data,function(k,v){
+						
+						var watch_log_info = {
+							'play_detail_id' : v.play_detail_id,
+							'play_line_index' : v.play_line_index ? v.play_line_index : 0,
+							'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
+							'play_time' : v.play_time ? v.play_time : 0.00 ,
+							'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
+						}
+						
+						
 						let _dom = '<div class="layui-card watch_log_item">' + 
 										'<div class="layui-card-header">'+v.title+'</div>'+
 										'<div class="layui-card-body">'+
-											'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-id="'+v.watch_log_id+'"><img src="'+cover_host + v.cover+'" /></a>'+
+											'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img src="'+cover_host + v.cover+'" /></a>'+
 											'<span class="watch_rate">'+
 												'<div class="layui-progress" lay-showPercent="true">'+
 													'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
@@ -307,20 +317,23 @@
 					window.swiper_watchlog.virtual.removeAllSlides()
 					window.swiper_watchlog.virtual.appendSlide(_list)
 					window.swiper_watchlog.virtual.update()
+
 					//初始化 进度条
 					element.init()
 					
-					
 					mui('.watch_log_item').on('tap','a',function(){
 						detail_id = this.getAttribute('data')
-						watch_log_id = this.getAttribute('watch-log-id')
+						
 						data_index = this.getAttribute('data-index')
+						// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
+						let watch_log_info = this.getAttribute('watch-log-info')
+
+						localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
 						
 						mui.openWindow({
 							id:'detail' ,
-							url:'detail.html?id=' + detail_id +'&watch_log_id=' + watch_log_id
+							url:'detail.html?id=' + detail_id 
 						  });
-						
 						
 					})
 					
@@ -385,7 +398,6 @@
 						
 					}
 					
-					
 					flow.lazyimg()
 				},
 				error:function(xhr,type,errorThrown){
@@ -432,6 +444,7 @@
 			
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
+				localStorage.removeItem('watch_log_info')
 				mui.ajax(custom.host + '/v1/watchLogger',{
 					data:{'id':detail_id},
 					dataType:'json',//服务器返回json格式数据
