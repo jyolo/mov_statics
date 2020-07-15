@@ -158,14 +158,14 @@
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
 		mui.init({
             beforeback: function(){
-                //获得列表界面的webview
-                var wv = plus.webview.getWebviewById('HBuilder');
+				if (window.plus != undefined){
+					//获得列表界面的webview
+					var wv = plus.webview.getWebviewById('HBuilder');
+					//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+					mui.fire(wv,'search_history');
+					mui.fire(wv,'getWatchLoggerList');
+				}
 				
-                //触发列表界面的自定义事件（refresh）,从而进行数据刷新
-                mui.fire(wv,'search_history');
-                mui.fire(wv,'getWatchLoggerList');
-				
-                //返回true，继续页面关闭逻辑
                 return true;
             }
         })
@@ -245,7 +245,6 @@
 			data:{id:custom.params.id},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
-			async:false,  //同步
 			timeout:10000,//超时时间设置为10秒；
 			headers:{'Authorization':localStorage.authToken},
 			success:function(msg){
