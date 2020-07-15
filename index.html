@@ -214,6 +214,7 @@
 	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
 		var backNum = 0
 		mui.init({
+		
 			beforeback: function() {
 				backNum++;
 				if(backNum > 1) {
@@ -228,7 +229,7 @@
 				
 			}
 		})
-		console.log(window.plus)
+		
 		var $ = layui.jquery
 		var form = layui.form
 		var element = layui.element
@@ -240,15 +241,19 @@
 		flow.lazyimg()
 
 		//获取搜索历史
-		var search_tpl = searchTpl.innerHTML
-		var search_history = function(tpl){
+		
+		var search_history = function(){
+			
 			mui.ajax(custom.host + '/v1/search/history',{
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				headers:{'Authorization':localStorage.authToken},
+				beforeSend:function(){
+					$('#search-history-box').find('.search-tag').remove()
+				},
 				success:function(msg){
-					laytpl(tpl).render(msg.data, function(html){
+					laytpl(searchTpl.innerHTML).render(msg.data, function(html){
 					  // view.innerHTML = html;
 					  $('#search-history-box').append(html)
 					});
@@ -268,86 +273,95 @@
 			});
 		}
 		
-		search_history(search_tpl)
+		search_history()
 		
-		mui.ajax(custom.host + '/v1/getWatchLoggerList',{
-			dataType:'json',//服务器返回json格式数据
-			type:'post',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			headers:{'Authorization':localStorage.authToken},
-			success:function(msg){
-				if(msg.data.length > 0){
-					$('.watch-log-content').addClass('layui-show')
+		window.addEventListener('search_history',search_history)
+		
+		var getWatchLoggerList = function(){
+			mui.ajax(custom.host + '/v1/getWatchLoggerList',{
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Authorization':localStorage.authToken},
+				success:function(msg){
+					if(msg.data.length > 0){
+						$('.watch-log-content').addClass('layui-show')
+						
+						let _list = []
+						$.each(msg.data,function(k,v){
+							
+							var watch_log_info = {
+								'play_detail_id' : v.play_detail_id,
+								'play_line_index' : v.play_line_index ? v.play_line_index : 0,
+								'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
+								'play_time' : v.play_time ? v.play_time : 0.00 ,
+								'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
+							}
+							
+							
+							let _dom = '<div class="layui-card watch_log_item">' + 
+											'<div class="layui-card-header">'+v.title+'</div>'+
+											'<div class="layui-card-body">'+
+												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img src="'+cover_host + v.cover+'" /></a>'+
+												'<span class="watch_rate">'+
+													'<div class="layui-progress" lay-showPercent="true">'+
+														'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
+													'</div>' +
+												'</span>'+
+											'</div>'+
+										'</div>'
+										
+							_list.push(_dom)
+						})
+						window.swiper_watchlog = new Swiper('.watchlog', {
+							  slidesPerView: 3,
+							  slidesPerGroup:3,
+							  centeredSlides: false,
+							  spaceBetween: 1,
+							  virtual: {
+								slides: [],
+							  },
+						});
+						window.swiper_watchlog.virtual.removeAllSlides()
+						window.swiper_watchlog.virtual.appendSlide(_list)
+						window.swiper_watchlog.virtual.update()
+			
+						//初始化 进度条
+						element.init()
+						
+						mui('.watch_log_item').on('tap','a',function(){
+							detail_id = this.getAttribute('data')
+							
+							data_index = this.getAttribute('data-index')
+							// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
+							let watch_log_info = this.getAttribute('watch-log-info')
+			
+							localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
+							
+							mui.openWindow({
+								id:'detail' ,
+								url:'detail.html?id=' + detail_id 
+							  });
+							
+						})
+						
+					}else{
+						$('.watchlog').fadeOut();
+						$('.watchlog').next().fadeIn();
+						$('.watchlog').parent().removeClass('layui-show')
+					}
 					
-					let _list = []
-					$.each(msg.data,function(k,v){
-						
-						var watch_log_info = {
-							'play_detail_id' : v.play_detail_id,
-							'play_line_index' : v.play_line_index ? v.play_line_index : 0,
-							'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
-							'play_time' : v.play_time ? v.play_time : 0.00 ,
-							'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
-						}
-						
-						
-						let _dom = '<div class="layui-card watch_log_item">' + 
-										'<div class="layui-card-header">'+v.title+'</div>'+
-										'<div class="layui-card-body">'+
-											'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img src="'+cover_host + v.cover+'" /></a>'+
-											'<span class="watch_rate">'+
-												'<div class="layui-progress" lay-showPercent="true">'+
-													'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
-												'</div>' +
-											'</span>'+
-										'</div>'+
-									'</div>'
-									
-						_list.push(_dom)
-					})
-					window.swiper_watchlog = new Swiper('.watchlog', {
-						  slidesPerView: 3,
-						  slidesPerGroup:3,
-						  centeredSlides: false,
-						  spaceBetween: 1,
-						  virtual: {
-							slides: [],
-						  },
-					});
-					window.swiper_watchlog.virtual.removeAllSlides()
-					window.swiper_watchlog.virtual.appendSlide(_list)
-					window.swiper_watchlog.virtual.update()
-
-					//初始化 进度条
-					element.init()
-					
-					mui('.watch_log_item').on('tap','a',function(){
-						detail_id = this.getAttribute('data')
-						
-						data_index = this.getAttribute('data-index')
-						// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
-						let watch_log_info = this.getAttribute('watch-log-info')
-
-						localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
-						
-						mui.openWindow({
-							id:'detail' ,
-							url:'detail.html?id=' + detail_id 
-						  });
-						
-					})
-					
-				}else{
-					$('.watchlog').fadeOut();
-					$('.watchlog').next().fadeIn();
-					$('.watchlog').parent().removeClass('layui-show')
+				},
+				error:function(xhr,type,errorThrown){
+					custom.ajaxErrorHandler(xhr)
 				}
-				
-			},
-			error:function(xhr,type,errorThrown){
-				custom.ajaxErrorHandler(xhr)
-			}
-		});
+			});
+			
+		}
+		
+		
+		getWatchLoggerList()
+		window.addEventListener('getWatchLoggerList',getWatchLoggerList)
 		
 		//固定Bar
 		util.fixbar({
@@ -471,8 +485,26 @@
 		});
 
 		
+		// app 中
+		mui.plusReady(function () {
+		    console.log('234234324')
+			wv = plus.webview.currentWebview()
+			wv.addEventListener('popGesture',function(e){
+				console.log('popGesture: '+e.type+','+e.result+','+e.progress)
+			})
+			
+			console.log("当前页面URL："+plus.webview.currentWebview().getURL());
+			console.log(JSON.stringify(plus.webview.currentWebview()));
+		})
+		
+		
+		
 		
 	});
+	
+
+	
+	
 	
 	
 </script>

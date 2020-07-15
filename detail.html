@@ -156,7 +156,19 @@
 	}).extend({
 	  fly: 'index'
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
-		mui.init()
+		mui.init({
+            beforeback: function(){
+                //获得列表界面的webview
+                var wv = plus.webview.getWebviewById('HBuilder');
+				
+                //触发列表界面的自定义事件（refresh）,从而进行数据刷新
+                mui.fire(wv,'search_history');
+                mui.fire(wv,'getWatchLoggerList');
+				
+                //返回true，继续页面关闭逻辑
+                return true;
+            }
+        })
 		var $ = layui.jquery
 		var laytpl = layui.laytpl
 		var custom = layui.custom
@@ -348,8 +360,7 @@
                     console.log(layui.cache.play_info)
 
 				})
-				
-						
+	
 				
 				
 			},
@@ -376,6 +387,7 @@
 			if (window.send_watch_info_interval == undefined && dp.video.readyState == 4){
 				// ajax 轮询
 				window.send_watch_info_interval = setInterval(function(){
+					
                     mui.ajax(custom.host + '/v1/setWatchLog',{
                         data:layui.cache.play_info,
                         dataType:'json',//服务器返回json格式数据
@@ -383,7 +395,7 @@
                         timeout:10000,//超时时间设置为10秒；
                         headers:{'Authorization':localStorage.authToken},
                         success:function(msg){
-                            // console.log(msg)
+                            // console.log(msg.msg)
                         },
                     });
 				},2500)
@@ -447,7 +459,17 @@
 				// 更新播放记录
 				layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
 				layui.cache.play_info['play_item_index'] = layui.cache.play_info.play_item_index + 1
-				ws.send(JSON.stringify(layui.cache.play_info))
+				
+				mui.ajax(custom.host + '/v1/setWatchLog',{
+				    data:layui.cache.play_info,
+				    dataType:'json',//服务器返回json格式数据
+				    type:'post',//HTTP请求类型,
+				    timeout:10000,//超时时间设置为10秒；
+				    headers:{'Authorization':localStorage.authToken},
+				    success:function(msg){
+				        // console.log(msg.msg)
+				    },
+				});
 				
 			}else{
 				layer.msg('播放结束',{'time':3000})
@@ -458,6 +480,16 @@
 		});
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
 		
 	});
 	
