@@ -298,7 +298,6 @@
 								'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
 							}
 							
-							
 							let _dom = '<div class="layui-card watch_log_item">' + 
 											'<div class="layui-card-header">'+v.title+'</div>'+
 											'<div class="layui-card-body">'+
@@ -321,29 +320,37 @@
 							  virtual: {
 								slides: [],
 							  },
+							  on:{
+							      slideChange: function(){
+							        console.log('改变了，activeIndex为'+this.activeIndex);
+									bind_tap_on_history_item()
+							      },
+							    },
 						});
 						window.swiper_watchlog.virtual.removeAllSlides()
 						window.swiper_watchlog.virtual.appendSlide(_list)
 						window.swiper_watchlog.virtual.update()
 			
-						//初始化 进度条
-						element.init()
+						//初始化 进度条 绑定 点击事件
+						var bind_tap_on_history_item = function(){
+							element.init()
+							mui('.swiper-slide').on('tap','a',function(){
+								detail_id = this.getAttribute('data')
+								
+								data_index = this.getAttribute('data-index')
+								// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
+								let watch_log_info = this.getAttribute('watch-log-info')
+										
+								localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
+								
+								mui.openWindow({
+									id:'detail' ,
+									url:'detail.html?id=' + detail_id 
+								  });
+							})
+						}
+						bind_tap_on_history_item()
 						
-						mui('.watch_log_item').on('tap','a',function(){
-							detail_id = this.getAttribute('data')
-							
-							data_index = this.getAttribute('data-index')
-							// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
-							let watch_log_info = this.getAttribute('watch-log-info')
-			
-							localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
-							
-							mui.openWindow({
-								id:'detail' ,
-								url:'detail.html?id=' + detail_id 
-							  });
-							
-						})
 						
 					}else{
 						$('.watchlog').fadeOut();
