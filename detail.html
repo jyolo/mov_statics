@@ -15,13 +15,24 @@
   <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mui/mui.min.js"></script>
   <style>
-  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
-  .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
+
+  @media screen and (min-width: 960px){
+      #playbox{border:1px solid #000000 ;width: 100%;height: 33rem;}
+
+  }
+  @media screen and (max-width: 768px){
+      #playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
+
+  }
+  .pre_nex{position: relative;top: 29px;}
   /* .fly-column{padding: 0px;} */
   .fly-panel{background: none;}
   .fly-column{margin-top: 1rem;}
   .fly-main{min-height: auto;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
+  #playwrapper botton{float: left}
+
+  .swiper-button-next, .swiper-button-prev{color: #009688}
   </style>
 </head>
 <body class="fly-full">
@@ -37,9 +48,6 @@
       <!-- 登入后的状态 -->
       <li class="layui-nav-item user_info">
         <a class="fly-nav-avatar" href="javascript:;">
-          <cite class="layui-hide-xs">贤心</cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
-          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
           <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/images/avatar/default.png">
         </a>
         <dl class="layui-nav-child">
@@ -67,12 +75,18 @@
 
 <div class="fly-main" style="overflow: hidden;">
 
-	<div class="layui-row" style="background: #f2f2f2;">
+	<div class="layui-row" >
 		<!-- <blockquote class="layui-elem-quote  swiper-pagination" style="position: unset;">引用区域的文字</blockquote> -->
-		<div class="swiper-pagination" style="position: unset;padding: 1rem;"></div>
+
+        <div class="pre_nex" style="display: none">
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+        <div class="swiper-pagination" style="position: unset;padding: 1rem;"></div>
 		<hr>
 		<div class="swiper-container play-line">
-		  <div class="swiper-wrapper" id="playwrapper">
+
+            <div class="swiper-wrapper" id="playwrapper">
 				<div class="layui-flow-more" style="width: 100%"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>
 				<script type="text/html" id="playitem">
 					{{#  layui.each(d, function(index, item){ }}
@@ -83,36 +97,16 @@
 						</div>
 					{{# }) }}
 				</script>
-		  </div>
+            </div>
+
 		</div>
 		
 	</div>
   
 
-  <!-- <blockquote class="layui-elem-quote layui-quote-nm">暂无数据</blockquote> -->
-
-<!--  <div style="text-align: center;">
-    <div class="laypage-main">
-      <span class="laypage-curr">1</span>
-      <a href="">2</a><a href="">3</a>
-      <a href="">4</a>
-      <a href="">5</a>
-      <span>…</span>
-      <a href="" class="laypage-last" title="尾页">尾页</a>
-      <a href="" class="laypage-next">下一页</a>
-    </div>
-  </div> -->
-
 </div>
 
-<!-- <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div> -->
+
 
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/DPlayer.min.js"></script>
@@ -178,15 +172,15 @@
 		var isopen_ws = false
 		
 		//固定Bar
-		util.fixbar({
-		  bar1: '&#xe603;'
-		  ,bgcolor: '#009688'
-		  ,click: function(type){
-			if(type === 'bar1'){
-			  mui.back()
-			}
-		  }
-		});
+		// util.fixbar({
+		//   bar1: '&#xe603;'
+		//   ,bgcolor: '#009688'
+		//   ,click: function(type){
+		// 	if(type === 'bar1'){
+		// 	  mui.back()
+		// 	}
+		//   }
+		// });
 		
 		
 		
@@ -267,9 +261,13 @@
 							   return '当前线路：' + current + ' ；共 ' + total + '条线路';
 							 }
 					   },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
 				});
 				$('#playwrapper').find('.layui-flow-more').fadeOut()
-
+                $('.pre_nex').fadeIn()
 
 
 				// 有播放记录
