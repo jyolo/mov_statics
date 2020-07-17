@@ -83,7 +83,11 @@
 
 
 <div class="fly-main" style="overflow: hidden;">
-  
+<!--	<div class="layui-row" style="text-align: center">-->
+<!--		<div class="logo">-->
+<!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" />-->
+<!--		</div>-->
+<!--	</div>-->
 	<div class="layui-row search" >
 		 <form action="" class="layui-form search-form">
 			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
@@ -94,7 +98,7 @@
 			 </div>
 		 </form>
 	</div>
-	
+
 	
 	<div class="layui-row " style="background: #FFFFFF;margin-top: 1rem;">
 	  <div class="layui-collapse" lay-accordion>
@@ -118,13 +122,17 @@
 	    </div>
 		
 	    <div class="layui-colla-item">
-	      <h2 class="layui-colla-title">观看记录 <span style="float: right;font-size: 5px;color: #9e9e9e;">更多 ></span></h2>
-	      <div class="layui-colla-content watch-log-content">
+			<h2 class="layui-colla-title">观看记录
+				<span style="float: right;font-size: 5px;color: #9e9e9e;">
+					<a href="user/watch_history.html">更多 ></a>
+				</span>
+			</h2>
+			<div class="layui-colla-content watch-log-content">
 			  <div class="swiper-container watchlog">
-			    <div class="swiper-wrapper"></div>
+				<div class="swiper-wrapper"></div>
 			  </div>
 			  <div class="layui-flow-more" style="display: none;">暂无数据</div>
-		  </div>
+			</div>
 	    </div>
 		<div class="layui-colla-item " style="display: none;">
 			<h2 class="layui-colla-title" id="search_result">搜索结果 <span style="float: right;color: #9e9e9e;">更多 ></span></h2>
