@@ -2,7 +2,7 @@ var host = 'https://api.yy8.pw'
 var ws_host = 'wss://ws.yy8.pw'
 var cover_host = 'https://cdn.jsdelivr.net/gh/zenhiss/mov_img/cover/'
 
-// var host = 'http://api.m.com'
+var host = 'http://ctb.api.yy8.pw/'
 // var ws_host = 'ws://ws.m.com:2345'
 // var cover_host = 'http://img.i3tp.cn:66/'
 var chooseTag = Function()
