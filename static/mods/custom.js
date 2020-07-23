@@ -2,7 +2,7 @@ var host = 'https://api.yy8.pw'
 var ws_host = 'wss://ws.yy8.pw'
 var cover_host = 'https://cdn.jsdelivr.net/gh/zenhiss/mov_img/cover/'
 
-var host = 'http://ctb.api.yy8.pw/'
+var host = 'http://api.m.com'
 // var ws_host = 'ws://ws.m.com:2345'
 // var cover_host = 'http://img.i3tp.cn:66/'
 var chooseTag = Function()
@@ -153,6 +153,20 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 			break;
 		}
 	}
+
+	var markWrongLine = function () {
+		// 发送后台播放错误的线路
+		mui.ajax(custom.host + '/v1/markWrongLine',{
+			data:{'detail_id':custom.params.id,'play_line_index':layui.cache.play_info.play_line_index},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			headers:{'Authorization':localStorage.authToken},
+			success:function(msg){
+				console.log(msg)
+			},
+		});
+	}
 	
 	var retry_max_times = 3 
 	var retry_times = 0 
@@ -173,7 +187,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 		// 超过最大重试次数 标记该资源线路 无效
 		
 		// 只有一个无法切换线路
-		if(msg.data['play_m3u8'].length == 1) {
+		if(msg.data.length == 1) {
 			layer.open({
 			  title: '友情提醒',
 			  btn:[],
@@ -188,27 +202,19 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 			  }   
 			});
 			// 当播放线路加载失败 且 只有一条的时候 发送 load_error 信息
-			isopen_ws = false
+			markWrongLine()
+
 			return
 		}else{
-			
-			// 发送后台播放错误的线路
-			mui.ajax(custom.host + '/v1/markWrongLine',{
-				data:{'detail_id':custom.params.id,'play_line_index':layui.cache.play_info.play_line_index},
-				dataType:'json',//服务器返回json格式数据
-				type:'get',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				headers:{'Authorization':localStorage.authToken},
-				success:function(msg){
-					console.log(msg)
-				},
-			});
-			
+			markWrongLine()
+
 			// 如果有不止一个线路 自动切换线路播放
 			dp.notice('视频加载失败~ ,正在为您切换线路！')
+			// 删除掉 当前线路
+			window.swiper_play_line.removeSlide(window.swiper_play_line.activeIndex);
 			//切换到下一个线路
-			window.swiper_play_line.slideTo(window.swiper_play_line.activeIndex + 1)
-			layui.cache.play_info.play_line_index = window.swiper_play_line.activeIndex + 1
+			window.swiper_play_line.slideTo(0)
+			layui.cache.play_info.play_line_index = window.swiper_play_line.activeIndex
 			
 			
 			// 获取下个线路的当前的 播放play_item_index 索引

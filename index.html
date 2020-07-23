@@ -68,10 +68,10 @@
           <img src="static/images/avatar/default.png">
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>观看记录</a></dd>
           <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;" class="layui-bg-black">
+          <hr  class="layui-bg-black">
           <dd><a href="javascript:;" class="loginOut" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
@@ -91,7 +91,7 @@
 	<div class="layui-row search" >
 		 <form action="" class="layui-form search-form">
 			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
-				<input type="text" name="kw" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input keyword">    
+				<input type="text" name="kw" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input keyword">
 			 </div>
 			 <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
 			 	<button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit">搜索</button>
@@ -120,7 +120,7 @@
 			  
 		  </div>
 	    </div>
-		
+
 	    <div class="layui-colla-item">
 			<h2 class="layui-colla-title">观看记录
 				<span style="float: right;font-size: 5px;color: #9e9e9e;">
@@ -134,8 +134,9 @@
 			  <div class="layui-flow-more" style="display: none;">暂无数据</div>
 			</div>
 	    </div>
+
 		<div class="layui-colla-item " style="display: none;">
-			<h2 class="layui-colla-title" id="search_result">搜索结果 <span style="float: right;color: #9e9e9e;">更多 ></span></h2>
+			<h2 class="layui-colla-title" id="search_result">搜索结果 </h2>
 			<div class="layui-colla-content ">
 				<ul class="fly-case-list" id="vlistView" style="display: none;">
 					
@@ -236,8 +237,25 @@
 		var flow = layui.flow
 		flow.lazyimg()
 
+		// 进入播放页面之前 先记录播放记录 时间 等信息
+		var setWatchLogger = function (detail_id ,successCallBack) {
+			mui.ajax(custom.host + '/v1/watchLogger',{
+				data:{'id':detail_id},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				headers:{'Authorization':localStorage.authToken},
+				success:function(msg){
+					if(msg.code == 1){
+						successCallBack(msg)
+					}else{
+						layer.msg(msg.msg)
+					}
+				},
+			});
+		}
+
 		//获取搜索历史
-		
 		var search_history = function(){
 			
 			mui.ajax(custom.host + '/v1/search/history',{
@@ -250,29 +268,26 @@
 				},
 				success:function(msg){
 					laytpl(searchTpl.innerHTML).render(msg.data, function(html){
-					  // view.innerHTML = html;
-					  $('#search-history-box').append(html)
+						document.getElementById('search-history-box').innerHTML = html
 					});
 					
 					// 搜索历史点击后直接触发 搜索
 					$('#search-history-box').find('button').on('click',function(){
-						$('.search-form').find('input[name=kw]').attr('value',$(this).text())
+						$('.search-form').find('input[name=kw]').val('')
+						$('.search-form').find('input[name=kw]').val($(this).text())
 						$('.search-form').find('.submit').trigger('click')
-		
 					})
-					
-					$('.search-history-content').addClass('layui-show')
+
 				},
 				error:function(xhr,type,errorThrown){
 					custom.ajaxErrorHandler(xhr)
 				}
 			});
-		}
-		
-		search_history()
-		
+		}()
+
 		window.addEventListener('search_history',search_history)
-		
+
+		// 获取播放记录
 		var getWatchLoggerList = function(){
 			mui.ajax(custom.host + '/v1/getWatchLoggerList',{
 				dataType:'json',//服务器返回json格式数据
@@ -335,17 +350,19 @@
 								// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
 								let watch_log_info = this.getAttribute('watch-log-info')
 								localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
-								mui.openWindow({
-									id:'detail' ,
-									url:'detail.html?id=' + detail_id 
-								  });
+								setWatchLogger(detail_id,function (msg) {
+
+									mui.openWindow({
+										id:'detail' ,
+										url:'detail.html?id=' + detail_id
+									});
+								})
 							})
 
-
 						}
+
 						bind_tap_on_history_item()
-						
-						
+
 					}else{
 						$('.watchlog').fadeOut();
 						$('.watchlog').next().fadeIn();
@@ -358,27 +375,25 @@
 				}
 			});
 			
-		}
-		
-		
-		getWatchLoggerList()
+		}()
+
 		window.addEventListener('getWatchLoggerList',getWatchLoggerList)
 		
 		//固定Bar
 		util.fixbar({
-		  bar1: '&#xe68e;'
-		  ,bgcolor: '#009688'
-		  ,click: function(type){
-			if(type === 'bar1'){
-			  mui.openWindow({
-			      id:'index' ,
-			      url:'index.html'
-			    });
-			}
+		  // bar1: '&#xe68e;',
+		  bgcolor: '#009688',
+		  click: function(type){
+			// if(type === 'bar1'){
+			//   mui.openWindow({
+			//       id:'index' ,
+			//       url:'index.html'
+			//     });
+			// }
 		  }
 		});
-		
-		
+
+
 		var toend = false
 		var getListData = function(ListTpl,requestUrl,params){
 			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
@@ -460,24 +475,13 @@
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
 				localStorage.removeItem('watch_log_info')
-				mui.ajax(custom.host + '/v1/watchLogger',{
-					data:{'id':detail_id},
-					dataType:'json',//服务器返回json格式数据
-					type:'post',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
-					headers:{'Authorization':localStorage.authToken},
-					success:function(msg){
-						if(msg.code == 1){
-							mui.openWindow({
-								id:'detail' ,
-								url:'detail.html?id=' + detail_id
-							  });
-						}else{
-							layer.msg(msg.msg)
-						}
-					},
-				});
-				
+
+				setWatchLogger(detail_id ,function(msg){
+					mui.openWindow({
+						id:'detail' ,
+						url:'detail.html?id=' + detail_id
+					});
+				})
 				
 				
 			})

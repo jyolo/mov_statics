@@ -92,7 +92,7 @@
 				<script type="text/html" id="playitem">
 					{{#  layui.each(d, function(index, item){ }}
 						<div class="swiper-slide">
-							{{#  layui.each(item, function(k, v){ }}
+							{{#  layui.each(item.play_m3u8 , function(k, v){ }}
 								<button type="button" class="layui-btn layui-btn-radius layui-btn-normal play-botton" data="{{ v.value }}">{{ v.name }}</button>
 							{{# }) }}
 						</div>
@@ -243,9 +243,10 @@
 			timeout:10000,//超时时间设置为10秒；
 			headers:{'Authorization':localStorage.authToken},
 			success:function(msg){
+                console.log(msg.data)
 				let getTpl = playitem.innerHTML
 				let view = document.getElementById('playwrapper');
-				layui.laytpl(getTpl).render(msg.data['play_m3u8'], function(html){
+				layui.laytpl(getTpl).render(msg.data, function(html){
 					view.innerHTML = html;
 				});
 				
@@ -288,7 +289,7 @@
 				}else{
 					// 预加载第一个
                     window.dp.switchVideo({
-					    url: msg.data['play_m3u8'][0][0]['value'],
+					    url: msg.data[0]['play_m3u8'][0]['value'],
 						type: 'customHls',
 					    pic: 'http://images.shejidaren.com/wp-content/uploads/2018/03/134715wPw.jpg',
 
