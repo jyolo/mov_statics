@@ -12,8 +12,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/css/global.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/video-js.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mui/mui.min.js"></script>
+
   <style>
 
   @media screen and (min-width: 960px){
@@ -107,11 +106,12 @@
 
 </div>
 
-
-
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mui/mui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/layui/layui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/DPlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/layui/layui.js"></script>
 <script>
 
 	window.dp = new DPlayer({
@@ -147,7 +147,7 @@
 	
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'static/mods/' //这里实际使用时，建议改成绝对路径
+	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
@@ -236,7 +236,7 @@
 		}
 		
 		
-		mui.ajax(host + '/v1/getDetail',{
+		mui.ajax(conf.host + '/v1/getDetail',{
 			data:{id:custom.params.id},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
@@ -387,7 +387,7 @@
 				// ajax 轮询
 				window.send_watch_info_interval = setInterval(function(){
 					
-                    mui.ajax(custom.host + '/v1/setWatchLog',{
+                    mui.ajax(conf.host + '/v1/setWatchLog',{
                         data:layui.cache.play_info,
                         dataType:'json',//服务器返回json格式数据
                         type:'post',//HTTP请求类型,
@@ -459,7 +459,7 @@
 				layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
 				layui.cache.play_info['play_item_index'] = layui.cache.play_info.play_item_index + 1
 				
-				mui.ajax(custom.host + '/v1/setWatchLog',{
+				mui.ajax(conf.host + '/v1/setWatchLog',{
 				    data:layui.cache.play_info,
 				    dataType:'json',//服务器返回json格式数据
 				    type:'post',//HTTP请求类型,
