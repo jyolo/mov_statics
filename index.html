@@ -147,7 +147,7 @@
 								<a href="#" class="vlist" data="{{ item.id }}">
 									<div class="layui-row ">
 										<div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
-										  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/https://cdn.jsdelivr.net/gh/jyolo/mov_statics@100d648f62c6a224b5b47af442290eae991f51b8/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
+										  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@100d648f62c6a224b5b47af442290eae991f51b8/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
 										</div>
 										<div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
 										 <h5 class="title">{{ item.title }}</h5>
@@ -314,7 +314,7 @@
 							let _dom = '<div class="layui-card watch_log_item">' + 
 											'<div class="layui-card-header">'+v.title+'</div>'+
 											'<div class="layui-card-body">'+
-												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/https://cdn.jsdelivr.net/gh/jyolo/mov_statics@100d648f62c6a224b5b47af442290eae991f51b8/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
+												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@100d648f62c6a224b5b47af442290eae991f51b8/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
 												'<span class="watch_rate">'+
 													'<div class="layui-progress" lay-showPercent="true">'+
 														'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
