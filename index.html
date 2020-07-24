@@ -346,6 +346,7 @@
 						//初始化 进度条 绑定 点击事件
 						var bind_tap_on_history_item = function(){
 							element.init()
+							Echo.init()
 							mui('.swiper-slide').on('tap','a',function(){
 								detail_id = this.getAttribute('data')
 								data_index = this.getAttribute('data-index')
