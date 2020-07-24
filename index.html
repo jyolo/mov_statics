@@ -50,6 +50,7 @@
 
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
+
   </style>
 </head>
 <body class="fly-full">
@@ -147,7 +148,7 @@
 								<a href="#" class="vlist" data="{{ item.id }}">
 									<div class="layui-row ">
 										<div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
-										  <img lay-src="{{ cover_host + item.cover_id }}" >
+										  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ cover_host + item.cover_id }}" >
 										</div>
 										<div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
 										 <h5 class="title">{{ item.title }}</h5>
@@ -208,7 +209,7 @@
 	  ,base: 'static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
+	}).use(['element','form','layer','custom','util','laytpl'],function(){
 		var backNum = 0
 		mui.init({
 		
@@ -234,9 +235,8 @@
 		var layer = layui.layer
 		var custom = layui.custom
 		var util = layui.util
-		var flow = layui.flow
-		flow.lazyimg()
-
+	
+	﻿
 		// 进入播放页面之前 先记录播放记录 时间 等信息
 		var setWatchLogger = function (detail_id ,successCallBack) {
 			mui.ajax(custom.host + '/v1/watchLogger',{
@@ -312,7 +312,7 @@
 							let _dom = '<div class="layui-card watch_log_item">' + 
 											'<div class="layui-card-header">'+v.title+'</div>'+
 											'<div class="layui-card-body">'+
-												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img src="'+cover_host + v.cover+'" /></a>'+
+												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+cover_host + v.cover+'" /></a>'+
 												'<span class="watch_rate">'+
 													'<div class="layui-progress" lay-showPercent="true">'+
 														'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
@@ -362,7 +362,7 @@
 						}
 
 						bind_tap_on_history_item()
-
+						window.Echo.init()
 					}else{
 						$('.watchlog').fadeOut();
 						$('.watchlog').next().fadeIn();
@@ -428,7 +428,8 @@
 						
 					}
 					
-					flow.lazyimg()
+					// flow.lazyimg()
+					window.Echo.init()
 				},
 				error:function(xhr,type,errorThrown){
 					console.log(xhr)
