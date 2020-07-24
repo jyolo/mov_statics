@@ -1,42 +1,3 @@
-/**
- * echo.min.js 图片懒加载
- */
-﻿window.Echo=(function(window,document,undefined){'use strict';var store=[],offset,throttle,poll;var _inView=function(el){var coords=el.getBoundingClientRect();return((coords.top>=0&&coords.left>=0&&coords.top)<=(window.innerHeight||document.documentElement.clientHeight)+parseInt(offset));};var _pollImages=function(){for(var i=store.length;i--;){var self=store[i];if(_inView(self)){self.src=self.getAttribute('data-echo');store.splice(i,1);}}};var _throttle=function(){clearTimeout(poll);poll=setTimeout(_pollImages,throttle);};var init=function(obj){var nodes=document.querySelectorAll('[data-echo]');var opts=obj||{};offset=opts.offset||0;throttle=opts.throttle||250;for(var i=0;i<nodes.length;i++){store.push(nodes[i]);}_throttle();if(document.addEventListener){window.addEventListener('scroll',_throttle,false);}else{window.attachEvent('onscroll',_throttle);}};return{init:init,render:_throttle};})(window,document);
-
-
-var host = 'https://api.yy8.pw'
-var ws_host = 'wss://ws.yy8.pw'
-var cover_host = 'https://cdn.jsdelivr.net/gh/zenhiss/mov_img/cover/'
-
-// var host = 'http://api.m.com'
-// var ws_host = 'ws://ws.m.com:2345'
-// var cover_host = 'http://img.i3tp.cn:66/'
-var chooseTag = Function()
-var isApp = false
-
-
-
-// 没登陆跳转到登陆页面
-if(localStorage.authToken == undefined && window.location.href.indexOf('auth') == -1){
-	mui.openWindow({
-	    id:'auth' ,
-	    url:'./user/auth.html' 
-	  });
-}
-
-if(localStorage.authToken != undefined && window.location.href.indexOf('auth') != -1){
-	mui.openWindow({
-	    id:'index' ,
-	    url:'../index.html' 
-	  });
-}
-
-
-if (window.plus != undefined){
-	isApp = true
-}
-
-window.loginOut = function(){}
 
 layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	href = window.location.href.split('?') 
@@ -44,11 +5,8 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	var custom = {}
 	device = layui.device()
 	var $ = layui.jquery
-	// console.log(device)
 	var laytpl = layui.laytpl
-	custom.host = host	
-	custom.ws_host = ws_host	
-	
+
 	
 	let params = {},arg = []
 	if(href.length >= 2){
@@ -64,7 +22,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	}
 	
 	window.loginOut = function(){
-		mui.ajax(custom.host + '/v1/auth/loginOut',{
+		mui.ajax(conf.host + '/v1/auth/loginOut',{
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
@@ -97,7 +55,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 				  var lis = [];
 				  console.log('to the end')
 				  p = $.extend(paramField ,{'page':page})
-				  mui.ajax(custom.host + requestUrl,{
+				  mui.ajax(conf.host + requestUrl,{
 					data:p,
 					dataType:'json',//服务器返回json格式数据
 					type:'get',//HTTP请求类型
@@ -162,7 +120,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 
 	var markWrongLine = function () {
 		// 发送后台播放错误的线路
-		mui.ajax(custom.host + '/v1/markWrongLine',{
+		mui.ajax(conf.host + '/v1/markWrongLine',{
 			data:{'detail_id':custom.params.id,'play_line_index':layui.cache.play_info.play_line_index},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
