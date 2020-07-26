@@ -51,6 +51,7 @@
 
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
+
   </style>
 </head>
 <body class="fly-full">
@@ -148,7 +149,7 @@
 								<a href="#" class="vlist" data="{{ item.id }}">
 									<div class="layui-row ">
 										<div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
-										  <img lay-src="{{ cover_host + item.cover_id }}" >
+										  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
 										</div>
 										<div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
 										 <h5 class="title">{{ item.title }}</h5>
@@ -200,8 +201,10 @@
 
 </div>
 
-
-
+<script src="static/mui/mui.min.js"></script>
+<script src="static/js/global.js"></script>
+<script src="static/layui/layui.js"></script>
+<script src="static/swiper/swiper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>
 <script>
 	layui.config({
@@ -209,7 +212,7 @@
 	  ,base: 'static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
+	}).use(['element','form','layer','custom','util','laytpl'],function(){
 		var backNum = 0
 		mui.init({
 		
@@ -235,12 +238,12 @@
 		var layer = layui.layer
 		var custom = layui.custom
 		var util = layui.util
-		var flow = layui.flow
-		flow.lazyimg()
+
+	﻿
 
 		// 进入播放页面之前 先记录播放记录 时间 等信息
 		var setWatchLogger = function (detail_id ,successCallBack) {
-			mui.ajax(custom.host + '/v1/watchLogger',{
+			mui.ajax(conf.host + '/v1/watchLogger',{
 				data:{'id':detail_id},
 				dataType:'json',//服务器返回json格式数据
 				type:'post',//HTTP请求类型
@@ -259,7 +262,7 @@
 		//获取搜索历史
 		var search_history = function(){
 			
-			mui.ajax(custom.host + '/v1/search/history',{
+			mui.ajax(conf.host + '/v1/search/history',{
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
@@ -290,7 +293,7 @@
 
 		// 获取播放记录
 		var getWatchLoggerList = function(){
-			mui.ajax(custom.host + '/v1/getWatchLoggerList',{
+			mui.ajax(conf.host + '/v1/getWatchLoggerList',{
 				dataType:'json',//服务器返回json格式数据
 				type:'post',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
@@ -313,7 +316,7 @@
 							let _dom = '<div class="layui-card watch_log_item">' + 
 											'<div class="layui-card-header">'+v.title+'</div>'+
 											'<div class="layui-card-body">'+
-												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img src="'+cover_host + v.cover+'" /></a>'+
+												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
 												'<span class="watch_rate">'+
 													'<div class="layui-progress" lay-showPercent="true">'+
 														'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
@@ -363,7 +366,7 @@
 						}
 
 						bind_tap_on_history_item()
-
+						window.Echo.init()
 					}else{
 						$('.watchlog').fadeOut();
 						$('.watchlog').next().fadeIn();
@@ -406,7 +409,7 @@
 				'params' : params
 			} 
 			
-			mui.ajax(custom.host + requestUrl,{
+			mui.ajax(conf.host + requestUrl,{
 				data:params,
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
@@ -429,7 +432,8 @@
 						
 					}
 					
-					flow.lazyimg()
+					// flow.lazyimg()
+					window.Echo.init()
 				},
 				error:function(xhr,type,errorThrown){
 					console.log(xhr)
@@ -493,7 +497,7 @@
 		
 		// app 中
 		mui.plusReady(function () {
-		    console.log('234234324')
+
 			wv = plus.webview.currentWebview()
 			wv.addEventListener('popGesture',function(e){
 				console.log('popGesture: '+e.type+','+e.result+','+e.progress)
