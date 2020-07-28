@@ -119,13 +119,17 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	}
 
 	var markWrongLine = function () {
+		var headers = {}
+		if(isLogin == true){
+			var headers = {'Authorization':localStorage.authToken}
+		}
 		// 发送后台播放错误的线路
 		mui.ajax(conf.host + '/v1/markWrongLine',{
 			data:{'detail_id':custom.params.id,'play_line_index':layui.cache.play_info.play_line_index},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
-			headers:{'Authorization':localStorage.authToken},
+			headers:headers,
 			success:function(msg){
 				console.log(msg)
 			},
