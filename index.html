@@ -40,7 +40,7 @@
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
   .main-content{background: #FFFFFF;margin-top: 1rem;}
-
+  .layui-tab-title li{min-width: 0px}
   </style>
 </head>
 <body class="fly-full">
@@ -97,7 +97,7 @@
 
 	  <div class="layui-collapse" lay-accordion>
 
-	    <div class="layui-colla-item search-item " >
+	    <div class="layui-colla-item search-item hidden" >
 	      <h2 class="layui-colla-title ">搜索历史</h2>
 	      <div class="layui-colla-content search-history-content" >
 			  <div  id="search-history-box">
@@ -114,7 +114,7 @@
 		  </div>
 	    </div>
 
-	    <div class="layui-colla-item watch-log-item " >
+	    <div class="layui-colla-item watch-log-item hidden" >
 			<h2 class="layui-colla-title">观看记录</h2>
 			<div class="layui-colla-content watch-log-content">
 			  <div class="swiper-container watchlog">
@@ -126,65 +126,85 @@
 			</div>
 	    </div>
 
-		<div class="layui-colla-item search-result hidden" >
+		<div class="layui-colla-item search-result " >
 			<h2 class="layui-colla-title" id="search_result">搜索结果 </h2>
 			<div class="layui-colla-content ">
-				<ul class="fly-case-list" id="vlistView" style="display: none;">
-					
-					<script type="text/html" id="vlistScript">
-						
-						 {{#  layui.each(d, function(index, item){ }}
-							<li>
-								<a href="#" class="vlist" data="{{ item.id }}">
-									<div class="layui-row ">
-										<div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
-										  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
-										</div>
-										<div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
-										 <h5 class="title">{{ item.title }}</h5>
-										 {{# if (item.year && item.year != ''){ }}
-											 <p>年份: {{ item.year }}</p>
-										 {{# }else{  }}
-											<p>年份: 未知</p>	
-										 {{# }  }}
-										 
-										 {{# if (item.area && item.area != ''){ }}
-											 <p>地区: {{ item.area }}</p>
-										 {{# }else{  }}
-											 <p>地区: 未知</p>	
-										 {{# }  }}
-										 
-										 {{# if (item.director && item.director != ''){ }}
-											 <p>导演: {{ item.director }}</p>
-										 {{# }else{  }}
-											 <p>导演: 未知</p>	
-										 {{# }  }}
-										 						 
-										 {{# if (item.actor && item.actor != ''){ }}
-											 <p>演员: {{ item.actor }}</p>
-										 {{# }else{  }}
-											 <p>演员: 未知</p>	
-										 {{# }  }}
-
-										 {{# if (item.desc && item.desc != ''){ }}
-											  <p>简介: {{ item.desc }}</p>
-										 {{# }else{  }}
-											  <p>简介: 未知</p>	
-										 {{# }  }}
-										</div>
-									</div>
-								</a>
-							</li>
-						{{# }) }}
-						
-					</script>
-				
-				</ul>
-				
+				<ul class="fly-case-list" id="vlistView" style="display: none;"></ul>
 			</div>
 		</div>
 
       </div>
+
+        <script type="text/html" id="vlistScript">
+
+            {{#  layui.each(d, function(index, item){ }}
+            <li>
+                <a href="#" class="vlist" data="{{ item.id }}">
+                    <div class="layui-row ">
+                        <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
+                            <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
+                        </div>
+                        <div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
+                            <h5 class="title">{{ item.title }}</h5>
+                            {{# if (item.year && item.year != ''){ }}
+                            <p>年份: {{ item.year }}</p>
+                            {{# }else{  }}
+                            <p>年份: 未知</p>
+                            {{# }  }}
+
+                            {{# if (item.area && item.area != ''){ }}
+                            <p>地区: {{ item.area }}</p>
+                            {{# }else{  }}
+                            <p>地区: 未知</p>
+                            {{# }  }}
+
+                            {{# if (item.director && item.director != ''){ }}
+                            <p>导演: {{ item.director }}</p>
+                            {{# }else{  }}
+                            <p>导演: 未知</p>
+                            {{# }  }}
+
+                            {{# if (item.actor && item.actor != ''){ }}
+                            <p>演员: {{ item.actor }}</p>
+                            {{# }else{  }}
+                            <p>演员: 未知</p>
+                            {{# }  }}
+
+                            {{# if (item.desc && item.desc != ''){ }}
+                            <p>简介: {{ item.desc }}</p>
+                            {{# }else{  }}
+                            <p>简介: 未知</p>
+                            {{# }  }}
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {{# }) }}
+
+        </script>
+
+      <div class="layui-row">
+          <div class="layui-tab layui-tab-brief" lay-filter="mov_category" >
+              <ul class="layui-tab-title" >
+                  <li class="layui-this">啊啊</li>
+                  <li>啊啊</li>
+                  <li>啊啊啊</li>
+                  <li>啊啊</li>
+              </ul>
+              <div class="layui-tab-content">
+                  <div id="search_result_swpier" class="swiper-container" >
+                      <div class="swiper-wrapper">
+                          <div class="swiper-slide dy" data-type="dy">slider1</div>
+                          <div class="swiper-slide dsj" data-type="dsj">slider2</div>
+                          <div class="swiper-slide dm" data-type="dm">slider3</div>
+                          <div class="swiper-slide zy" data-type="zy">slider4</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
 
 
 	</div>
@@ -229,6 +249,23 @@
 		var layer = layui.layer
 		var custom = layui.custom
 		var util = layui.util
+
+
+        window.search_result_swpier = new Swiper('#search_result_swpier',{
+            autoHeight: true,
+            on: {
+                slideChangeTransitionStart: function () {
+                    $('.layui-tab-title').find('li').removeClass('layui-this');
+                    $('.layui-tab-title').find('li').eq(this.activeIndex).addClass('layui-this');
+                },
+            }
+        })
+
+        //监听 mov_category 点击
+        element.on('tab(mov_category)', function(data){
+            search_result_swpier.slideTo(data.index)
+        })
+
 
 	﻿
 		// 进入播放页面之前 先记录播放记录 时间 等信息
@@ -405,9 +442,15 @@
 		var toend = false
 		var getListData = function(ListTpl,requestUrl,params){
 
+
+
 			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
 			params.page = params.page ? params.page : 0
-			
+            // 当前swpier 的类型
+            params.data_type = $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(search_result_swpier.activeIndex).attr('data-type')
+
+            console.log(params)
+
 			layui.cache.getListDataFuncArgs = {
 				'ListTpl':ListTpl,
 				'requestUrl' : requestUrl,
@@ -417,6 +460,7 @@
 			if(isLogin){
 			    var heards = {'Authorization':localStorage.authToken}
             }
+
 
 			mui.ajax(conf.host + requestUrl,{
 				data:params,
@@ -433,7 +477,10 @@
 					if(msg.data.list.length > 0){
 						layui.laytpl(ListTpl).render(msg.data.list, function(html){
 							$('#vlistView').find('.layui-flow-more').remove()
-							$('#vlistView').append(html)
+							// $('#vlistView').append(html)
+                            console.log('1111111111')
+                            $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(search_result_swpier.activeIndex).append(html)
+                            search_result_swpier.update()
 							toend = true
 						});
 					}else{
@@ -468,7 +515,7 @@
 				}
 			}
 		);
-		
+
 		var getTpl = vlistScript.innerHTML
 		form.on('submit(seachSubmit)', function(data){
 		  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
@@ -476,7 +523,6 @@
 		  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
 			let view = $('#vlistView').empty()
 			//显示 搜索结果折叠面板
-			
 			if($('#search_result').next().hasClass('layui-show') == false){
 				$('#search_result').parent('.layui-colla-item').fadeIn()
 				$('#search_result').trigger('click')
@@ -484,9 +530,8 @@
 			}
 			
 			getListData(getTpl,'/v1/search' ,data.field)
-			// custom.flow(getTpl,'/v1/search',data.field)
-			
-			
+
+
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
 				// localStorage.removeItem('watch_log_info')
@@ -500,10 +545,9 @@
 
 			})
 		  
-		  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 		});
 
-		
 		// app 中
 		mui.plusReady(function () {
 
