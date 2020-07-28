@@ -234,14 +234,17 @@
 			});
 			return false
 		}
-		
-		
+
+        var headers = {};
+        if(isLogin == true){
+            var headers = {'Authorization':localStorage.authToken}
+        }
 		mui.ajax(conf.host + '/v1/getDetail',{
 			data:{id:custom.params.id},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
-			headers:{'Authorization':localStorage.authToken},
+            headers:headers,
 			success:function(msg){
                 console.log(msg.data)
 				let getTpl = playitem.innerHTML
@@ -249,7 +252,6 @@
 				layui.laytpl(getTpl).render(msg.data, function(html){
 					view.innerHTML = html;
 				});
-				
 				//遍历线路
 				window.swiper_play_line = new Swiper('.play-line', {
 				     slidesPerView: 1,
@@ -382,8 +384,8 @@
 			layui.cache.play_info.play_time = dp.video.currentTime
             layui.cache.play_info.video_total_time = dp.video.duration
 
-			// 定时间没有初始化 且 视频状态已就绪 则开始 定时器轮询
-			if (window.send_watch_info_interval == undefined && dp.video.readyState == 4){
+			// 定时间没有初始化 且 视频状态已就绪 则开始 定时器轮询  已登陆 才记录
+			if (window.send_watch_info_interval == undefined && dp.video.readyState == 4 && isLogin == true){
 				// ajax 轮询
 				window.send_watch_info_interval = setInterval(function(){
 					

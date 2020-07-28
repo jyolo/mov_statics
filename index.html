@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>友影</title>
-  <meta name="keywords" content="{{ lay.base.keywords }}">
-  <meta name="description" content="{{ lay.base.description }}">
+  <meta name="keywords" content="影视搜索">
+  <meta name="description" content="影视搜索引擎">
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -17,40 +17,29 @@
   <script src="static/swiper/swiper.min.js"></script>
   <script src="static/mui/mui.min.js"></script>
   <style>
-  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
-  .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
+
   .fly-main{min-height: auto;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
   .search{margin-top:3rem;}
+  .search .keyword{height: 4rem ;border-radius: 2px}
+  .search .submit{height: 4rem}
   .search-history .layui-btn{margin: 0.2rem;}
-  .layui-colla-title{background-color: #FFFFFF;}
+  .layui-colla-title{background-color: #FFFFFF;height: auto}
   .search-tag{display: inline-block;padding-bottom: 0.5rem;}
   .layui-card-header{height: 24px;text-align: left;border-bottom: none}
   .layui-card-body{height: 105px;}
-  .watch_rate{
-	  width: 100%;
-	  display: block;
-  }
+  .watch_rate{width: 100%;display: block;}
   @media screen and (min-width: 960px){
-	  .layui-card-body{
-		  height: 22rem;
-	  }
-	  .layui-card-body img{
-		  width: 100%;
-		  height: 21rem;
-		  display: block;
-	  }
+	  .layui-card-body{height: 22rem;}
+	  .layui-card-body img{width: 100%;height: 21rem;display: block;}
   }
   @media screen and (max-width: 768px){
-	  .layui-card-body img{
-		  width: 100%;
-		  height: 7.01rem;
-		  display: block;
-	  }
+	  .layui-card-body img{width: 100%;height: 7.01rem;display: block;}
   }
 
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
+  .main-content{background: #FFFFFF;margin-top: 1rem;}
 
   </style>
 </head>
@@ -85,15 +74,17 @@
 
 
 <div class="fly-main" style="overflow: hidden;">
-<!--	<div class="layui-row" style="text-align: center">-->
-<!--		<div class="logo">-->
-<!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" />-->
-<!--		</div>-->
-<!--	</div>-->
+    <!--logo-->
+	<div class="layui-row" style="text-align: center">
+		<div class="logo">
+			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" style="height: 200px;width:300px;border:1px solid black"/>
+		</div>
+	</div>
+    <!--search box-->
 	<div class="layui-row search" >
 		 <form action="" class="layui-form search-form">
 			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
-				<input type="text" name="kw" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input keyword">
+				<input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword">
 			 </div>
 			 <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
 			 	<button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit">搜索</button>
@@ -101,13 +92,14 @@
 		 </form>
 	</div>
 
-	
-	<div class="layui-row " style="background: #FFFFFF;margin-top: 1rem;">
+    <!--search result-->
+	<div class="layui-row main-content" >
+
 	  <div class="layui-collapse" lay-accordion>
-	    <div class="layui-colla-item ">
+
+	    <div class="layui-colla-item search-item " >
 	      <h2 class="layui-colla-title ">搜索历史</h2>
-	      <div class="layui-colla-content search-history-content">
-			  
+	      <div class="layui-colla-content search-history-content" >
 			  <div  id="search-history-box">
 			    <script type="text/html" id="searchTpl">
 			  			{{# if(d.length > 0){ }}
@@ -119,25 +111,22 @@
 			  			{{# } }}
 			  		</script>
 			  </div>
-			  
 		  </div>
 	    </div>
 
-	    <div class="layui-colla-item">
-			<h2 class="layui-colla-title">观看记录
-				<span style="float: right;font-size: 5px;color: #9e9e9e;">
-					<a href="user/watch_history.html">更多 ></a>
-				</span>
-			</h2>
+	    <div class="layui-colla-item watch-log-item " >
+			<h2 class="layui-colla-title">观看记录</h2>
 			<div class="layui-colla-content watch-log-content">
 			  <div class="swiper-container watchlog">
-				<div class="swiper-wrapper"></div>
+                    <div class="swiper-wrapper">
+
+                    </div>
 			  </div>
-			  <div class="layui-flow-more" style="display: none;">暂无数据</div>
+
 			</div>
 	    </div>
 
-		<div class="layui-colla-item " style="display: none;">
+		<div class="layui-colla-item search-result hidden" >
 			<h2 class="layui-colla-title" id="search_result">搜索结果 </h2>
 			<div class="layui-colla-content ">
 				<ul class="fly-case-list" id="vlistView" style="display: none;">
@@ -176,8 +165,7 @@
 										 {{# }else{  }}
 											 <p>演员: 未知</p>	
 										 {{# }  }}
-										 
-										 
+
 										 {{# if (item.desc && item.desc != ''){ }}
 											  <p>简介: {{ item.desc }}</p>
 										 {{# }else{  }}
@@ -195,7 +183,10 @@
 				
 			</div>
 		</div>
-	   
+
+      </div>
+
+
 	</div>
 	
 
@@ -240,149 +231,163 @@
 		var util = layui.util
 
 	﻿
-
 		// 进入播放页面之前 先记录播放记录 时间 等信息
 		var setWatchLogger = function (detail_id ,successCallBack) {
-			mui.ajax(conf.host + '/v1/watchLogger',{
-				data:{'id':detail_id},
-				dataType:'json',//服务器返回json格式数据
-				type:'post',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				headers:{'Authorization':localStorage.authToken},
-				success:function(msg){
-					if(msg.code == 1){
-						successCallBack(msg)
-					}else{
-						layer.msg(msg.msg)
-					}
-				},
-			});
+            var headers = {}
+		    if(isLogin == true){
+                var headers = {'Authorization':localStorage.authToken}
+            }
+            mui.ajax(conf.host + '/v1/watchLogger',{
+                data:{'id':detail_id},
+                dataType:'json',//服务器返回json格式数据
+                type:'post',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                headers:headers,
+                success:function(msg){
+                    if(msg.code == 1){
+                        successCallBack(msg)
+                    }else{
+                        layer.msg(msg.msg)
+                    }
+                },
+            });
 		}
 
 		//获取搜索历史
-		var search_history = function(){
-			
-			mui.ajax(conf.host + '/v1/search/history',{
-				dataType:'json',//服务器返回json格式数据
-				type:'get',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				headers:{'Authorization':localStorage.authToken},
-				beforeSend:function(){
-					$('#search-history-box').find('.search-tag').remove()
-				},
-				success:function(msg){
-					laytpl(searchTpl.innerHTML).render(msg.data, function(html){
-						document.getElementById('search-history-box').innerHTML = html
-					});
-					
-					// 搜索历史点击后直接触发 搜索
-					$('#search-history-box').find('button').on('click',function(){
-						$('.search-form').find('input[name=kw]').val('')
-						$('.search-form').find('input[name=kw]').val($(this).text())
-						$('.search-form').find('.submit').trigger('click')
-					})
+		var getSearchHistory = function(){
+			if(isLogin == false){
+                $('.search-history-content').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn" onclick="window.gotoLogin()">请登录</span></div>')
+            }else{
+                mui.ajax(conf.host + '/v1/search/history',{
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    headers:{'Authorization':localStorage.authToken},
+                    beforeSend:function(){
+                        $('#search-history-box').find('.search-tag').remove()
+                    },
+                    success:function(msg){
+                        laytpl(searchTpl.innerHTML).render(msg.data, function(html){
+                            document.getElementById('search-history-box').innerHTML = html
+                        });
 
-				},
-				error:function(xhr,type,errorThrown){
-					custom.ajaxErrorHandler(xhr)
-				}
-			});
-		}()
+                        // 搜索历史点击后直接触发 搜索
+                        $('#search-history-box').find('button').on('click',function(){
+                            $('.search-form').find('input[name=kw]').val('')
+                            $('.search-form').find('input[name=kw]').val($(this).text())
+                            $('.search-form').find('.submit').trigger('click')
+                        })
 
-		window.addEventListener('search_history',search_history)
+                    },
+                    error:function(xhr,type,errorThrown){
+                        custom.ajaxErrorHandler(xhr)
+                    }
+                });
+            }
+
+		}
+		window.addEventListener('getSearchHistory',getSearchHistory)
 
 		// 获取播放记录
 		var getWatchLoggerList = function(){
-			mui.ajax(conf.host + '/v1/getWatchLoggerList',{
-				dataType:'json',//服务器返回json格式数据
-				type:'post',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				headers:{'Authorization':localStorage.authToken},
-				success:function(msg){
-					if(msg.data.length > 0){
-						$('.watch-log-content').addClass('layui-show')
-						
-						let _list = []
-						$.each(msg.data,function(k,v){
-							
-							var watch_log_info = {
-								'play_detail_id' : v.play_detail_id,
-								'play_line_index' : v.play_line_index ? v.play_line_index : 0,
-								'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
-								'play_time' : v.play_time ? v.play_time : 0.00 ,
-								'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
-							}
-							
-							let _dom = '<div class="layui-card watch_log_item">' + 
-											'<div class="layui-card-header">'+v.title+'</div>'+
-											'<div class="layui-card-body">'+
-												'<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
-												'<span class="watch_rate">'+
-													'<div class="layui-progress" lay-showPercent="true">'+
-														'<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
-													'</div>' +
-												'</span>'+
-											'</div>'+
-										'</div>'
-										
-							_list.push(_dom)
-						})
-						window.swiper_watchlog = new Swiper('.watchlog', {
-							  slidesPerView: 3,
-							  slidesPerGroup:3,
-							  centeredSlides: false,
-							  spaceBetween: 1,
-							  virtual: {
-								slides: [],
-							  },
-							  on:{
-							      slideChange: function(){
-									bind_tap_on_history_item()
-							      },
-							    },
-						});
-						window.swiper_watchlog.virtual.removeAllSlides()
-						window.swiper_watchlog.virtual.appendSlide(_list)
-						window.swiper_watchlog.virtual.update()
+		    if(isLogin == false){
+                $('.watchlog').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn " onclick="window.gotoLogin()">请登录</span></div>')
+            }else{
+                mui.ajax(conf.host + '/v1/getWatchLoggerList',{
+                    dataType:'json',//服务器返回json格式数据
+                    type:'post',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    headers:{'Authorization':localStorage.authToken},
+                    success:function(msg){
+                        if(msg.data.length > 0){
+                            $('.watch-log-content').addClass('layui-show')
 
-						//初始化 进度条 绑定 点击事件
-						var bind_tap_on_history_item = function(){
-							element.init()
-							mui('.swiper-slide').on('tap','a',function(){
-								detail_id = this.getAttribute('data')
-								data_index = this.getAttribute('data-index')
-								// watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
-								let watch_log_info = this.getAttribute('watch-log-info')
-								localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
-								setWatchLogger(detail_id,function (msg) {
+                            let _list = []
+                            $.each(msg.data,function(k,v){
 
-									mui.openWindow({
-										id:'detail' ,
-										url:'detail.html?id=' + detail_id
-									});
-								})
-							})
+                                var watch_log_info = {
+                                    'play_detail_id' : v.play_detail_id,
+                                    'play_line_index' : v.play_line_index ? v.play_line_index : 0,
+                                    'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
+                                    'play_time' : v.play_time ? v.play_time : 0.00 ,
+                                    'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
+                                }
 
-						}
+                                let _dom = '<div class="layui-card watch_log_item">' +
+                                    '<div class="layui-card-header">'+v.title+'</div>'+
+                                    '<div class="layui-card-body">'+
+                                    '<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
+                                    '<span class="watch_rate">'+
+                                    '<div class="layui-progress" lay-showPercent="true">'+
+                                    '<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
+                                    '</div>' +
+                                    '</span>'+
+                                    '</div>'+
+                                    '</div>'
 
-						bind_tap_on_history_item()
-						window.Echo.init()
-					}else{
-						$('.watchlog').fadeOut();
-						$('.watchlog').next().fadeIn();
-						$('.watchlog').parent().removeClass('layui-show')
-					}
-					
-				},
-				error:function(xhr,type,errorThrown){
-					custom.ajaxErrorHandler(xhr)
-				}
-			});
-			
-		}()
+                                _list.push(_dom)
+                            })
+                            window.swiper_watchlog = new Swiper('.watchlog', {
+                                slidesPerView: 3,
+                                slidesPerGroup:3,
+                                centeredSlides: false,
+                                spaceBetween: 1,
+                                virtual: {
+                                    slides: [],
+                                },
+                                on:{
+                                    slideChange: function(){
+                                        bind_tap_on_history_item()
+                                        element.init()
+                                        window.Echo.init()
+                                    },
+                                },
+                            });
+                            window.swiper_watchlog.virtual.removeAllSlides()
+                            window.swiper_watchlog.virtual.appendSlide(_list)
+                            window.swiper_watchlog.virtual.update()
+
+                            //初始化 进度条 绑定 点击事件
+                            var bind_tap_on_history_item = function(){
+                                mui('.swiper-slide').on('tap','a',function(){
+                                    detail_id = this.getAttribute('data')
+                                    data_index = this.getAttribute('data-index')
+                                    // watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
+                                    let watch_log_info = this.getAttribute('watch-log-info')
+                                    localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
+                                    setWatchLogger(detail_id,function (msg) {
+
+                                        mui.openWindow({
+                                            id:'detail' ,
+                                            url:'detail.html?id=' + detail_id
+                                        });
+                                    })
+                                })
+                            }
+
+                            bind_tap_on_history_item()
+                            element.init()
+                            window.Echo.init()
+                        }else{
+                            $('.watchlog').fadeOut();
+                            $('.watchlog').next().fadeIn();
+                            $('.watchlog').parent().removeClass('layui-show')
+                        }
+
+                    },
+                    error:function(xhr,type,errorThrown){
+                        custom.ajaxErrorHandler(xhr)
+                    }
+                });
+            }
+		}
 
 		window.addEventListener('getWatchLoggerList',getWatchLoggerList)
-		
+
+
+        getSearchHistory()
+        getWatchLoggerList()
+
 		//固定Bar
 		util.fixbar({
 		  // bar1: '&#xe68e;',
@@ -397,9 +402,9 @@
 		  }
 		});
 
-
 		var toend = false
 		var getListData = function(ListTpl,requestUrl,params){
+
 			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
 			params.page = params.page ? params.page : 0
 			
@@ -407,18 +412,24 @@
 				'ListTpl':ListTpl,
 				'requestUrl' : requestUrl,
 				'params' : params
-			} 
-			
+			}
+            var heards = {}
+			if(isLogin){
+			    var heards = {'Authorization':localStorage.authToken}
+            }
+
 			mui.ajax(conf.host + requestUrl,{
 				data:params,
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
-				headers:{'Authorization':localStorage.authToken},
+				headers:heards,
 				beforeSend:function(){
 					$('#vlistView').append(loading_dom)
 				},
 				success:function(msg){
+                    $('.logo').slideUp()
+
 					if(msg.data.list.length > 0){
 						layui.laytpl(ListTpl).render(msg.data.list, function(html){
 							$('#vlistView').find('.layui-flow-more').remove()
@@ -431,8 +442,7 @@
 						$('#vlistView').append('<div class="layui-flow-more">没有更多了</div>')
 						
 					}
-					
-					// flow.lazyimg()
+
 					window.Echo.init()
 				},
 				error:function(xhr,type,errorThrown){
@@ -479,7 +489,7 @@
 			
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
-				localStorage.removeItem('watch_log_info')
+				// localStorage.removeItem('watch_log_info')
 
 				setWatchLogger(detail_id ,function(msg){
 					mui.openWindow({
@@ -487,8 +497,7 @@
 						url:'detail.html?id=' + detail_id
 					});
 				})
-				
-				
+
 			})
 		  
 		  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
