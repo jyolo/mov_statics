@@ -94,7 +94,7 @@
 
     <!--search result-->
 	<div class="layui-row main-content" >
-
+        <!--
 	  <div class="layui-collapse" lay-accordion>
 
 	    <div class="layui-colla-item search-item hidden" >
@@ -134,6 +134,7 @@
 		</div>
 
       </div>
+        -->
 
         <script type="text/html" id="vlistScript">
 
@@ -183,28 +184,35 @@
 
         </script>
 
-      <div class="layui-row">
+      <div class="layui-row" >
           <div class="layui-tab layui-tab-brief" lay-filter="mov_category" >
-              <ul class="layui-tab-title" >
+              <ul class="layui-tab-title hidden" >
                   <li class="layui-this">啊啊</li>
                   <li>啊啊</li>
                   <li>啊啊啊</li>
                   <li>啊啊</li>
               </ul>
-              <div class="layui-tab-content">
-                  <div id="search_result_swpier" class="swiper-container" >
-                      <div class="swiper-wrapper">
-                          <div class="swiper-slide dy" data-type="dy">slider1</div>
-                          <div class="swiper-slide dsj" data-type="dsj">slider2</div>
-                          <div class="swiper-slide dm" data-type="dm">slider3</div>
-                          <div class="swiper-slide zy" data-type="zy">slider4</div>
-                      </div>
-                  </div>
+              <div class="layui-tab-content hidden">
+                2222222222
+              </div>
+          </div>
+
+
+
+      </div>
+
+      <div class="layui-row">
+
+          <div id="search_result_swpier" class="swiper-container" >
+              <div class="swiper-wrapper">
+                  <div class="swiper-slide" id="dy"><ul class="fly-case-list"></ul></div>
+                  <div class="swiper-slide" id="dsj"><ul class="fly-case-list"></ul></div>
+                  <div class="swiper-slide" id="zy"><ul class="fly-case-list"></ul></div>
+                  <div class="swiper-slide" id="dm"><ul class="fly-case-list"></ul></div>
               </div>
           </div>
 
       </div>
-
 
 
 	</div>
@@ -226,7 +234,6 @@
 	}).use(['element','form','layer','custom','util','laytpl'],function(){
 		var backNum = 0
 		mui.init({
-		
 			beforeback: function() {
 				backNum++;
 				if(backNum > 1) {
@@ -250,23 +257,80 @@
 		var custom = layui.custom
 		var util = layui.util
 
+        // 初始化 获取列表的cache
+        layui.cache.getListDataFuncArgs = {}
+        var list_tpl = vlistScript.innerHTML
+        var list_requst_url = '/v1/search'
+        var toend = false
 
+        // 初始化选项卡的 swiper
         window.search_result_swpier = new Swiper('#search_result_swpier',{
             autoHeight: true,
             on: {
                 slideChangeTransitionStart: function () {
                     $('.layui-tab-title').find('li').removeClass('layui-this');
                     $('.layui-tab-title').find('li').eq(this.activeIndex).addClass('layui-this');
+                    layui.cache.current_data_type =  $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(this.activeIndex).attr('id')
+                    //首次切换过来没有数据的时候 加载一次数据
+                    if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page == 0 && $('#'+layui.cache.current_data_type).find('li').length == 0){
+                        // 滚动到指定位置获取 数据
+                        let $wrapper = $('.main-content');     // 父级容器
+                        let $target = $('#search_result_swpier');    // 目标元素
+                        window.scrollTo($target.offset().top - $wrapper.offset().top + $wrapper.scrollTop() ,0)
+                        getListData()
+                        this.update()
+
+                    }else{
+
+                        if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
+                            window.scrollTo( 0,0)
+                        }else{
+                            toend = false
+                            this.update()
+                            console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
+                            document.body.scrollTo( 0,layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
+
+                        }
+
+                        // 重置 scrollTop 的值
+                        // var scrollTop = $(window).scrollTop();
+                        // var scrollHeight = $('#'+ layui.cache.current_data_type).height();
+                        // var windowHeight = $(window).height();
+                        // var $target = $('#' +layui.cache.current_data_type);
+                        // if (scrollTop + windowHeight + 100 >= scrollHeight ) {
+                        //     // 上锁
+                        //     toend = false
+                        //     console.log($(window).scrollTop())
+                        //     window.scrollTo( 0,$target.height() - 120)
+                        //     console.log($(window).scrollTop()) // 重置后的值
+                        //     toend = true
+                        //     // 开锁
+                        // }else{
+                        //     // toend = false
+                        //     // window.scrollTo( 0,$target.height() - 120)
+                        //     // toend = true
+                        // }
+
+                    }
                 },
             }
         })
+
+        //初始化 4个 选项卡的 cache
+        $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
+            layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0}
+            if($(v).hasClass('swiper-slide-active')){
+                layui.cache.current_data_type = $(v).attr('id')
+            }
+        })
+
+
+
 
         //监听 mov_category 点击
         element.on('tab(mov_category)', function(data){
             search_result_swpier.slideTo(data.index)
         })
-
-
 	﻿
 		// 进入播放页面之前 先记录播放记录 时间 等信息
 		var setWatchLogger = function (detail_id ,successCallBack) {
@@ -418,7 +482,6 @@
                 });
             }
 		}
-
 		window.addEventListener('getWatchLoggerList',getWatchLoggerList)
 
 
@@ -439,55 +502,52 @@
 		  }
 		});
 
-		var toend = false
-		var getListData = function(ListTpl,requestUrl,params){
 
-
+		var getListData = function(lock_scroll = false){
 
 			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
-			params.page = params.page ? params.page : 0
-            // 当前swpier 的类型
-            params.data_type = $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(search_result_swpier.activeIndex).attr('data-type')
+
+            let params = layui.cache.form_data
+            params.page = layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page
+            params.data_type = layui.cache.current_data_type
 
             console.log(params)
-
-			layui.cache.getListDataFuncArgs = {
-				'ListTpl':ListTpl,
-				'requestUrl' : requestUrl,
-				'params' : params
-			}
             var heards = {}
 			if(isLogin){
 			    var heards = {'Authorization':localStorage.authToken}
             }
-
-
-			mui.ajax(conf.host + requestUrl,{
+			mui.ajax(conf.host + list_requst_url,{
 				data:params,
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				headers:heards,
 				beforeSend:function(){
-					$('#vlistView').append(loading_dom)
+
+				    if($('#' + layui.cache.current_data_type).find('.layui-flow-more').length == 0){
+                        $('#' + layui.cache.current_data_type).append(loading_dom)
+                        search_result_swpier.update()
+                    }
+
 				},
 				success:function(msg){
                     $('.logo').slideUp()
 
 					if(msg.data.list.length > 0){
-						layui.laytpl(ListTpl).render(msg.data.list, function(html){
-							$('#vlistView').find('.layui-flow-more').remove()
-							// $('#vlistView').append(html)
-                            console.log('1111111111')
-                            $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(search_result_swpier.activeIndex).append(html)
+						layui.laytpl(list_tpl).render(msg.data.list, function(html){
+                            $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
+                            $('#' + layui.cache.current_data_type).find('ul').append(html)
                             search_result_swpier.update()
-							toend = true
+                            if(lock_scroll == false){
+                                toend = true
+                            }
+
 						});
 					}else{
 						toend = false
-						$('#vlistView').find('.layui-flow-more').remove()
-						$('#vlistView').append('<div class="layui-flow-more">没有更多了</div>')
-						
+                        $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
+                        $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more">没有更多了</div>')
+                        search_result_swpier.update()
 					}
 
 					window.Echo.init()
@@ -501,22 +561,36 @@
 		$(window).scroll(
 			function () {
 				var scrollTop = $(this).scrollTop();
-				var scrollHeight = $(document).height();
+				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
 				var windowHeight = $(this).height();
-				if (scrollTop + windowHeight+100 >= scrollHeight && toend == true) {
+                var current_data_type = layui.cache.current_data_type
+                // console.log('dom高度：'+scrollHeight +'----窗口高度：'+windowHeight + '------滚动高度：' + scrollTop + '--> ' + (scrollTop + windowHeight + 100) )
+
+                if(layui.cache.getListDataFuncArgs[current_data_type].scrollTop > scrollTop){
+
+                    console.log(  '++++>>>' + scrollTop)
+                    console.log(  '++++>>>>>>>' + layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
+                    document.body.scrollTo(0 , layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
+                }else{
+                    layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
+                    console.log(  '++++>>>' + scrollTop)
+                }
+
+                console.log($('body').scrollTop())
+
+
+
+
+				if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
+                    toend=false;
 					// 分页 + 1
-					layui.cache.getListDataFuncArgs.params.page = layui.cache.getListDataFuncArgs.params.page + 1
-					getListData(
-						layui.cache.getListDataFuncArgs.ListTpl,
-						layui.cache.getListDataFuncArgs.requestUrl,
-						layui.cache.getListDataFuncArgs.params
-						)
-					toend=false;
+					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
+					getListData()
 				}
 			}
 		);
 
-		var getTpl = vlistScript.innerHTML
+
 		form.on('submit(seachSubmit)', function(data){
 		  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
 		  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
@@ -528,9 +602,14 @@
 				$('#search_result').trigger('click')
 				$('#vlistView').fadeIn()
 			}
-			
-			getListData(getTpl,'/v1/search' ,data.field)
 
+			$('.layui-tab-title').removeClass('hidden')
+
+            layui.cache.form_data = data.field
+
+            $('#' + layui.cache.current_data_type).find('li').remove()
+
+            getListData()
 
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
@@ -559,9 +638,7 @@
 			console.log("当前页面URL："+plus.webview.currentWebview().getURL());
 			console.log(JSON.stringify(plus.webview.currentWebview()));
 		})
-		
-		
-		
+
 		
 	});
 	
