@@ -41,6 +41,7 @@
   .layui-progress-text{color: #EFEFF4;}
   .main-content{background: #FFFFFF;margin-top: 1rem;}
   .layui-tab-title li{min-width: 0px}
+  #mov_category{z-index: 100000;background-color: white;}
   </style>
 </head>
 <body class="fly-full">
@@ -73,7 +74,7 @@
 
 
 
-<div class="fly-main" style="overflow: hidden;">
+<div class="fly-main" id="fly-main" style="overflow: hidden;">
     <!--logo-->
 	<div class="layui-row" style="text-align: center">
 		<div class="logo">
@@ -93,7 +94,7 @@
 	</div>
 
     <!--search result-->
-	<div class="layui-row main-content" >
+	<div class="layui-row main-content" id="main-content">
         <!--
 	  <div class="layui-collapse" lay-accordion>
 
@@ -185,7 +186,7 @@
         </script>
 
       <div class="layui-row" >
-          <div class="layui-tab layui-tab-brief" lay-filter="mov_category" >
+          <div class="layui-tab layui-tab-brief" lay-filter="mov_category" id="mov_category">
               <ul class="layui-tab-title hidden" >
                   <li class="layui-this">啊啊</li>
                   <li>啊啊</li>
@@ -285,8 +286,8 @@
                         if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
                             window.scrollTo( 0,0)
                         }else{
-                            toend = false
-                            this.update()
+                            // toend = false
+                            // this.update()
                             console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
                             document.body.scrollTo( 0,layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
 
@@ -538,11 +539,19 @@
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                             $('#' + layui.cache.current_data_type).find('ul').append(html)
                             search_result_swpier.update()
-                            if(lock_scroll == false){
-                                toend = true
-                            }
+                            // if(lock_scroll == false){
+                            //     toend = true
+                            // }
+							toend = true
 
 						});
+						
+						
+						window.sticky.refresh()
+						window.sticky.update({
+							top:51
+						})
+						
 					}else{
 						toend = false
                         $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
@@ -551,7 +560,13 @@
 					}
 
 					window.Echo.init()
-				},
+
+
+					
+					
+
+
+                },
 				error:function(xhr,type,errorThrown){
 					console.log(xhr)
 				}
@@ -566,17 +581,17 @@
                 var current_data_type = layui.cache.current_data_type
                 // console.log('dom高度：'+scrollHeight +'----窗口高度：'+windowHeight + '------滚动高度：' + scrollTop + '--> ' + (scrollTop + windowHeight + 100) )
 
-                if(layui.cache.getListDataFuncArgs[current_data_type].scrollTop > scrollTop){
+                // if(layui.cache.getListDataFuncArgs[current_data_type].scrollTop > scrollTop){
 
-                    console.log(  '++++>>>' + scrollTop)
-                    console.log(  '++++>>>>>>>' + layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
-                    document.body.scrollTo(0 , layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
-                }else{
-                    layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-                    console.log(  '++++>>>' + scrollTop)
-                }
+                //     console.log(  '++++>>>' + scrollTop)
+                //     console.log(  '++++>>>>>>>' + layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
+                //     document.body.scrollTo(0 , layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
+                // }else{
+                //     layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
+                //     console.log(  '++++>>>' + scrollTop)
+                // }
 
-                console.log($('body').scrollTop())
+                // console.log($('body').scrollTop())
 
 
 
@@ -611,6 +626,15 @@
 
             getListData()
 
+            // var Sticky = new hcSticky(document.getElementById('main-content'), {
+            //     stickTo: document.getElementById('mov_category'),
+            //     top:80
+            // });
+			window.sticky = new hcSticky('#mov_category', {
+                stickTo: '#main-content',
+                top:51
+            });
+			
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
 				// localStorage.removeItem('watch_log_info')
