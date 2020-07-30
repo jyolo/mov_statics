@@ -275,6 +275,7 @@
                     $('.layui-tab-title').find('li').removeClass('layui-this');
                     $('.layui-tab-title').find('li').eq(this.activeIndex).addClass('layui-this');
                     layui.cache.current_data_type =  $('#search_result_swpier > .swiper-wrapper').find('.swiper-slide').eq(this.activeIndex).attr('id')
+
                     //首次切换过来没有数据的时候 加载一次数据
                     if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page == 0 && $('#'+layui.cache.current_data_type).find('li').length == 0){
                         // 滚动到指定位置获取 数据
@@ -282,7 +283,7 @@
                         let $target = $('#search_result_swpier');    // 目标元素
                         window.scrollTo($target.offset().top - $wrapper.offset().top + $wrapper.scrollTop() ,0)
                         getListData()
-                        this.update()
+
 
                     }else{
 
@@ -291,13 +292,15 @@
                             $('html,body').animate({scrollTop: 0},100);
                         }else{
                             // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
-                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},50);
+                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
 
                         }
-                        this.update()
-
                     }
+
                 },
+                slideChangeTransitionEnd:function(){
+                    this.update()
+                }
             }
         })
 
@@ -513,11 +516,7 @@
 						layui.laytpl(list_tpl).render(msg.data.list, function(html){
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                             $('#' + layui.cache.current_data_type).find('ul').append(html)
-                            search_result_swpier.update()
 
-                            // if(lock_scroll == false){
-                            //     toend = true
-                            // }
 
 							toend = true
 
@@ -533,15 +532,11 @@
 						toend = false
                         $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                         $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more">没有更多了</div>')
-                        search_result_swpier.update()
 					}
 
 					window.Echo.init()
 
-
-					
-					
-
+                    search_result_swpier.update()
 
                 },
 				error:function(xhr,type,errorThrown){
@@ -559,10 +554,7 @@
 
                 // 记录每个选项卡的滚动位置
                 layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-                if(scrollTop + windowHeight + 100 >= scrollHeight){
-
-                    search_result_swpier.updateSize()
-                }
+                
                 // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
 				if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
                     toend=false;
@@ -608,7 +600,7 @@
                 top:51
             });
 			
-			mui('#vlistView').on('tap','.vlist',function(){
+			mui('#search_result_swpier').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
 				// localStorage.removeItem('watch_log_info')
 				setWatchLogger(detail_id ,function(msg){
