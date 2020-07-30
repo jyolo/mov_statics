@@ -27,22 +27,32 @@
   .layui-colla-title{background-color: #FFFFFF;height: auto}
   .search-tag{display: inline-block;padding-bottom: 0.5rem;}
   .layui-card-header{height: 24px;text-align: left;border-bottom: none}
-  .layui-card-body{height: 105px;}
+
   .watch_rate{width: 100%;display: block;}
 
+
+  .vlist{display: block;}
+  .vlist .cover{min-height: 8rem;border-radius: 10px;}
+  .vlist .dinfo{padding-left: 0.5rem;}
+  .vlist .dinfo p{overflow: hidden;display: inline-block;width: 100%;height: 1.2rem;text-overflow: ellipsis;white-space: nowrap;}
+  .vlist .dinfo h5{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;margin-bottom: 0.5rem;}
+  .vlist .title{font-weight: 700;font-size: 0.9rem;}
+
   @media screen and (min-width: 960px){
-	  .layui-card-body{height: 22rem;}
-	  .layui-card-body img{width: 100%;height: 21rem;display: block;}
+      .layui-card-body{height: 22rem;}
+      .layui-card-body img{width: 100%;height: 21rem;display: block;}
+
   }
-  @media screen and (min-width: 768px){
-	  .layui-card-body img{width: 100%;height: 7.01rem;display: block;}
+  @media screen and (max-width: 768px){
+      .layui-card-body img{width: 100%;height: 7.01rem;display: block;}
+      .vlist img{width: 100%;height: 9.66rem;display: block;}
   }
 
 
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
   .main-content{background: #FFFFFF;margin-top: 1rem;}
-  .layui-tab-title li{min-width: 0px}
+  /*.layui-tab-title li{min-width: 0px}*/
   #mov_category{z-index: 100000;background-color: white;}
   </style>
 </head>
@@ -96,46 +106,47 @@
 		 </form>
 	</div>
 
-    <!--search result-->
+    <!--search result   -->
 	<div class="layui-row main-content" id="main-content">
 
 	  <div class="layui-collapse " lay-accordion>
+          <!--
+         <div class="layui-colla-item search-item hidden" >
+           <h2 class="layui-colla-title ">搜索历史</h2>
+           <div class="layui-colla-content search-history-content" >
+               <div  id="search-history-box">
+                 <script type="text/html" id="searchTpl">
+                           {{# if(d.length > 0){ }}
+                               {{#  layui.each(d, function(index, item){ }}
+                                   <div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius ">{{ item }}</button></div>
+                               {{# }) }}
+                           {{# }else{ }}
+                               <div class="layui-flow-more">暂无数据</div>
+                           {{# } }}
+                       </script>
+               </div>
+           </div>
+         </div>
 
-	    <div class="layui-colla-item search-item hidden" >
-	      <h2 class="layui-colla-title ">搜索历史</h2>
-	      <div class="layui-colla-content search-history-content" >
-			  <div  id="search-history-box">
-			    <script type="text/html" id="searchTpl">
-			  			{{# if(d.length > 0){ }}
-			  				{{#  layui.each(d, function(index, item){ }}
-			  					<div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius ">{{ item }}</button></div>
-			  				{{# }) }}
-			  			{{# }else{ }}
-			  				<div class="layui-flow-more">暂无数据</div>
-			  			{{# } }}
-			  		</script>
-			  </div>
-		  </div>
-	    </div>
+         <div class="layui-colla-item watch-log-item " >
+             <h2 class="layui-colla-title">观看记录</h2>
+             <div class="layui-colla-content watch-log-content">
+               <div class="swiper-container watchlog">
+                     <div class="swiper-wrapper">
 
-	    <div class="layui-colla-item watch-log-item " >
-			<h2 class="layui-colla-title">观看记录</h2>
-			<div class="layui-colla-content watch-log-content">
-			  <div class="swiper-container watchlog">
-                    <div class="swiper-wrapper">
+                     </div>
+               </div>
 
-                    </div>
-			  </div>
-
-			</div>
-	    </div>
-
+             </div>
+         </div>
+         -->
       </div>
 
 
        <script type="text/html" id="vlistScript">
 
             {{#  layui.each(d, function(index, item){ }}
+			
             <li>
                 <a href="#" class="vlist" data="{{ item.id }}">
                     <div class="layui-row ">
@@ -177,7 +188,7 @@
                     </div>
                 </a>
             </li>
-            {{# }) }}
+			{{# }) }}
 
         </script>
 
@@ -254,6 +265,8 @@
         var list_requst_url = '/v1/search'
         var toend = false
 
+
+
         // 初始化选项卡的 swiper
         window.search_result_swpier = new Swiper('#search_result_swpier',{
             autoHeight: true,
@@ -278,7 +291,7 @@
                             $('html,body').animate({scrollTop: 0},100);
                         }else{
                             // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
-                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},150);
+                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},50);
 
                         }
                         this.update()
@@ -543,14 +556,21 @@
 				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
 				var windowHeight = $(this).height();
                 var current_data_type = layui.cache.current_data_type
+
                 // 记录每个选项卡的滚动位置
                 layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
+                if(scrollTop + windowHeight + 100 >= scrollHeight){
+
+                    search_result_swpier.updateSize()
+                }
                 // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
 				if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
                     toend=false;
 					// 分页 + 1
 					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
 					getListData()
+
+
 				}
 			}
 		);
