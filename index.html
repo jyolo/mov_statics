@@ -21,8 +21,8 @@
   .fly-main{min-height: auto;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
   .search{margin-top:3rem;}
-  .search .keyword{height: 4rem ;border-radius: 2px}
-  .search .submit{height: 4rem}
+  .search .keyword{height: 3rem ;border-radius: 2px}
+  .search .submit{height: 3rem}
   .search-history .layui-btn{margin: 0.2rem;}
   .layui-colla-title{background-color: #FFFFFF;height: auto}
   .search-tag{display: inline-block;padding-bottom: 0.5rem;}
@@ -79,8 +79,9 @@
 <div class="fly-main" id="fly-main" style="overflow: hidden;">
     <!--logo-->
 	<div class="layui-row" style="text-align: center">
-		<div class="logo">
-			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" style="height: 200px;width:300px;border:1px solid black"/>
+		<div class="logo" style="height: 90px;border:1px solid black">
+<!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" />-->
+            logo
 		</div>
 	</div>
     <!--search box-->
@@ -97,8 +98,8 @@
 
     <!--search result-->
 	<div class="layui-row main-content" id="main-content">
-        <!--
-	  <div class="layui-collapse" lay-accordion>
+
+	  <div class="layui-collapse " lay-accordion>
 
 	    <div class="layui-colla-item search-item hidden" >
 	      <h2 class="layui-colla-title ">搜索历史</h2>
@@ -117,7 +118,7 @@
 		  </div>
 	    </div>
 
-	    <div class="layui-colla-item watch-log-item hidden" >
+	    <div class="layui-colla-item watch-log-item " >
 			<h2 class="layui-colla-title">观看记录</h2>
 			<div class="layui-colla-content watch-log-content">
 			  <div class="swiper-container watchlog">
@@ -129,17 +130,10 @@
 			</div>
 	    </div>
 
-		<div class="layui-colla-item search-result " >
-			<h2 class="layui-colla-title" id="search_result">搜索结果 </h2>
-			<div class="layui-colla-content ">
-				<ul class="fly-case-list" id="vlistView" style="display: none;"></ul>
-			</div>
-		</div>
-
       </div>
-        -->
 
-        <script type="text/html" id="vlistScript">
+
+       <script type="text/html" id="vlistScript">
 
             {{#  layui.each(d, function(index, item){ }}
             <li>
@@ -196,12 +190,8 @@
                   <li>动漫</li>
               </ul>
               <div class="layui-tab-content hidden">
-                2222222222
               </div>
           </div>
-
-
-
       </div>
 
       <div class="layui-row">
@@ -213,7 +203,6 @@
                   <div class="swiper-slide" id="dm"><ul class="fly-case-list"></ul></div>
               </div>
           </div>
-
       </div>
 
 
@@ -298,16 +287,6 @@
                 },
             }
         })
-
-        //初始化 4个 选项卡的 cache
-        $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
-            console.log(v)
-            layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0}
-            if(k == 0){
-                layui.cache.current_data_type = $(v).attr('id')
-            }
-        })
-
 
 
         //监听 mov_category 点击
@@ -579,17 +558,22 @@
 
 		form.on('submit(seachSubmit)', function(data){
 
-			let view = $('#vlistView').empty()
+            //初始化 4个 选项卡的 cache
+            $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
+                layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0}
+                if($(v).hasClass('swiper-slide-active')){
+                    layui.cache.current_data_type = $(v).attr('id')
+                }else if(k == 0){
+                    layui.cache.current_data_type = $(v).attr('id')
+                }
+            })
+
 			//显示 搜索结果折叠面板
-			if($('#search_result').next().hasClass('layui-show') == false){
-				$('#search_result').parent('.layui-colla-item').fadeIn()
-				$('#search_result').trigger('click')
-				$('#vlistView').fadeIn()
+			if($('.watch-log-item').hasClass('hidden') == false){
+                $('.watch-log-item').find('.layui-colla-title').trigger('click')
 			}
 
 			$('#search_result_swpier').removeClass('hidden')
-            search_result_swpier.init()
-
 			$('.layui-tab-title').removeClass('hidden')
 
             layui.cache.form_data = data.field
