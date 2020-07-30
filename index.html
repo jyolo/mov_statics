@@ -29,13 +29,15 @@
   .layui-card-header{height: 24px;text-align: left;border-bottom: none}
   .layui-card-body{height: 105px;}
   .watch_rate{width: 100%;display: block;}
+
   @media screen and (min-width: 960px){
 	  .layui-card-body{height: 22rem;}
 	  .layui-card-body img{width: 100%;height: 21rem;display: block;}
   }
-  @media screen and (max-width: 768px){
+  @media screen and (min-width: 768px){
 	  .layui-card-body img{width: 100%;height: 7.01rem;display: block;}
   }
+
 
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
@@ -188,10 +190,10 @@
       <div class="layui-row" >
           <div class="layui-tab layui-tab-brief" lay-filter="mov_category" id="mov_category">
               <ul class="layui-tab-title hidden" >
-                  <li class="layui-this">啊啊</li>
-                  <li>啊啊</li>
-                  <li>啊啊啊</li>
-                  <li>啊啊</li>
+                  <li class="layui-this">电影</li>
+                  <li>电视剧</li>
+                  <li>综艺</li>
+                  <li>动漫</li>
               </ul>
               <div class="layui-tab-content hidden">
                 2222222222
@@ -203,8 +205,7 @@
       </div>
 
       <div class="layui-row">
-
-          <div id="search_result_swpier" class="swiper-container" >
+          <div id="search_result_swpier" class="swiper-container hidden" >
               <div class="swiper-wrapper">
                   <div class="swiper-slide" id="dy"><ul class="fly-case-list"></ul></div>
                   <div class="swiper-slide" id="dsj"><ul class="fly-case-list"></ul></div>
@@ -284,33 +285,14 @@
                     }else{
 
                         if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
-                            window.scrollTo( 0,0)
+                            // window.scrollTo( 0,0)
+                            $('html,body').animate({scrollTop: 0},100);
                         }else{
-                            // toend = false
-                            // this.update()
-                            console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
-                            document.body.scrollTo( 0,layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
+                            // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
+                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},150);
 
                         }
-
-                        // 重置 scrollTop 的值
-                        // var scrollTop = $(window).scrollTop();
-                        // var scrollHeight = $('#'+ layui.cache.current_data_type).height();
-                        // var windowHeight = $(window).height();
-                        // var $target = $('#' +layui.cache.current_data_type);
-                        // if (scrollTop + windowHeight + 100 >= scrollHeight ) {
-                        //     // 上锁
-                        //     toend = false
-                        //     console.log($(window).scrollTop())
-                        //     window.scrollTo( 0,$target.height() - 120)
-                        //     console.log($(window).scrollTop()) // 重置后的值
-                        //     toend = true
-                        //     // 开锁
-                        // }else{
-                        //     // toend = false
-                        //     // window.scrollTo( 0,$target.height() - 120)
-                        //     // toend = true
-                        // }
+                        this.update()
 
                     }
                 },
@@ -319,12 +301,12 @@
 
         //初始化 4个 选项卡的 cache
         $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
+            console.log(v)
             layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0}
-            if($(v).hasClass('swiper-slide-active')){
+            if(k == 0){
                 layui.cache.current_data_type = $(v).attr('id')
             }
         })
-
 
 
 
@@ -504,7 +486,7 @@
 		});
 
 
-		var getListData = function(lock_scroll = false){
+		var getListData = function(){
 
 			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
 
@@ -512,7 +494,7 @@
             params.page = layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page
             params.data_type = layui.cache.current_data_type
 
-            console.log(params)
+            // console.log(params)
             var heards = {}
 			if(isLogin){
 			    var heards = {'Authorization':localStorage.authToken}
@@ -528,6 +510,7 @@
 				    if($('#' + layui.cache.current_data_type).find('.layui-flow-more').length == 0){
                         $('#' + layui.cache.current_data_type).append(loading_dom)
                         search_result_swpier.update()
+
                     }
 
 				},
@@ -539,9 +522,11 @@
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                             $('#' + layui.cache.current_data_type).find('ul').append(html)
                             search_result_swpier.update()
+
                             // if(lock_scroll == false){
                             //     toend = true
                             // }
+
 							toend = true
 
 						});
@@ -579,23 +564,9 @@
 				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
 				var windowHeight = $(this).height();
                 var current_data_type = layui.cache.current_data_type
-                // console.log('dom高度：'+scrollHeight +'----窗口高度：'+windowHeight + '------滚动高度：' + scrollTop + '--> ' + (scrollTop + windowHeight + 100) )
-
-                // if(layui.cache.getListDataFuncArgs[current_data_type].scrollTop > scrollTop){
-
-                //     console.log(  '++++>>>' + scrollTop)
-                //     console.log(  '++++>>>>>>>' + layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
-                //     document.body.scrollTo(0 , layui.cache.getListDataFuncArgs[current_data_type].scrollTop)
-                // }else{
-                //     layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-                //     console.log(  '++++>>>' + scrollTop)
-                // }
-
-                // console.log($('body').scrollTop())
-
-
-
-
+                // 记录每个选项卡的滚动位置
+                layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
+                // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
 				if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
                     toend=false;
 					// 分页 + 1
@@ -607,9 +578,7 @@
 
 
 		form.on('submit(seachSubmit)', function(data){
-		  // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-		  // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-		  // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
 			let view = $('#vlistView').empty()
 			//显示 搜索结果折叠面板
 			if($('#search_result').next().hasClass('layui-show') == false){
@@ -618,18 +587,18 @@
 				$('#vlistView').fadeIn()
 			}
 
+			$('#search_result_swpier').removeClass('hidden')
+            search_result_swpier.init()
+
 			$('.layui-tab-title').removeClass('hidden')
 
             layui.cache.form_data = data.field
-
-            $('#' + layui.cache.current_data_type).find('li').remove()
+            //清楚4个选项卡里面的所有li
+            $('.fly-case-list').find('li').remove()
 
             getListData()
 
-            // var Sticky = new hcSticky(document.getElementById('main-content'), {
-            //     stickTo: document.getElementById('mov_category'),
-            //     top:80
-            // });
+
 			window.sticky = new hcSticky('#mov_category', {
                 stickTo: '#main-content',
                 top:51
@@ -638,7 +607,6 @@
 			mui('#vlistView').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
 				// localStorage.removeItem('watch_log_info')
-
 				setWatchLogger(detail_id ,function(msg){
 					mui.openWindow({
 						id:'detail' ,
@@ -658,7 +626,6 @@
 			wv.addEventListener('popGesture',function(e){
 				console.log('popGesture: '+e.type+','+e.result+','+e.progress)
 			})
-			
 			console.log("当前页面URL："+plus.webview.currentWebview().getURL());
 			console.log(JSON.stringify(plus.webview.currentWebview()));
 		})
