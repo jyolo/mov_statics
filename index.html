@@ -250,18 +250,19 @@
 
                     }else{
 
-                        if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
-                            // window.scrollTo( 0,0)
-                            $('html,body').animate({scrollTop: 0},100);
-                        }else{
-                            // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
-                            $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
 
-                        }
                     }
 
                 },
                 slideChangeTransitionEnd:function(){
+                    if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
+                        // window.scrollTo( 0,0)
+                        $('html,body').animate({scrollTop: 0},100);
+                    }else{
+                        // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
+                        $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
+
+                    }
                     this.update()
                 }
             }
