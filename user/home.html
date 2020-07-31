@@ -33,9 +33,9 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="javascript:go_back();">
-      <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
-      <!--        <img src="static/images/logo.png" alt="layui">-->
+    <a class="fly-logo go_back" href="javascript:;"  >
+        <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
+        <!--        <img src="static/images/logo.png" alt="layui">-->
     </a>
 
     <ul class="layui-nav fly-nav-user">
@@ -106,7 +106,6 @@
 <script src="../static/js/global.js"></script>
 <script src="../static/layui/layui.js"></script>
 <script src="../static/swiper/swiper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>
 <script>
 layui.config({
   version: "3.0.0"
@@ -189,7 +188,7 @@ layui.config({
                           let _dom = '<div class="layui-card watch_log_item">' +
                               '<div class="layui-card-header">'+v.title+'</div>'+
                               '<div class="layui-card-body">'+
-                              '<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
+                              '<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" ><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
                               '<span class="watch_rate">'+
                               '<div class="layui-progress" lay-showPercent="true">'+
                               '<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
@@ -224,10 +223,7 @@ layui.config({
                       window.bind_tap_on_history_item = function(){
                           mui('.swiper-slide').on('tap','a',function(){
                               detail_id = this.getAttribute('data')
-                              data_index = this.getAttribute('data-index')
-                              // watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
-                              let watch_log_info = this.getAttribute('watch-log-info')
-                              localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
+
                               setWatchLogger(detail_id,function (msg) {
                                   mui.openWindow({
                                       id:'detail' ,

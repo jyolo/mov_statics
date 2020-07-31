@@ -221,8 +221,8 @@ layui.config({
 				if(msg.data.register == 'ok'){
 					localStorage.authToken = msg.data.Authorization
 					mui.openWindow({
-					    id:'index' ,
-					    url:'../index.html'
+					    id:'home' ,
+					    url:'../user/home.html'
 					  });
 				}else{
 					layer.msg(msg.msg,{
@@ -263,8 +263,8 @@ layui.config({
 				if(msg.data.login == 'ok'){
 					localStorage.authToken = msg.data.Authorization
 					mui.openWindow({
-					    id:'index' ,
-					    url:'../index.html'
+					    id:'home' ,
+						url:'../user/home.html'
 					  });
 				}else{
 					layer.msg(msg.msg,{

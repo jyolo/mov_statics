@@ -60,15 +60,15 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="javascript:go_back();">
-      <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
-      <!--        <img src="static/images/logo.png" alt="layui">-->
+    <a class="fly-logo go_back" href="javascript:;"  >
+        <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
+        <!--        <img src="static/images/logo.png" alt="layui">-->
     </a>
 
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
-        <a class="fly-nav-avatar" href="javascript:;">
+        <a class="fly-nav-avatar" href="../user/home.html">
           <i class="layui-icon layui-icon-username" style="font-size: 25px; color: #009688;line-height: 61px" ></i>
         </a>
       </li>
@@ -88,12 +88,12 @@
             {{#  layui.each(item.list, function(s, sub){ }}
             <p style="display: block">
             <div class="layui-card watch_log_item">
-              <div class="layui-card-header">{{ sub.title }}</div>
+              <div class="layui-card-header" style="margin-bottom: 10px;font-weight: bold">{{ sub.title }}</div>
               <div class="layui-card-body">
                 <div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
                   <a href="javascript:;" data="{{ sub.play_detail_id }}" ><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host +  sub.cover }}" /></a>
                   <span class="watch_rate">
-                            <div class="layui-progress" lay-showPercent="true">
+                            <div class="layui-progress" >
                                 <div class="layui-progress-bar layui-bg-red" lay-percent="{{ sub.watch_rate }}"></div>
                             </div>
                       </span>
@@ -103,7 +103,7 @@
 
                     <div class="layui-row">观看至: {{ sub.watch_rate }}</div>
                     <div class="layui-row" >
-                      <button type="button" class="layui-btn ">
+                      <button type="button" class="layui-btn continue-play" data="{{ sub.play_detail_id }}" onclick="javascript:continue_play(this);">
                         继续播放 <i class="layui-icon">&#xe652;</i>
                       </button>
                     </div>
@@ -131,7 +131,6 @@
 <script src="../static/js/global.js"></script>
 <script src="../static/layui/layui.js"></script>
 <script src="../static/swiper/swiper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>
 <script>
 	layui.config({
 	  version: "3.0.0"
@@ -184,7 +183,16 @@
 
         getWatchLoggerListByTimeLine()
 
+        window.continue_play = function(obj){
 
+          var detail_id = $(obj).attr('data')
+          setWatchLogger(detail_id ,function(msg){
+            mui.openWindow({
+              id:'detail' ,
+              url:'../detail.html?id=' + detail_id
+            });
+          })
+        }
 
         $(window).scroll(
                 function () {
