@@ -2,19 +2,19 @@
 <html style="background-color: #e2e2e2;">
 <head>
   <meta charset="utf-8">
-  <title>友影</title>
-  <meta name="keywords" content="{{ lay.base.keywords }}">
-  <meta name="description" content="{{ lay.base.description }}">
+  <title>有影-观看记录</title>
+  <meta name="keywords" content="影视搜索">
+  <meta name="description" content="影视搜索引擎">
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/layui/css/layui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/css/global.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/player/video-js.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/layui/layui.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/swiper/swiper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mui/mui.min.js"></script>
+  <link rel="stylesheet" href="../static/layui/css/layui.css">
+  <link rel="stylesheet" href="../static/css/global.css">
+  <link rel="stylesheet" href="../static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="../static/player/video-js.min.css">
+  <script src="../static/layui/layui.js"></script>
+  <script src="../static/swiper/swiper.min.js"></script>
+  <script src="../static/mui/mui.min.js"></script>
   <style>
   .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
   .playbox{border:1px solid #000000 ;width: 100%;height: 15rem;}
@@ -25,91 +25,181 @@
   .layui-colla-title{background-color: #FFFFFF;}
   .search-tag{display: inline-block;padding-bottom: 0.5rem;}
   .layui-card-header{height: 24px;text-align: left;border-bottom: none}
-  .layui-card-body{height: 105px;}
+
   .watch_rate{
 	  width: 100%;
 	  display: block;
   }
   @media screen and (min-width: 960px){
-	  .layui-card-body{
+    .layui-timeline .layui-card-body{
 		  height: 22rem;
 	  }
-	  .layui-card-body img{
+    .layui-timeline .layui-card-body img{
 		  width: 100%;
 		  height: 21rem;
 		  display: block;
 	  }
   }
   @media screen and (max-width: 768px){
-	  .layui-card-body img{
+    .layui-timeline .layui-card-body{
+      height: 10rem;
+    }
+    .layui-timeline .layui-card-body img{
 		  width: 100%;
-		  height: 7.01rem;
+		  height: 9.01rem;
 		  display: block;
 	  }
   }
 
   .layui-card-body a{display: block;}
-  .layui-progress-text{color: #EFEFF4;}
+  .layui-progress-text{color: #0C0C0C;top:2px}
+
   </style>
 </head>
 <body class="fly-full">
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
-      <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/images/logo2.png" alt="layui">
+    <a class="fly-logo" href="javascript:go_back();">
+      <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
+      <!--        <img src="static/images/logo.png" alt="layui">-->
     </a>
 
-    
     <ul class="layui-nav fly-nav-user">
       <!-- 登入后的状态 -->
-      <li class="layui-nav-item user_info">
+      <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
-          <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/images/avatar/default.png">
+          <i class="layui-icon layui-icon-username" style="font-size: 25px; color: #009688;line-height: 61px" ></i>
         </a>
-        <dl class="layui-nav-child">
-          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;" class="layui-bg-black">
-          <dd><a href="javascript:;" class="loginOut" style="text-align: center;">退出</a></dd>
-        </dl>
       </li>
-    
     </ul>
   </div>
 </div>
+<div class="fly-panel " style="padding-top: 20px;" id="history_timelimie_content">
+
+  <ul class="layui-timeline" style="min-height: 100px"></ul>
+  <script type="text/html" id="history_list">
+
+    {{#  layui.each(d, function(index, item){ }}
+        <li class="layui-timeline-item">
+          <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+          <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">{{ item.date }}</h3>
+            {{#  layui.each(item.list, function(s, sub){ }}
+            <p style="display: block">
+            <div class="layui-card watch_log_item">
+              <div class="layui-card-header">{{ sub.title }}</div>
+              <div class="layui-card-body">
+                <div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
+                  <a href="javascript:;" data="{{ sub.play_detail_id }}" ><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host +  sub.cover }}" /></a>
+                  <span class="watch_rate">
+                            <div class="layui-progress" lay-showPercent="true">
+                                <div class="layui-progress-bar layui-bg-red" lay-percent="{{ sub.watch_rate }}"></div>
+                            </div>
+                      </span>
+                </div>
+                <div class="layui-col-xs7 layui-col-sm7 layui-col-md7">
+                  <div class="watch_history_desc" style="padding-left: 10px;">
+
+                    <div class="layui-row">观看至: {{ sub.watch_rate }}</div>
+                    <div class="layui-row" >
+                      <button type="button" class="layui-btn ">
+                        继续播放 <i class="layui-icon">&#xe652;</i>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            </p>
+            {{# }) }}
 
 
+          </div>
+        </li>
+    {{# }) }}
 
-<div class="fly-main" style="overflow: hidden;">
-  
 
-	
+  </script>
 
 </div>
 
 
+<script src="../static/mui/mui.min.js"></script>
+<script src="../static/js/global.js"></script>
+<script src="../static/layui/layui.js"></script>
+<script src="../static/swiper/swiper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>
 <script>
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@bc5831ff78c1ef50c3d709377df57c5d632e553f/static/mods/' //这里实际使用时，建议改成绝对路径
+      ,base: '../static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','form','layer','custom','util','laytpl','flow'],function(){
-		var backNum = 0
+	}).use(['element','jquery','laytpl'],function(){
+
 		mui.init({})
 		var $ = layui.jquery
-		var form = layui.form
 		var element = layui.element
 		var laytpl = layui.laytpl
-		var layer = layui.layer
-		var custom = layui.custom
-		var util = layui.util
-		var flow = layui.flow
-		flow.lazyimg()
 
-		
+        var history_tpl = history_list.innerHTML
+        var toend=false;
+        layui.cache.page = 0
+
+        window.getWatchLoggerListByTimeLine = function(){
+
+          page = layui.cache.page
+          mui.ajax(conf.host + '/v1/getWatchLoggerListByTimeLine',{
+            data:{page:page},
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型,
+            timeout:10000,//超时时间设置为10秒；
+            headers:{'Authorization':localStorage.authToken},
+            beforeSend:function(){
+              $('.layui-timeline').append('<li style="padding-bottom: 20px">' + loading_dom + '</li>')
+            },
+            success:function(msg){
+              $('.layui-timeline').find('.layui-flow-more').remove()
+              if(msg.data.length > 0){
+                laytpl(history_tpl).render(msg.data, function(html){
+                  // document.getElementById('history_timelimie_content').innerHTML = html
+                  $('.layui-timeline').append(html)
+                  element.init()
+                  window.Echo.init()
+                  toend = true
+                });
+              }else{
+                $('.layui-timeline').append('<li class="layui-timeline-item"><div class="layui-flow-more" >没有更多了</div></li>')
+              }
+
+            },
+          });
+
+        }
+
+
+
+        getWatchLoggerListByTimeLine()
+
+
+
+        $(window).scroll(
+                function () {
+                  var scrollTop = $(this).scrollTop();
+                  var scrollHeight = $('.layui-timeline').height();
+                  var windowHeight = $(this).height();
+                  // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
+                  if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
+                    toend=false;
+                    layui.cache.page = layui.cache.page + 1
+                    getWatchLoggerListByTimeLine()
+                  }
+                }
+        );
+
 		
 	});
 	

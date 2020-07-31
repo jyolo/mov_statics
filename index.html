@@ -13,9 +13,6 @@
   <link rel="stylesheet" href="static/swiper/swiper.min.css">
   <link rel="stylesheet" href="static/player/video-js.min.css">
   <link rel="shortcut icon" href=" static/images/favicon.ico" />
-  <script src="static/layui/layui.js"></script>
-  <script src="static/swiper/swiper.min.js"></script>
-  <script src="static/mui/mui.min.js"></script>
   <style>
 
   .fly-main{min-height: auto;}
@@ -24,11 +21,6 @@
   .search .keyword{height: 3rem ;border-radius: 2px}
   .search .submit{height: 3rem}
   .search-history .layui-btn{margin: 0.2rem;}
-  .layui-colla-title{background-color: #FFFFFF;height: auto}
-  .search-tag{display: inline-block;padding-bottom: 0.5rem;}
-  .layui-card-header{height: 24px;text-align: left;border-bottom: none}
-
-  .watch_rate{width: 100%;display: block;}
 
 
   .vlist{display: block;}
@@ -52,7 +44,7 @@
   .layui-card-body a{display: block;}
   .layui-progress-text{color: #EFEFF4;}
   .main-content{background: #FFFFFF;margin-top: 1rem;}
-  /*.layui-tab-title li{min-width: 0px}*/
+  .layui-tab-title li{min-width: 0px}
   #mov_category{z-index: 100000;background-color: white;}
   </style>
 </head>
@@ -60,27 +52,29 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
-      <img src="static/images/logo.png" alt="layui">
+    <a class="fly-logo" href="javascript:go_back();">
+        <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
+<!--        <img src="static/images/logo.png" alt="layui">-->
     </a>
+    <ul class="layui-nav fly-nav-user" >
+        <script type="text/html" id="user_login_status">
 
-    
-    <ul class="layui-nav fly-nav-user">
-      <!-- 登入后的状态 -->
-      <li class="layui-nav-item user_info">
-        <a class="fly-nav-avatar" href="javascript:;">
-          <img src="static/images/avatar/default.png">
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>观看记录</a></dd>
-          <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr  class="layui-bg-black">
-          <dd><a href="javascript:;" class="loginOut" style="text-align: center;">退出</a></dd>
-        </dl>
-      </li>
-    
+            {{#  if(d.islogin === true){ }}
+            <li class="layui-nav-item user_info">
+                <a class="fly-nav-avatar" href="javascript:;" lay-type="home" style="color: #009688">
+                    个人中心
+                </a>
+            </li>
+            {{# }else{ }}
+            <li class="layui-nav-item user_info">
+                <a class="fly-nav-avatar" href="javascript:;" lay-type="auth" style="color: #009688">
+                    登录/注册
+                </a>
+            </li>
+            {{# } }}
+        </script>
     </ul>
+
   </div>
 </div>
 
@@ -108,40 +102,6 @@
 
     <!--search result   -->
 	<div class="layui-row main-content" id="main-content">
-
-	  <div class="layui-collapse hidden" lay-accordion>
-          <!--
-         <div class="layui-colla-item search-item hidden" >
-           <h2 class="layui-colla-title ">搜索历史</h2>
-           <div class="layui-colla-content search-history-content" >
-               <div  id="search-history-box">
-                 <script type="text/html" id="searchTpl">
-                           {{# if(d.length > 0){ }}
-                               {{#  layui.each(d, function(index, item){ }}
-                                   <div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius ">{{ item }}</button></div>
-                               {{# }) }}
-                           {{# }else{ }}
-                               <div class="layui-flow-more">暂无数据</div>
-                           {{# } }}
-                       </script>
-               </div>
-           </div>
-         </div>
-
-         <div class="layui-colla-item watch-log-item " >
-             <h2 class="layui-colla-title">观看记录</h2>
-             <div class="layui-colla-content watch-log-content">
-               <div class="swiper-container watchlog">
-                     <div class="swiper-wrapper">
-
-                     </div>
-               </div>
-
-             </div>
-         </div>
-         -->
-      </div>
-
 
        <script type="text/html" id="vlistScript">
 
@@ -233,39 +193,42 @@
 	  ,base: 'static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','form','layer','custom','util','laytpl'],function(){
-		var backNum = 0
-		mui.init({
-			beforeback: function() {
-				backNum++;
-				if(backNum > 1) {
-					plus.runtime.quit();
-				} else {
-					mui.toast("再按一次退出应用");
-				}
-				setTimeout(function() {
-					backNum = 0
-				}, 2000);
-				return false;
-				
-			}
-		})
-		
+	}).use(['element','jquery','form','util','laytpl'],function(){
+
 		var $ = layui.jquery
 		var form = layui.form
 		var element = layui.element
 		var laytpl = layui.laytpl
-		var layer = layui.layer
-		var custom = layui.custom
 		var util = layui.util
 
         // 初始化 获取列表的cache
         layui.cache.getListDataFuncArgs = {}
         var list_tpl = vlistScript.innerHTML
         var list_requst_url = '/v1/search'
-        var toend = false
 
 
+        laytpl(user_login_status.innerHTML).render({'islogin':isLogin}, function(html){
+
+            $('.fly-nav-user').append(html)
+            $('.fly-nav-user').find('a').on('click',function(){
+                switch ($(this).attr('lay-type')) {
+                    case 'auth':
+                        mui.openWindow({
+                            id:'auth' ,
+                            url:'user/auth.html'
+                        });
+                        break
+                    case 'home':
+                        mui.openWindow({
+                            id:'auth' ,
+                            url:'user/home.html'
+                        });
+                        break;
+
+                }
+            })
+
+        });
 
         // 初始化选项卡的 swiper
         window.search_result_swpier = new Swiper('#search_result_swpier',{
@@ -304,186 +267,20 @@
             }
         })
 
-
         //监听 mov_category 点击
         element.on('tab(mov_category)', function(data){
             search_result_swpier.slideTo(data.index)
         })
-	﻿
-		// 进入播放页面之前 先记录播放记录 时间 等信息
-		var setWatchLogger = function (detail_id ,successCallBack) {
-            var headers = {}
-		    if(isLogin == true){
-                var headers = {'Authorization':localStorage.authToken}
-            }
-            mui.ajax(conf.host + '/v1/watchLogger',{
-                data:{'id':detail_id},
-                dataType:'json',//服务器返回json格式数据
-                type:'post',//HTTP请求类型
-                timeout:10000,//超时时间设置为10秒；
-                headers:headers,
-                success:function(msg){
-                    if(msg.code == 1){
-                        successCallBack(msg)
-                    }else{
-                        layer.msg(msg.msg)
-                    }
-                },
-            });
-		}
-
-		//获取搜索历史
-		var getSearchHistory = function(){
-			if(isLogin == false){
-                $('.search-history-content').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn" onclick="window.gotoLogin()">请登录</span></div>')
-            }else{
-                mui.ajax(conf.host + '/v1/search/history',{
-                    dataType:'json',//服务器返回json格式数据
-                    type:'get',//HTTP请求类型
-                    timeout:10000,//超时时间设置为10秒；
-                    headers:{'Authorization':localStorage.authToken},
-                    beforeSend:function(){
-                        $('#search-history-box').find('.search-tag').remove()
-                    },
-                    success:function(msg){
-                        laytpl(searchTpl.innerHTML).render(msg.data, function(html){
-                            document.getElementById('search-history-box').innerHTML = html
-                        });
-
-                        // 搜索历史点击后直接触发 搜索
-                        $('#search-history-box').find('button').on('click',function(){
-                            $('.search-form').find('input[name=kw]').val('')
-                            $('.search-form').find('input[name=kw]').val($(this).text())
-                            $('.search-form').find('.submit').trigger('click')
-                        })
-
-                    },
-                    error:function(xhr,type,errorThrown){
-                        custom.ajaxErrorHandler(xhr)
-                    }
-                });
-            }
-
-		}
-		window.addEventListener('getSearchHistory',getSearchHistory)
-
-		// 获取播放记录
-		var getWatchLoggerList = function(){
-		    if(isLogin == false){
-                $('.watchlog').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn " onclick="window.gotoLogin()">请登录</span></div>')
-            }else{
-                mui.ajax(conf.host + '/v1/getWatchLoggerList',{
-                    dataType:'json',//服务器返回json格式数据
-                    type:'post',//HTTP请求类型
-                    timeout:10000,//超时时间设置为10秒；
-                    headers:{'Authorization':localStorage.authToken},
-                    success:function(msg){
-                        if(msg.data.length > 0){
-                            $('.watch-log-content').addClass('layui-show')
-
-                            let _list = []
-                            $.each(msg.data,function(k,v){
-
-                                var watch_log_info = {
-                                    'play_detail_id' : v.play_detail_id,
-                                    'play_line_index' : v.play_line_index ? v.play_line_index : 0,
-                                    'play_item_index' : v.play_item_index ? v.play_item_index : 0 ,
-                                    'play_time' : v.play_time ? v.play_time : 0.00 ,
-                                    'video_total_time' : v.video_total_time ? v.video_total_time : 0.00 ,
-                                }
-
-                                let _dom = '<div class="layui-card watch_log_item">' +
-                                    '<div class="layui-card-header">'+v.title+'</div>'+
-                                    '<div class="layui-card-body">'+
-                                    '<a href="javascript:;" data-index="'+k+'" data="'+v.play_detail_id+'" watch-log-info="'+Base64.encode(JSON.stringify(watch_log_info))+'"><img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="'+conf.cover_host + v.cover+'" /></a>'+
-                                    '<span class="watch_rate">'+
-                                    '<div class="layui-progress" lay-showPercent="true">'+
-                                    '<div class="layui-progress-bar layui-bg-red" lay-percent="'+v.watch_rate+'"></div>'+
-                                    '</div>' +
-                                    '</span>'+
-                                    '</div>'+
-                                    '</div>'
-
-                                _list.push(_dom)
-                            })
-                            window.swiper_watchlog = new Swiper('.watchlog', {
-                                slidesPerView: 3,
-                                slidesPerGroup:3,
-                                centeredSlides: false,
-                                spaceBetween: 1,
-                                virtual: {
-                                    slides: [],
-                                },
-                                on:{
-                                    slideChange: function(){
-                                        bind_tap_on_history_item()
-                                        element.init()
-                                        window.Echo.init()
-                                    },
-                                },
-                            });
-                            window.swiper_watchlog.virtual.removeAllSlides()
-                            window.swiper_watchlog.virtual.appendSlide(_list)
-                            window.swiper_watchlog.virtual.update()
-
-                            //初始化 进度条 绑定 点击事件
-                            var bind_tap_on_history_item = function(){
-                                mui('.swiper-slide').on('tap','a',function(){
-                                    detail_id = this.getAttribute('data')
-                                    data_index = this.getAttribute('data-index')
-                                    // watch_log 三要素 play_line_index ,play_item_index,play_time 存入 localstarge
-                                    let watch_log_info = this.getAttribute('watch-log-info')
-                                    localStorage.setItem('watch_log_info',Base64.decode(watch_log_info))
-                                    setWatchLogger(detail_id,function (msg) {
-
-                                        mui.openWindow({
-                                            id:'detail' ,
-                                            url:'detail.html?id=' + detail_id
-                                        });
-                                    })
-                                })
-                            }
-
-                            bind_tap_on_history_item()
-                            element.init()
-                            window.Echo.init()
-                        }else{
-                            $('.watchlog').fadeOut();
-                            $('.watchlog').next().fadeIn();
-                            $('.watchlog').parent().removeClass('layui-show')
-                        }
-
-                    },
-                    error:function(xhr,type,errorThrown){
-                        custom.ajaxErrorHandler(xhr)
-                    }
-                });
-            }
-		}
-		window.addEventListener('getWatchLoggerList',getWatchLoggerList)
-
-
-        getSearchHistory()
-        getWatchLoggerList()
 
 		//固定Bar
 		util.fixbar({
-		  // bar1: '&#xe68e;',
 		  bgcolor: '#009688',
 		  click: function(type){
-			// if(type === 'bar1'){
-			//   mui.openWindow({
-			//       id:'index' ,
-			//       url:'index.html'
-			//     });
-			// }
 		  }
 		});
 
 
 		var getListData = function(){
-
-			let loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63d;</i></a></div>'
 
             let params = layui.cache.form_data
             params.page = layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page
@@ -517,8 +314,8 @@
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                             $('#' + layui.cache.current_data_type).find('ul').append(html)
 
+                            layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = true
 
-							toend = true
 
 						});
 						
@@ -529,7 +326,9 @@
 						})
 						
 					}else{
-						toend = false
+
+                        layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = false
+
                         $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                         $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more">没有更多了</div>')
 					}
@@ -554,10 +353,11 @@
 
                 // 记录每个选项卡的滚动位置
                 layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-                
+
+
                 // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
-				if (scrollTop + windowHeight + 100 >= scrollHeight && toend == true) {
-                    toend=false;
+				if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
+                    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
 					// 分页 + 1
 					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
 					getListData()
@@ -572,7 +372,7 @@
 
             //初始化 4个 选项卡的 cache
             $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
-                layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0}
+                layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0 ,toend:true}
                 if($(v).hasClass('swiper-slide-active')){
                     layui.cache.current_data_type = $(v).attr('id')
                 }else if(k == 0){
