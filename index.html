@@ -207,8 +207,8 @@
 		if(custom.params.search_tag_value != undefined){
 			
 			$('.keyword').val(decodeURIComponent(custom.params.search_tag_value))
-			$('.search-form').find('.submit').trigger('click')
-			$('.search-form').trigger('submit(seachSubmit)')
+			$('.search-form').submit('seachSubmit')
+			$('.submit').trigger('click')
 			// $('.search-form').find('.submit')
 			console.log($('.search-form').find('.submit').length)
 		}
