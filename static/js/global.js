@@ -87,18 +87,18 @@ mui.plusReady(function () {
 			
 			// 上一页是 登陆页面 但是以及登陆 返回这 直接跳到首页
 	        if(prev_webview.id  == 'auth' && isLogin == true){
-				index_webview = plus.webview.getWebviewById('index')
+				// index_webview = plus.webview.getWebviewById('index')
 				HBuilder_webview = plus.webview.getWebviewById('HBuilder')
-				mui.fire(index_webview,'checkLogin');
+				// mui.fire(index_webview,'checkLogin');
 				mui.fire(HBuilder_webview,'checkLogin');
 	            mui.openWindow({
-	                id:'index' ,
+	                id:'HBuilder' ,
 	                url:'../index.html'
 	            });
 	            return false
 	        }
 			// 当前页是首页 上一页是 用户中心 但是  没有登陆
-	        if(curren_webview.id == 'index' && prev_webview.id == 'home' && isLogin == false){
+	        if(curren_webview.id == 'HBuilder' && prev_webview.id == 'home' && isLogin == false){
 				
 				mui.fire(curren_webview,'checkLogin');
 	            mui.openWindow({

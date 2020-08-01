@@ -189,7 +189,7 @@
 			laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
 				$('.fly-nav-user').find('li').remove()
 			    $('.fly-nav-user').append(html)
-				console.log('detail -----')
+				
 			    $('.fly-nav-user').find('a').on('tap',function(){
 			        switch ($(this).attr('lay-type')) {
 			            case 'auth':
@@ -202,6 +202,7 @@
 							}else{
 								home_webview = plus.webview.getWebviewById('home')
 								mui.fire(home_webview,'checkLogin');
+								dp.pause()
 								mui.openWindow({
 								    id:'home' ,
 								    url:'user/home.html'
@@ -213,8 +214,12 @@
 			                if(window.plus != undefined){
                                 home_webview = plus.webview.getWebviewById('home')
                                 mui.fire(home_webview,'checkLogin');
+                                mui.fire(home_webview,'getWatchLoggerList');
+                                mui.fire(home_webview,'getSearchHistory');
                             }
 							
+							dp.pause()
+
 			                mui.openWindow({
 			                    id:'home' ,
 			                    url:'user/home.html'
