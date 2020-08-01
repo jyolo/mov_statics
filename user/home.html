@@ -228,9 +228,10 @@ layui.config({
                               detail_id = this.getAttribute('data')
 
                               setWatchLogger(detail_id,function (msg) {
-								  
-								  detail_webview = plus.webview.getWebviewById('detail')
-								  mui.fire(detail_webview,'checkLogin');
+								  if(window.plus != undefined){
+								  	detail_webview = plus.webview.getWebviewById('detail')
+								  	mui.fire(detail_webview,'checkLogin');
+								  }
 								  
                                   mui.openWindow({
                                       id:'detail' ,
@@ -293,7 +294,7 @@ layui.config({
         url:'../index.html'
       });
     }else{
-      layer.alert('退出成功',function () {
+      layer.alert('确定退出？',function () {
         mui.openWindow({
           id:'index' ,
           url:'../index.html'

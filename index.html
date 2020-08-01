@@ -447,8 +447,11 @@
 				// localStorage.removeItem('watch_log_info')
 				setWatchLogger(detail_id ,function(msg){
 					
-					detail_webview = plus.webview.getWebviewById('detail')
-					mui.fire(detail_webview,'checkLogin');
+					if(window.plus != undefined){
+						detail_webview = plus.webview.getWebviewById('detail')
+						console.log(detail_webview)
+						mui.fire(detail_webview,'checkLogin');
+					}
 					
 					mui.openWindow({
 						id:'detail' ,

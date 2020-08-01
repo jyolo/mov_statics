@@ -49,8 +49,8 @@
           <script type="text/html" id="user_login_status">
 
               {{#  if(d.islogin === true){ }}
-              <li class="layui-nav-item">
-                  <a class="fly-nav-avatar" href="javascript:;">
+              <li class="layui-nav-item" >
+                  <a class="fly-nav-avatar" href="javascript:;" lay-type="home">
                       <i class="layui-icon layui-icon-username" style="font-size: 25px; color: #009688;line-height: 61px" ></i>
                   </a>
               </li>
@@ -185,29 +185,49 @@
 
 
 
-        laytpl(user_login_status.innerHTML).render({'islogin':isLogin}, function(html){
+		window.render_login_status = function(){
+			laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
+				$('.fly-nav-user').find('li').remove()
+			    $('.fly-nav-user').append(html)
+				console.log('detail -----')
+			    $('.fly-nav-user').find('a').on('tap',function(){
+			        switch ($(this).attr('lay-type')) {
+			            case 'auth':
+							if((localStorage.authToken != undefined) == false){
 
-            $('.fly-nav-user').append(html)
-            $('.fly-nav-user').find('a').on('click',function(){
-                switch ($(this).attr('lay-type')) {
-                    case 'auth':
-                        mui.openWindow({
-                            id:'auth' ,
-                            url:'user/auth.html'
-                        });
-                        break
-                    case 'home':
-                        mui.openWindow({
-                            id:'auth' ,
-                            url:'user/home.html'
-                        });
-                        break;
-
-                }
-            })
-
-        });
-
+								mui.openWindow({
+								    id:'auth' ,
+								    url:'user/auth.html'
+								});
+							}else{
+								home_webview = plus.webview.getWebviewById('home')
+								mui.fire(home_webview,'checkLogin');
+								mui.openWindow({
+								    id:'home' ,
+								    url:'user/home.html'
+								});
+							}
+			                
+			                break
+			            case 'home':
+			                if(window.plus != undefined){
+                                home_webview = plus.webview.getWebviewById('home')
+                                mui.fire(home_webview,'checkLogin');
+                            }
+							
+			                mui.openWindow({
+			                    id:'home' ,
+			                    url:'user/home.html'
+			                });
+			                break;
+			
+			        }
+			    })
+			
+			});
+			
+		}
+		render_login_status()
         if (custom.params == false){
             layer.open({
                 title: '友情提醒',
