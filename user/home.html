@@ -96,6 +96,15 @@
   </div>
 
 
+  <div class="layui-row" style="margin-top: 20px">
+    <div class="layui-card">
+      <div class="layui-card-header logout" >
+        <i class="layui-icon layui-icon-right" ></i>
+        退出
+      </div>
+    </div>
+  </div>
+
 
 
 </div>
@@ -138,12 +147,6 @@ layui.config({
                       document.getElementById('search-history-box').innerHTML = html
                   });
 
-                  // 搜索历史点击后直接触发 搜索
-                  // $('#search-history-box').find('button').on('click',function(){
-                  //     $('.search-form').find('input[name=kw]').val('')
-                  //     $('.search-form').find('input[name=kw]').val($(this).text())
-                  //     $('.search-form').find('.submit').trigger('click')
-                  // })
 
               },
               error:function(xhr,type,errorThrown){
@@ -256,7 +259,7 @@ layui.config({
   getWatchLoggerList()
   getSearchHistory()
 
-  $('.more').on('click',function(){
+  $('.more').on('tap',function(){
     switch ($(this).attr('lay-type')) {
       case 'watchlog':
         mui.openWindow({
@@ -272,6 +275,30 @@ layui.config({
         break;
     }
   })
+
+  $('.logout').on('tap',function () {
+    localStorage.removeItem('authToken');
+    if(window.plus != undefined){
+      alert('退出成功')
+	  index_webview = plus.webview.getWebviewById('index')
+	  HBuilder_webview = plus.webview.getWebviewById('HBuilder')
+	  mui.fire(index_webview,'checkLogin');
+	  mui.fire(HBuilder_webview,'checkLogin');
+      mui.openWindow({
+        id:'index' ,
+        url:'../index.html'
+      });
+    }else{
+      layer.alert('退出成功',function () {
+        mui.openWindow({
+          id:'index' ,
+          url:'../index.html'
+        });
+      })
+    }
+
+  })
+
 
 
 });
