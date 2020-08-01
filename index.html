@@ -45,6 +45,7 @@
   .main-content{background: #FFFFFF;margin-top: 1rem;}
   .layui-tab-title li{min-width: 0px}
   #mov_category{z-index: 100000;background-color: white;}
+  .swiper-slide{min-height: 1000px;}
   </style>
 </head>
 <body class="fly-full " >
@@ -194,14 +195,22 @@
 	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@cf59e697c316826233c4b6bb3f5f9956109efa4e/static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','jquery','form','util','laytpl'],function(){
+	}).use(['element','jquery','custom','form','util','laytpl'],function(){
 
 		var $ = layui.jquery
 		var form = layui.form
 		var element = layui.element
 		var laytpl = layui.laytpl
 		var util = layui.util
-
+		var custom = layui.custom
+		
+		if(custom.params.search_tag_value != undefined){
+			
+			$('.keyword').val(decodeURIComponent(custom.params.search_tag_value))
+			$('.search-form').find('.submit').trigger('click')
+			// $('.search-form').find('.submit')
+			console.log($('.search-form').find('.submit').length)
+		}
 
         // 初始化 获取列表的cache
         layui.cache.getListDataFuncArgs = {}
@@ -282,27 +291,30 @@
                     //首次切换过来没有数据的时候 加载一次数据
                     if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page == 0 && $('#'+layui.cache.current_data_type).find('li').length == 0){
                         // 滚动到指定位置获取 数据
-                        let $wrapper = $('.main-content');     // 父级容器
-                        let $target = $('#search_result_swpier');    // 目标元素
-                        window.scrollTo($target.offset().top - $wrapper.offset().top + $wrapper.scrollTop() ,0)
+						// 当前选项卡 toend 赋值 false 主动触发 getListData
+                        layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = false
+						$('html,body').animate({scrollTop: 298},100);
                         getListData()
-
-
+						this.update()
+					
                     }else{
-
+						
 
                     }
 
                 },
                 slideChangeTransitionEnd:function(){
                     if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
-                        // window.scrollTo( 0,0)
-                        $('html,body').animate({scrollTop: 0},100);
+                    	$('html,body').animate({scrollTop: 298},100);
                     }else{
-                        // console.log('===>' + layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop)
-                        $('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
-
+                    	// 不能小于298 否则贴不到 顶上
+                    	if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop < 298){
+                    		layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop = 298
+                    	}
+                    	$('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
+                    
                     }
+					
                     this.update()
                 }
             }
@@ -321,6 +333,8 @@
 		  }
 		});
 
+		
+		
 
 		var getListData = function(){
 
@@ -349,8 +363,8 @@
 
 				},
 				success:function(msg){
-                    $('.logo').slideUp()
-
+                    // $('.logo').slideUp()
+					
 					if(msg.data.list.length > 0){
 						layui.laytpl(list_tpl).render(msg.data.list, function(html){
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
@@ -366,6 +380,8 @@
 						window.sticky.update({
 							top:51
 						})
+						
+						
 						
 					}else{
 
@@ -409,6 +425,7 @@
 			}
 		);
 
+		
 
 		form.on('submit(seachSubmit)', function(data){
 
@@ -429,18 +446,28 @@
 
 			$('#search_result_swpier').removeClass('hidden')
 			$('.layui-tab-title').removeClass('hidden')
-
+				
+			
+			
             layui.cache.form_data = data.field
             //清楚4个选项卡里面的所有li
             $('.fly-case-list').find('li').remove()
+			
+			
+			$('html,body').animate({scrollTop: 298},500);
 
             getListData()
 
-
-			window.sticky = new hcSticky('#mov_category', {
-                stickTo: '#main-content',
-                top:51
-            });
+			if(window.sticky == undefined){
+				window.sticky = new hcSticky('#mov_category', {
+				    stickTo: '#main-content',
+				    top:51
+				});
+			}else{
+				window.sticky.refresh()
+			}
+			
+			
 			
 			mui('#search_result_swpier').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')

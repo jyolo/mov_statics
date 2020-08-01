@@ -84,7 +84,7 @@
           <script type="text/html" id="searchTpl">
             {{# if(d.length > 0){ }}
             {{#  layui.each(d, function(index, item){ }}
-            <div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius ">{{ item }}</button></div>
+            <div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius" data="{{ item }}">{{ item }}</button></div>
             {{# }) }}
             {{# }else{ }}
             <div class="layui-flow-more">暂无数据</div>
@@ -96,7 +96,7 @@
   </div>
 
 
-  <div class="layui-row" style="margin-top: 20px">
+  <div class="layui-row" style="margin-top: 20px;margin-bottom: 20px;">
     <div class="layui-card">
       <div class="layui-card-header logout" >
         <i class="layui-icon layui-icon-right" ></i>
@@ -147,7 +147,13 @@ layui.config({
                       document.getElementById('search-history-box').innerHTML = html
                   });
 
-
+				  $('.search-tag').on('tap',function(){
+					  search_tag_value = $(this).find('button').attr('data')
+				  	  mui.openWindow({
+						  id:'index',
+						  url: '../index.html?search_tag_value=' + encodeURIComponent(search_tag_value),
+				  	  });
+				  })
               },
               error:function(xhr,type,errorThrown){
                   custom.ajaxErrorHandler(xhr)
@@ -303,6 +309,7 @@ layui.config({
     }
 
   })
+	
 
 
 
