@@ -228,6 +228,10 @@ layui.config({
                               detail_id = this.getAttribute('data')
 
                               setWatchLogger(detail_id,function (msg) {
+								  
+								  detail_webview = plus.webview.getWebviewById('detail')
+								  mui.fire(detail_webview,'checkLogin');
+								  
                                   mui.openWindow({
                                       id:'detail' ,
                                       url:'../detail.html?id=' + detail_id
