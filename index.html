@@ -92,7 +92,7 @@
 	</div>
     <!--search box-->
 	<div class="layui-row search" >
-		 <form action="" class="layui-form search-form">
+		 <form action="" class="layui-form search-form" >
 			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
 				<input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword">
 			 </div>
@@ -208,6 +208,7 @@
 			
 			$('.keyword').val(decodeURIComponent(custom.params.search_tag_value))
 			$('.search-form').find('.submit').trigger('click')
+			$('.search-form').trigger('submit(seachSubmit)')
 			// $('.search-form').find('.submit')
 			console.log($('.search-form').find('.submit').length)
 		}
@@ -426,7 +427,6 @@
 		);
 
 		
-
 		form.on('submit(seachSubmit)', function(data){
 
             //初始化 4个 选项卡的 cache
