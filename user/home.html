@@ -126,7 +126,13 @@ layui.config({
   var element = layui.element
   var laytpl = layui.laytpl
   var custom = layui.custom
-
+	
+	window.getUID = function() { // 获取唯一值
+	        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+	            return v.toString(16);
+	        });
+	}
   //获取搜索历史
   window.getSearchHistory = function(){
   	if(isLogin == false){
@@ -148,10 +154,18 @@ layui.config({
                   });
 
 				  $('.search-tag').on('tap',function(){
-					  search_tag_value = $(this).find('button').attr('data')
+					  searchTagvalue = $(this).find('button').attr('data')
+					 
+					  if(window.plus != undefined){
+					  	index_webview = plus.webview.getWebviewById('HBuilder')
+						console.log(index_webview)	
+					  	mui.fire(index_webview,'fromSearchHistory',{search_tag_value:searchTagvalue});
+						
+					  }
 				  	  mui.openWindow({
-						  id:'index',
-						  url: '../index.html?search_tag_value=' + encodeURIComponent(search_tag_value),
+						  id:'HBuilder',
+						  url: '../index.html?search_tag_value=' + encodeURIComponent(searchTagvalue) + '&hash=' + getUID(),
+						  extras:{search_tag_value:searchTagvalue}
 				  	  });
 				  })
               },
@@ -291,18 +305,18 @@ layui.config({
     localStorage.removeItem('authToken');
     if(window.plus != undefined){
       alert('退出成功')
-	  index_webview = plus.webview.getWebviewById('index')
+	  // index_webview = plus.webview.getWebviewById('index')
 	  HBuilder_webview = plus.webview.getWebviewById('HBuilder')
-	  mui.fire(index_webview,'checkLogin');
+	  // mui.fire(index_webview,'checkLogin');
 	  mui.fire(HBuilder_webview,'checkLogin');
       mui.openWindow({
-        id:'index' ,
+        id:'HBuilder' ,
         url:'../index.html'
       });
     }else{
       layer.alert('确定退出？',function () {
         mui.openWindow({
-          id:'index' ,
+          id:'HBuilder' ,
           url:'../index.html'
         });
       })

@@ -204,19 +204,14 @@
 		var util = layui.util
 		var custom = layui.custom
 		
-		if(custom.params.search_tag_value != undefined){
-			
-			$('.keyword').val(decodeURIComponent(custom.params.search_tag_value))
-			$('.search-form').submit('seachSubmit')
-			$('.submit').trigger('click')
-			// $('.search-form').find('.submit')
-			console.log($('.search-form').find('.submit').length)
-		}
-
-        // 初始化 获取列表的cache
-        layui.cache.getListDataFuncArgs = {}
-        var list_tpl = vlistScript.innerHTML
-        var list_requst_url = '/v1/search'
+		var animate_scrollTop_height = 298
+		
+		
+		// 初始化 获取列表的cache
+		layui.cache.getListDataFuncArgs = {}
+		var list_tpl = vlistScript.innerHTML
+		var list_requst_url = '/v1/search'
+		
 		
 	
 		var backNum = 0
@@ -294,7 +289,7 @@
                         // 滚动到指定位置获取 数据
 						// 当前选项卡 toend 赋值 false 主动触发 getListData
                         layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = false
-						$('html,body').animate({scrollTop: 298},100);
+						$('html,body').animate({scrollTop: animate_scrollTop_height},100);
                         getListData()
 						this.update()
 					
@@ -306,11 +301,11 @@
                 },
                 slideChangeTransitionEnd:function(){
                     if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
-                    	$('html,body').animate({scrollTop: 298},100);
+                    	$('html,body').animate({scrollTop: animate_scrollTop_height},100);
                     }else{
                     	// 不能小于298 否则贴不到 顶上
-                    	if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop < 298){
-                    		layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop = 298
+                    	if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop < animate_scrollTop_height){
+                    		layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop = animate_scrollTop_height
                     	}
                     	$('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
                     
@@ -335,15 +330,12 @@
 		});
 
 		
-		
-
 		var getListData = function(){
 
             let params = layui.cache.form_data
             params.page = layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page
             params.data_type = layui.cache.current_data_type
 
-            // console.log(params)
             var heards = {}
 			if(isLogin){
 			    var heards = {'Authorization':localStorage.authToken}
@@ -403,61 +395,41 @@
 			});
 		}
 		
-		$(window).scroll(
-			function () {
-				var scrollTop = $(this).scrollTop();
-				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
-				var windowHeight = $(this).height();
-                var current_data_type = layui.cache.current_data_type
-
-                // 记录每个选项卡的滚动位置
-                layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-
-
-                // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
-				if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
-                    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
-					// 分页 + 1
-					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
-					getListData()
-
-
-				}
-			}
-		);
 
 		
-		form.on('submit(seachSubmit)', function(data){
-
-            //初始化 4个 选项卡的 cache
-            $('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
-                layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0 ,toend:true}
-                if($(v).hasClass('swiper-slide-active')){
-                    layui.cache.current_data_type = $(v).attr('id')
-                }else if(k == 0){
-                    layui.cache.current_data_type = $(v).attr('id')
-                }
-            })
-
+		window.form_submit = function(formData){
+			
+			//初始化 4个 选项卡的 cache
+			$('#search_result_swpier').find('.swiper-slide').each(function (k,v) {
+			    layui.cache.getListDataFuncArgs[ $(v).attr('id') ] = {page:0 ,toend:false}
+			    if($(v).hasClass('swiper-slide-active')){
+			        layui.cache.current_data_type = $(v).attr('id')
+			    }else if(k == 0){
+			        layui.cache.current_data_type = $(v).attr('id')
+			    }
+			})
+			
 			//显示 搜索结果折叠面板
 			if($('.watch-log-item').hasClass('hidden') == false){
-                $('.watch-log-item').find('.layui-colla-title').trigger('click')
+			    $('.watch-log-item').find('.layui-colla-title').trigger('click')
 			}
-
+			
 			$('#search_result_swpier').removeClass('hidden')
 			$('.layui-tab-title').removeClass('hidden')
 				
 			
 			
-            layui.cache.form_data = data.field
-            //清楚4个选项卡里面的所有li
-            $('.fly-case-list').find('li').remove()
+			layui.cache.form_data = formData
 			
 			
-			$('html,body').animate({scrollTop: 298},500);
-
-            getListData()
-
+			//清楚4个选项卡里面的所有li
+			$('.fly-case-list').find('li').remove()
+			
+			
+			$('html,body').animate({scrollTop: animate_scrollTop_height},500);
+			
+			getListData()
+			
 			if(window.sticky == undefined){
 				window.sticky = new hcSticky('#mov_category', {
 				    stickTo: '#main-content',
@@ -467,7 +439,7 @@
 				window.sticky.refresh()
 			}
 			
-			
+
 			
 			mui('#search_result_swpier').on('tap','.vlist',function(){
 				detail_id = this.getAttribute('data')
@@ -485,14 +457,78 @@
 						url:'detail.html?id=' + detail_id
 					});
 				})
-
+			
 			})
-		  
-		    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
-		});
-
 		
+		}
+		
+		
+		
+		$('.search-form').on('submit',function(){
+			p = $(this).serialize().split('=')
 
+			if(p[1].indexOf('%') > -1){
+				p[1] = decodeURIComponent(p[1])
+			}
+			
+			form_submit({kw:p[1]})
+			return false
+		})
+		
+		
+		// app 中事件
+		window.addEventListener('fromSearchHistory',function(event){
+			//确保每个webview 的 window.isLogin 是 最新的状态
+		
+			var self = plus.webview.currentWebview();
+			console.log(self.id)
+			console.log(event.detail.search_tag_value)
+			$('.keyword').val(event.detail.search_tag_value)
+			
+			
+			$('.search-form').submit()
+		
+			
+		})
+		// H5 处理
+		if(window.plus == undefined && custom.params.search_tag_value != undefined){
+			// 从个人中心 搜索历史跳转过来的
+			// kw 赋值
+			$('.keyword').val(decodeURIComponent(custom.params.search_tag_value))
+			//触发表单提交事件
+			$('.search-form').submit()
+		}
+		
+		
+		
+		
+		$(window).scroll(
+			function () {
+				
+				var scrollTop = $(this).scrollTop();
+				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
+				var windowHeight = $(this).height();
+                var current_data_type = layui.cache.current_data_type
+
+                // 记录每个选项卡的滚动位置
+                layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
+
+
+                // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
+				if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
+					
+                    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
+					// 分页 + 1
+					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
+					getListData()
+
+
+				}
+			}
+		);
+
+
+	   
 		
 	});
 	
