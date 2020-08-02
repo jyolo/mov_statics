@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-color: #e2e2e2;">
+<html style="background-color: #e2e2e2;height:100%;">
 <head>
   <meta charset="utf-8">
   <title>友影</title>
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/player/video-js.min.css">
   <link rel="shortcut icon" href=" https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/images/favicon.ico" />
   <style>
-
+   html body{margin-top: 0px;}
   .fly-main{min-height: auto;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
   .search{margin-top:3rem;}
@@ -48,7 +48,7 @@
   .swiper-slide{min-height: 1000px;}
   </style>
 </head>
-<body class="fly-full " >
+<body class="fly-full " style="height:100%;background: url(static/images/bg.jpg) center no-repeat;background-size: cover;">
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
@@ -85,8 +85,8 @@
 	<div class="layui-row" style="text-align: center">
 		<div class="logo" style="height: 90px;text-align: center;padding-top: 5rem">
 <!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" />-->
-            <h2>有影</h2>
-            <hr/>
+            <h2 style="margin:1rem 0;background: url(static/images/logo2.png) center no-repeat;height:40px;"></h2>
+            
             <p>全网影视资源搜索引擎，就要给你好看！</p>
 		</div>
 	</div>
@@ -204,7 +204,7 @@
 		var util = layui.util
 		var custom = layui.custom
 		
-		var animate_scrollTop_height = 298
+		var animate_scrollTop_height = 237
 		
 		
 		// 初始化 获取列表的cache
@@ -504,26 +504,31 @@
 		
 		$(window).scroll(
 			function () {
-				
-				var scrollTop = $(this).scrollTop();
+				var scrollTop = $(window).scrollTop();
 				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
 				var windowHeight = $(this).height();
                 var current_data_type = layui.cache.current_data_type
-
-                // 记录每个选项卡的滚动位置
-                layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-
-
-                // 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
-				if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
+				if(current_data_type != undefined){
+					console.log(layui.cache.getListDataFuncArgs)
+					// 记录每个选项卡的滚动位置
+					layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
 					
-                    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
-					// 分页 + 1
-					layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
-					getListData()
-
-
+					
+					// 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
+					if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
+						
+					    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
+						// 分页 + 1
+						layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
+						getListData()
+					
+					}
+					
+					
 				}
+				
+
+                
 			}
 		);
 

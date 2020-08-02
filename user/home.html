@@ -138,6 +138,9 @@ layui.config({
   	if(isLogin == false){
           $('.search-history-content').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn" onclick="window.gotoLogin()">请登录</span></div>')
       }else{
+			
+		  console.log(window.searchTpl.innerHTML)
+		  
           mui.ajax(conf.host + '/v1/getSearchHistory',{
               dataType:'json',//服务器返回json格式数据
               type:'get',//HTTP请求类型
