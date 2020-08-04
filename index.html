@@ -8,15 +8,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/css/layui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/css/global.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/player/video-js.min.css">
-  <link rel="shortcut icon" href=" https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/images/favicon.ico" />
+  <link rel="stylesheet" href="./static/layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/global.css">
+  <link rel="stylesheet" href="./static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="./static/player/video-js.min.css">
+  <link rel="shortcut icon" href=" ./static/images/favicon.ico" />
 
   <style>
    html body{margin: 0px;padding: 0px}
-  .fly-main{min-height: auto;}
+  .fly-main{min-height: auto;width: 100%;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
   .search{margin-top:3rem;}
   .search .keyword{height: 3rem ;border-radius: 2px}
@@ -163,7 +163,7 @@
                   {{#  layui.each(d, function(index, item){ }}
 
                   <li>
-                      <a href="javascript:;" class="vlist" data="{{ item.id }}">
+                      <a href="javascript:void(0)" class="vlist" data="{{ item.id }}">
                           <div class="layui-row ">
                               <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
                                   <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
@@ -241,14 +241,17 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mui/mui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/js/global.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/layui.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.js"></script>
+<script src="./static/mui/mui.min.js"></script>
+<script src="./static/js/global.js"></script>
+<script src="./static/layui/layui.js"></script>
+<script src="./static/swiper/swiper.min.js"></script>
 <script>
+    window.removeEventListener('focusin',function () {
+        alert('123123')
+    })
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mods/' //这里实际使用时，建议改成绝对路径
+	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
 	}).use(['element','jquery','custom','util','laytpl'],function(){
@@ -259,15 +262,8 @@
 		var util = layui.util
 		var custom = layui.custom
 
-        if(window.plus == undefined){
-            var event_type = 'click'
-        }else{
-            var event_type = 'tap'
-        }
-
-        console.log(isLogin)
-
-        $('.top_menu_icon').on(event_type,function(){
+       
+        $('.top_menu_icon').on(click_event_type,function(){
             if($('.top_menu_content').css('display') == 'block'){
                 $('.top_menu_content').slideUp()
             }else{
@@ -275,16 +271,16 @@
                 $(this).fadeOut()
             }
         })
-        $('.slide_up').on(event_type,function () {
+        $('.slide_up').on(click_event_type,function () {
             $('.top_menu_content').slideUp()
             $('.top_menu_icon').fadeIn()
         })
-        mui('.top_menu_content').on(event_type,'.layui-card',function(){
+        mui('.top_menu_content').on(click_event_type,'.layui-card',function(){
             layer.msg('尽请期待！');
 			
         })
 
-
+		$('input').unbind('focusin')
 
         window.render_login_status = function(){
 
@@ -292,8 +288,8 @@
 
                 $('.user_login_status').find('.layui-btn').remove()
                 $('.user_login_status').append(html)
-                mui('.user_login_status').on(event_type,'.layui-btn',function(){
-                    console.log($(this).attr('lay-type'))
+                mui('.user_login_status').on(click_event_type,'.layui-btn',function(){
+                   
                     switch ($(this).attr('lay-type')) {
                         case 'auth':
                             if((localStorage.authToken != undefined) == false){
@@ -332,7 +328,10 @@
 
         }
         render_login_status()
-
+		window.addEventListener('refresh_login_status',function(event){
+			render_login_status()
+		})
+		
 
 		var animate_scrollTop_height = 300
 
@@ -416,6 +415,7 @@
 		util.fixbar({
 		  bgcolor: '#009688',
 		  click: function(type){
+			  console.log('zzzzzzzzzzzz')
 		  }
 		});
 
@@ -490,14 +490,10 @@
 			    }
 			})
 			
-			//显示 搜索结果折叠面板
-			if($('.watch-log-item').hasClass('hidden') == false){
-			    $('.watch-log-item').find('.layui-colla-title').trigger('click')
-			}
 			
 			$('#search_result_swpier').removeClass('hidden')
 			$('.layui-tab-title').removeClass('hidden')
-				
+			
 			
 			layui.cache.form_data = formData
 			
@@ -505,8 +501,7 @@
 			$('.fly-case-list').find('li').remove()
             // 搜索结果区最小高 ，否则不够高度向上滚动
 			$('#search_result_swpier').css('min-height','800px')
-
-
+			
             $('html,body').animate({scrollTop: animate_scrollTop_height},500);
 
 			getListData()
@@ -521,44 +516,28 @@
 			}
 			
 
-			if(window.plus == undefined){
-                mui('#search_result_swpier').on('click','.vlist',function(){
-                    detail_id = this.getAttribute('data')
-                    // localStorage.removeItem('watch_log_info')
-                    setWatchLogger(detail_id ,function(msg){
-
-                        if(window.plus != undefined){
-                            detail_webview = plus.webview.getWebviewById('detail')
-                            console.log(detail_webview)
-                            mui.fire(detail_webview,'checkLogin');
-                        }
-
-                        mui.openWindow({
-                            id:'detail' ,
-                            url:'detail.html?id=' + detail_id
-                        });
-                    })
-                })
-            }else{
-                mui('#search_result_swpier').on('tap','.vlist',function(){
-                    detail_id = this.getAttribute('data')
-                    // localStorage.removeItem('watch_log_info')
-                    setWatchLogger(detail_id ,function(msg){
-
-                        if(window.plus != undefined){
-                            detail_webview = plus.webview.getWebviewById('detail')
-                            console.log(detail_webview)
-                            mui.fire(detail_webview,'checkLogin');
-                        }
-
-                        mui.openWindow({
-                            id:'detail' ,
-                            url:'detail.html?id=' + detail_id
-                        });
-                    })
-
-                })
-            }
+			mui('#search_result_swpier').on(click_event_type,'.vlist',function(){
+				console.log(1111)
+				return false
+			    detail_id = this.getAttribute('data')
+			    // localStorage.removeItem('watch_log_info')
+			    setWatchLogger(detail_id ,function(msg){
+			
+			        if(window.plus != undefined){
+			            detail_webview = plus.webview.getWebviewById('detail')
+			            console.log(detail_webview)
+			            mui.fire(detail_webview,'checkLogin');
+			        }
+			
+			        mui.openWindow({
+			            id:'detail' ,
+			            url:'detail.html?id=' + detail_id
+			        });
+			    })
+				
+				return false
+			
+			})
 			
 
 		
@@ -578,7 +557,7 @@
 		})
 		
 		
-		// app 中事件
+		// app 中事件 从 个人中心过来的 触发事件
 		window.addEventListener('fromSearchHistory',function(event){
 			//确保每个webview 的 window.isLogin 是 最新的状态
 		
@@ -600,8 +579,6 @@
 			//触发表单提交事件
 			$('.search-form').submit()
 		}
-
-
 
 
 		$(window).scroll(

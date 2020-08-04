@@ -112,12 +112,12 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mui/mui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/js/global.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/layui.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/player/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/player/DPlayer.min.js"></script>
+<script src="./static/mui/mui.min.js"></script>
+<script src="./static/js/global.js"></script>
+<script src="./static/layui/layui.js"></script>
+<script src="./static/swiper/swiper.min.js"></script>
+<script src="./static/player/hls.min.js"></script>
+<script src="./static/player/DPlayer.min.js"></script>
 <script>
 
 	window.dp = new DPlayer({
@@ -153,7 +153,7 @@
 	
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mods/' //这里实际使用时，建议改成绝对路径
+	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
@@ -190,7 +190,7 @@
 				$('.fly-nav-user').find('li').remove()
 			    $('.fly-nav-user').append(html)
 				
-			    $('.fly-nav-user').find('a').on('tap',function(){
+			    $('.fly-nav-user').find('a').on(click_event_type,function(){
 			        switch ($(this).attr('lay-type')) {
 			            case 'auth':
 							if((localStorage.authToken != undefined) == false){
@@ -375,7 +375,7 @@
                     $(window.swiper_play_line.slides[pli]).find('.play-botton').eq(pii).addClass('layui-btn-disabled')
 
                     //切换线路播放 只更新 play_line_index 和 play_item_index
-                    mui('#playwrapper').on('tap','.play-botton',function(){
+                    mui('#playwrapper').on(click_event_type,'.play-botton',function(){
                         if($(this).hasClass('layui-btn-disabled')) {
                             return
                         }else{

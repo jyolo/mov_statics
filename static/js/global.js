@@ -40,23 +40,6 @@ if(isLogin == false && (window.location.href.indexOf('user') > -1) && !(window.l
 
 
 
-window.gotoLogin = function(){
-    mui.openWindow({
-        id:'auth' ,
-        url:'./user/auth.html'
-    });
-
-}
-
-window.go_to_url = function (id,url) {
-    mui.openWindow({
-        id:'auth' ,
-        url:'./user/auth.html'
-    });
-}
-
-
-
 
 // app 中 重写 返回的逻辑
 mui.plusReady(function () {
@@ -129,23 +112,12 @@ mui.plusReady(function () {
 })
 
 
-
-
-// //没有登陆直接进入 用户中心
-// if(window.location.href.indexOf('home.html') > -1 && isLogin == false){
-//     mui.openWindow({
-//         id:'auth' ,
-//         url:'../user/auth.html'
-//     });
-// }
-// //已经登陆进入 认证页面 返回 用户中心
-// if(window.location.href.indexOf('auth.html') > -1 && isLogin == true){
-//     mui.openWindow({
-//         id:'home' ,
-//         url:'../user/home.html'
-//     });
-// }
-
+ if(window.plus == undefined){
+		window.click_event_type = 'click'
+  }else{
+		window.click_event_type = 'tap'
+  }
+  
 
 
 window.addEventListener('checkLogin',function(event){
@@ -155,6 +127,7 @@ window.addEventListener('checkLogin',function(event){
 	}else{
 		window.isLogin = false
 	}
+
 	
 })
 
@@ -185,9 +158,8 @@ window.setWatchLogger = function (detail_id ,successCallBack) {
 
 
 
-mui('.layui-container').on('tap','.go_back',function(){
+mui('.layui-container').on(click_event_type,'.go_back',function(){
 
-	
 	
 	// 首页不再返回
 	if(window.plus != undefined){

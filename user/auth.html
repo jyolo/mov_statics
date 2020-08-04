@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="影视搜索">
   <meta name="description" content="影视搜索引擎">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/css/layui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/css/global.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="../static/layui/css/layui.css">
+  <link rel="stylesheet" href="../static/css/global.css">
+  <link rel="stylesheet" href="../static/swiper/swiper.min.css">
   <style type="text/css">
   	.swiper-pagination{position: relative;}
   </style>
@@ -107,10 +107,10 @@
   <p><a href="http://fly.layui.com/" target="_blank">友影</a></p>
 </div> -->
 
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mui/mui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/js/global.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/layui.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.js"></script>
+<script src="../static/mui/mui.min.js"></script>
+<script src="../static/js/global.js"></script>
+<script src="../static/layui/layui.js"></script>
+<script src="../static/swiper/swiper.min.js"></script>
 <script>
 
 
@@ -118,7 +118,7 @@
 
 layui.config({
   version: "3.0.0"
-  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mods/'
+  ,base: '../static/mods/'
 }).extend({
   fly: 'index'
 }).use(['fly','custom','form','jquery','layer'],function(){
@@ -262,6 +262,12 @@ layui.config({
 			success:function(msg){
 				if(msg.data.login == 'ok'){
 					localStorage.authToken = msg.data.Authorization
+					if(window.plus != undefined){
+						HBuilder_webview = plus.webview.getWebviewById('HBuilder')
+						mui.fire(HBuilder_webview,'refresh_login_status')
+						
+					}
+					
 					mui.openWindow({
 					    id:'home' ,
 						url:'../user/home.html'
