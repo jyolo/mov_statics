@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-color: #e2e2e2;height:100%;">
+<html >
 <head>
   <meta charset="utf-8">
   <title>友影</title>
@@ -13,8 +13,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/player/video-js.min.css">
   <link rel="shortcut icon" href=" https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/images/favicon.ico" />
+
   <style>
-   html body{margin-top: 0px;}
+   html body{margin: 0px;padding: 0px}
   .fly-main{min-height: auto;}
   .layui-btn-normal{float: left;margin: 0.5rem;}
   .search{margin-top:3rem;}
@@ -41,179 +42,308 @@
   }
 
   .layui-card-body a{display: block;}
-  .layui-progress-text{color: #EFEFF4;}
   .main-content{background: #FFFFFF;margin-top: 1rem;}
   .layui-tab-title li{min-width: 0px}
   #mov_category{z-index: 100000;background-color: white;}
-  .swiper-slide{min-height: 1000px;}
+
+   .layui-icon-more-vertical{
+       font-size: 30px;
+       color: #FFFFFF;
+       left: 0px;
+   }
+
+   .top_menu_content{
+       background: #FFFFFF;
+       height: 100%;
+       position: absolute;
+       width: 96%;
+       height: auto;
+       Opacity:0.9;
+       padding-top: 10px;
+       z-index: 1000;
+   }
+    .top_menu_content .layui-card{margin-bottom: 0px;width: 100%}
+    .top_menu_content .auth{margin-left: 2.3%;padding:0px;width: 95%}
+
+   ._background-image {
+       position: fixed;
+       z-index: -1;
+       width: 100%;
+   }
   </style>
 </head>
-<body class="fly-full " style="height:100%;background: url(static/images/bg.jpg) center no-repeat;background-size: cover;">
+<body class="fly-full " style="overflow: hidden">
 
-<div class="fly-header layui-bg-black">
-  <div class="layui-container">
-    <a class="fly-logo" href="javascript:;">
-<!--        <i class="layui-icon layui-icon-home" style="font-size: 20px;color: #009688;line-height: 41px"></i>-->
-<!--        <img src="static/images/logo.png" alt="layui">-->
-    </a>
-    <ul class="layui-nav fly-nav-user" >
-        <script type="text/html" id="user_login_status">
+  <div style="height: 100%">
+    <img src="./static/images/bg.jpg" class="_background-image">
+  </div>
 
-            {{#  if(d.islogin === true){ }}
-            <li class="layui-nav-item user_info">
-                <a class="fly-nav-avatar" href="javascript:;" lay-type="home" style="color: #009688">
-                    个人中心
-                </a>
-            </li>
-            {{# }else{ }}
-            <li class="layui-nav-item user_info">
-                <a class="fly-nav-avatar" href="javascript:;" lay-type="auth" style="color: #009688">
-                    登录/注册
-                </a>
-            </li>
-            {{# } }}
-        </script>
-    </ul>
+  <div class="layui-row " style="padding-left: 0.5rem;padding-right: 0.5rem" >
+
+      <div class="layui-row " id="top_menu" >
+          <div class="layui-box top_menu_content hidden"  >
+              <div class="layui-box " >
+                  <div class="layui-row user_login_status">
+                      <script type="text/html" id="user_login_status">
+                          {{#  if(d.islogin === true){ }}
+                          <button type="button" class="layui-btn layui-btn-normal layui-btn-fluid auth" lay-type="home">个人中心</button>
+                          {{# }else{ }}
+                          <button type="button" class="layui-btn layui-btn-normal layui-btn-fluid auth" lay-type="auth">注册 / 登录</button>
+                          {{# } }}
+                      </script>
+                  </div>
+                  <div class="layui-row">
+                      <div class="layui-card" datatype="today_update">
+                          <div class="layui-card-header logout" >
+                              <i class="layui-icon layui-icon-right" ></i>
+                              今日更新
+                          </div>
+                      </div>
+                      <div class="layui-card" datatype="hot_dy">
+                          <div class="layui-card-header " >
+                              <i class="layui-icon layui-icon-right" ></i>
+                              热门电影
+                          </div>
+                      </div>
+                      <div class="layui-card" datatype="hot_dsj">
+                          <div class="layui-card-header " >
+                              <i class="layui-icon layui-icon-right" ></i>
+                              热门电视剧
+                          </div>
+                      </div>
+                      <div class="layui-card" datatype="hot_zy">
+                          <div class="layui-card-header " >
+                              <i class="layui-icon layui-icon-right" ></i>
+                              热门综艺
+                          </div>
+                      </div>
+                      <div class="layui-card" datatype="hot_dm">
+                          <div class="layui-card-header " >
+                              <i class="layui-icon layui-icon-right" ></i>
+                              热门动漫
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="layui-row slide_up" style="height: 30px;width: 100%;position: relative;top:0px;text-align: center;background: #FFFFFF;cursor: pointer">
+                  <i class="layui-icon layui-icon-up" style="font-size: 20px;line-height: 36px"></i>
+              </div>
+          </div>
+          <div class="layui-box top_menu_icon" style="position: absolute;left: 90%; top: 10px;">
+              <i class="layui-icon layui-icon-more-vertical"></i>
+          </div>
+      </div>
+
+      <div class="fly-main"  id="fly-main" style="margin: 0px">
+          <!--logo-->
+          <div class="layui-row" style="text-align: center">
+              <div class="logo" style="height: 90px;text-align: center;padding-top: 5rem;color: #FFFFFF">
+                  <!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" />-->
+                  <h2 style="margin:1rem 0;background: url(static/images/logo2.png) center no-repeat;height:40px;"></h2>
+
+                  <p>全网影视资源搜索引擎，就要给你好看！</p>
+              </div>
+          </div>
+          <!--search box-->
+          <div class="layui-row search" >
+              <form action="" class="layui-form search-form" >
+                  <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
+                      <input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword">
+                  </div>
+                  <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                      <button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit" style="opacity:0.8;">搜索</button>
+                  </div>
+              </form>
+          </div>
+          <!--search result   -->
+          <div class="layui-row main-content " id="main-content">
+
+              <script type="text/html" id="vlistScript">
+
+                  {{#  layui.each(d, function(index, item){ }}
+
+                  <li>
+                      <a href="javascript:;" class="vlist" data="{{ item.id }}">
+                          <div class="layui-row ">
+                              <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
+                                  <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
+                              </div>
+                              <div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
+                                  <h5 class="title">{{ item.title }}</h5>
+                                  {{# if (item.year && item.year != ''){ }}
+                                  <p>年份: {{ item.year }}</p>
+                                  {{# }else{  }}
+                                  <p>年份: 未知</p>
+                                  {{# }  }}
+
+                                  {{# if (item.area && item.area != ''){ }}
+                                  <p>地区: {{ item.area }}</p>
+                                  {{# }else{  }}
+                                  <p>地区: 未知</p>
+                                  {{# }  }}
+
+                                  {{# if (item.director && item.director != ''){ }}
+                                  <p>导演: {{ item.director }}</p>
+                                  {{# }else{  }}
+                                  <p>导演: 未知</p>
+                                  {{# }  }}
+
+                                  {{# if (item.actor && item.actor != ''){ }}
+                                  <p>演员: {{ item.actor }}</p>
+                                  {{# }else{  }}
+                                  <p>演员: 未知</p>
+                                  {{# }  }}
+
+                                  {{# if (item.desc && item.desc != ''){ }}
+                                  <p>简介: {{ item.desc }}</p>
+                                  {{# }else{  }}
+                                  <p>简介: 未知</p>
+                                  {{# }  }}
+                              </div>
+                          </div>
+                      </a>
+                  </li>
+                  {{# }) }}
+
+              </script>
+
+              <div class="layui-row" >
+                  <div class="layui-tab layui-tab-brief" lay-filter="mov_category" id="mov_category">
+                      <ul class="layui-tab-title hidden" >
+                          <li class="layui-this">电影</li>
+                          <li>电视剧</li>
+                          <li>综艺</li>
+                          <li>动漫</li>
+                      </ul>
+                      <div class="layui-tab-content hidden">
+                      </div>
+                  </div>
+              </div>
+
+              <div class="layui-row">
+                  <div id="search_result_swpier" class="swiper-container hidden" >
+                      <div class="swiper-wrapper">
+                          <div class="swiper-slide" id="dy"><ul class="fly-case-list"></ul></div>
+                          <div class="swiper-slide" id="dsj"><ul class="fly-case-list"></ul></div>
+                          <div class="swiper-slide" id="zy"><ul class="fly-case-list"></ul></div>
+                          <div class="swiper-slide" id="dm"><ul class="fly-case-list"></ul></div>
+                      </div>
+                  </div>
+              </div>
+
+
+          </div>
+
+      </div>
 
   </div>
-</div>
 
 
 
-<div class="fly-main"  id="fly-main" style="overflow: hidden;">
-    <!--logo-->
-	<div class="layui-row" style="text-align: center">
-		<div class="logo" style="height: 90px;text-align: center;padding-top: 5rem">
-<!--			<img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png2" />-->
-            <h2 style="margin:1rem 0;background: url(static/images/logo2.png) center no-repeat;height:40px;"></h2>
-            
-            <p>全网影视资源搜索引擎，就要给你好看！</p>
-		</div>
-	</div>
-    <!--search box-->
-	<div class="layui-row search" >
-		 <form action="" class="layui-form search-form" >
-			 <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
-				<input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword">
-			 </div>
-			 <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-			 	<button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit">搜索</button>
-			 </div>
-		 </form>
-	</div>
-
-    <!--search result   -->
-	<div class="layui-row main-content" id="main-content">
-
-       <script type="text/html" id="vlistScript">
-
-            {{#  layui.each(d, function(index, item){ }}
-			
-            <li>
-                <a href="#" class="vlist" data="{{ item.id }}">
-                    <div class="layui-row ">
-                        <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cover" >
-                            <img class="lazy" src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/images/default.png" data-echo="{{ conf.cover_host + item.cover_id }}" >
-                        </div>
-                        <div class="layui-col-xs8 layui-col-sm8 layui-col-md8 dinfo" >
-                            <h5 class="title">{{ item.title }}</h5>
-                            {{# if (item.year && item.year != ''){ }}
-                            <p>年份: {{ item.year }}</p>
-                            {{# }else{  }}
-                            <p>年份: 未知</p>
-                            {{# }  }}
-
-                            {{# if (item.area && item.area != ''){ }}
-                            <p>地区: {{ item.area }}</p>
-                            {{# }else{  }}
-                            <p>地区: 未知</p>
-                            {{# }  }}
-
-                            {{# if (item.director && item.director != ''){ }}
-                            <p>导演: {{ item.director }}</p>
-                            {{# }else{  }}
-                            <p>导演: 未知</p>
-                            {{# }  }}
-
-                            {{# if (item.actor && item.actor != ''){ }}
-                            <p>演员: {{ item.actor }}</p>
-                            {{# }else{  }}
-                            <p>演员: 未知</p>
-                            {{# }  }}
-
-                            {{# if (item.desc && item.desc != ''){ }}
-                            <p>简介: {{ item.desc }}</p>
-                            {{# }else{  }}
-                            <p>简介: 未知</p>
-                            {{# }  }}
-                        </div>
-                    </div>
-                </a>
-            </li>
-			{{# }) }}
-
-        </script>
-
-      <div class="layui-row" >
-          <div class="layui-tab layui-tab-brief" lay-filter="mov_category" id="mov_category">
-              <ul class="layui-tab-title hidden" >
-                  <li class="layui-this">电影</li>
-                  <li>电视剧</li>
-                  <li>综艺</li>
-                  <li>动漫</li>
-              </ul>
-              <div class="layui-tab-content hidden">
-              </div>
-          </div>
-      </div>
-
-      <div class="layui-row">
-          <div id="search_result_swpier" class="swiper-container hidden" >
-              <div class="swiper-wrapper">
-                  <div class="swiper-slide" id="dy"><ul class="fly-case-list"></ul></div>
-                  <div class="swiper-slide" id="dsj"><ul class="fly-case-list"></ul></div>
-                  <div class="swiper-slide" id="zy"><ul class="fly-case-list"></ul></div>
-                  <div class="swiper-slide" id="dm"><ul class="fly-case-list"></ul></div>
-              </div>
-          </div>
-      </div>
-
-
-	</div>
-	
-
-</div>
 
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mui/mui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/js/global.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/layui/layui.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/swiper/swiper.min.js"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/js-base64@2.6.3/base64.min.js"></script>-->
 <script>
 	layui.config({
 	  version: "3.0.0"
 	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@e9414ea8b45f45628a7cef7064210010383ba4db/static/mods/' //这里实际使用时，建议改成绝对路径
 	}).extend({
 	  fly: 'index'
-	}).use(['element','jquery','custom','form','util','laytpl'],function(){
+	}).use(['element','jquery','custom','util','laytpl'],function(){
 
-		var $ = layui.jquery
-		var form = layui.form
+        var $ = layui.jquery
 		var element = layui.element
 		var laytpl = layui.laytpl
 		var util = layui.util
 		var custom = layui.custom
-		
-		var animate_scrollTop_height = 237
-		
-		
+
+        if(window.plus == undefined){
+            var event_type = 'click'
+        }else{
+            var event_type = 'tap'
+        }
+
+        console.log(isLogin)
+
+        $('.top_menu_icon').on(event_type,function(){
+            if($('.top_menu_content').css('display') == 'block'){
+                $('.top_menu_content').slideUp()
+            }else{
+                $('.top_menu_content').slideDown();
+                $(this).fadeOut()
+            }
+        })
+        $('.slide_up').on(event_type,function () {
+            $('.top_menu_content').slideUp()
+            $('.top_menu_icon').fadeIn()
+        })
+        mui('.top_menu_content').on(event_type,'.layui-card',function(){
+            layer.msg('尽请期待！');
+			
+        })
+
+
+
+        window.render_login_status = function(){
+
+            laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
+
+                $('.user_login_status').find('.layui-btn').remove()
+                $('.user_login_status').append(html)
+                mui('.user_login_status').on(event_type,'.layui-btn',function(){
+                    console.log($(this).attr('lay-type'))
+                    switch ($(this).attr('lay-type')) {
+                        case 'auth':
+                            if((localStorage.authToken != undefined) == false){
+                                mui.openWindow({
+                                    id:'auth' ,
+                                    url:'user/auth.html'
+                                });
+                            }else{
+                                if(window.plus != undefined){
+                                    home_webview = plus.webview.getWebviewById('home')
+                                    mui.fire(home_webview,'checkLogin');
+                                }
+                                mui.openWindow({
+                                    id:'home' ,
+                                    url:'user/home.html'
+                                });
+                            }
+                            break
+                        case 'home':
+                            if(window.plus != undefined){
+                                home_webview = plus.webview.getWebviewById('home')
+                                mui.fire(home_webview,'checkLogin');
+                            }
+                            mui.openWindow({
+                                id:'home' ,
+                                url:'user/home.html'
+                            });
+                            break;
+
+                    }
+					$('.top_menu_content').slideUp()
+					$('.top_menu_icon').fadeIn()
+				})
+
+            });
+
+        }
+        render_login_status()
+
+
+		var animate_scrollTop_height = 300
+
+        // $('#search_result_swpier').height(window.screen.height)
+
 		// 初始化 获取列表的cache
 		layui.cache.getListDataFuncArgs = {}
 		var list_tpl = vlistScript.innerHTML
 		var list_requst_url = '/v1/search'
 		
 		
-	
 		var backNum = 0
         mui.init({
             beforeback: function() {
@@ -230,50 +360,10 @@
 
             }
         })
-		
 
-		window.render_login_status = function(){
-			laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
-				$('.fly-nav-user').find('li').remove()
-			    $('.fly-nav-user').append(html)
-			    $('.fly-nav-user').find('a').on('click',function(){
-			        switch ($(this).attr('lay-type')) {
-			            case 'auth':
-							if((localStorage.authToken != undefined) == false){
+        // $('#fly-main').height($(window).height())
 
-								mui.openWindow({
-								    id:'auth' ,
-								    url:'user/auth.html'
-								});
-							}else{
-								home_webview = plus.webview.getWebviewById('home')
-								mui.fire(home_webview,'checkLogin');
-								mui.openWindow({
-								    id:'home' ,
-								    url:'user/home.html'
-								});
-							}
-			                
-			                break
-			            case 'home':
-			                if(window.plus != undefined){
-                                home_webview = plus.webview.getWebviewById('home')
-                                mui.fire(home_webview,'checkLogin');
-                            }
-							
-			                mui.openWindow({
-			                    id:'home' ,
-			                    url:'user/home.html'
-			                });
-			                break;
-			
-			        }
-			    })
-			
-			});
-			
-		}
-		render_login_status()
+
 	   
         // 初始化选项卡的 swiper
         window.search_result_swpier = new Swiper('#search_result_swpier',{
@@ -356,37 +446,28 @@
 
 				},
 				success:function(msg){
-                    // $('.logo').slideUp()
-					
+
 					if(msg.data.list.length > 0){
+
 						layui.laytpl(list_tpl).render(msg.data.list, function(html){
                             $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                             $('#' + layui.cache.current_data_type).find('ul').append(html)
 
                             layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = true
-
-
 						});
-						
-						
-						window.sticky.refresh()
-						window.sticky.update({
-							top:51
-						})
-						
-						
-						
-					}else{
 
+					}else{
                         layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = false
 
                         $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
                         $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more">没有更多了</div>')
 					}
 
+					
+                    window.sticky.refresh()
 					window.Echo.init()
-
                     search_result_swpier.update()
+					
 
                 },
 				error:function(xhr,type,errorThrown){
@@ -418,47 +499,68 @@
 			$('.layui-tab-title').removeClass('hidden')
 				
 			
-			
 			layui.cache.form_data = formData
-			
 			
 			//清楚4个选项卡里面的所有li
 			$('.fly-case-list').find('li').remove()
-			
-			
-			$('html,body').animate({scrollTop: animate_scrollTop_height},500);
-			
+            // 搜索结果区最小高 ，否则不够高度向上滚动
+			$('#search_result_swpier').css('min-height','800px')
+
+
+            $('html,body').animate({scrollTop: animate_scrollTop_height},500);
+
 			getListData()
-			
+
 			if(window.sticky == undefined){
 				window.sticky = new hcSticky('#mov_category', {
 				    stickTo: '#main-content',
-				    top:51
+				    top:-10
 				});
 			}else{
-				window.sticky.refresh()
+                window.sticky.refresh()
 			}
 			
 
+			if(window.plus == undefined){
+                mui('#search_result_swpier').on('click','.vlist',function(){
+                    detail_id = this.getAttribute('data')
+                    // localStorage.removeItem('watch_log_info')
+                    setWatchLogger(detail_id ,function(msg){
+
+                        if(window.plus != undefined){
+                            detail_webview = plus.webview.getWebviewById('detail')
+                            console.log(detail_webview)
+                            mui.fire(detail_webview,'checkLogin');
+                        }
+
+                        mui.openWindow({
+                            id:'detail' ,
+                            url:'detail.html?id=' + detail_id
+                        });
+                    })
+                })
+            }else{
+                mui('#search_result_swpier').on('tap','.vlist',function(){
+                    detail_id = this.getAttribute('data')
+                    // localStorage.removeItem('watch_log_info')
+                    setWatchLogger(detail_id ,function(msg){
+
+                        if(window.plus != undefined){
+                            detail_webview = plus.webview.getWebviewById('detail')
+                            console.log(detail_webview)
+                            mui.fire(detail_webview,'checkLogin');
+                        }
+
+                        mui.openWindow({
+                            id:'detail' ,
+                            url:'detail.html?id=' + detail_id
+                        });
+                    })
+
+                })
+            }
 			
-			mui('#search_result_swpier').on('tap','.vlist',function(){
-				detail_id = this.getAttribute('data')
-				// localStorage.removeItem('watch_log_info')
-				setWatchLogger(detail_id ,function(msg){
-					
-					if(window.plus != undefined){
-						detail_webview = plus.webview.getWebviewById('detail')
-						console.log(detail_webview)
-						mui.fire(detail_webview,'checkLogin');
-					}
-					
-					mui.openWindow({
-						id:'detail' ,
-						url:'detail.html?id=' + detail_id
-					});
-				})
-			
-			})
+
 		
 		}
 		
@@ -498,35 +600,31 @@
 			//触发表单提交事件
 			$('.search-form').submit()
 		}
-		
-		
-		
-		
+
+
+
+
 		$(window).scroll(
 			function () {
 				var scrollTop = $(window).scrollTop();
 				var scrollHeight = $('#'+ layui.cache.current_data_type).height();
 				var windowHeight = $(this).height();
                 var current_data_type = layui.cache.current_data_type
+
 				if(current_data_type != undefined){
-					console.log(layui.cache.getListDataFuncArgs)
+
 					// 记录每个选项卡的滚动位置
 					layui.cache.getListDataFuncArgs[current_data_type].scrollTop = scrollTop
-					
-					
+
 					// 距离底部 还有100 px  （滚动高度 + 窗口高度 + 100 > 窗口高度）
 					if (scrollTop + windowHeight + 100 >= scrollHeight && layui.cache.getListDataFuncArgs[current_data_type].toend == true) {
-						
 					    layui.cache.getListDataFuncArgs[current_data_type].toend=false;
 						// 分页 + 1
 						layui.cache.getListDataFuncArgs[current_data_type].page = layui.cache.getListDataFuncArgs[current_data_type].page + 1
 						getListData()
-					
 					}
-					
-					
+
 				}
-				
 
                 
 			}
@@ -543,5 +641,6 @@
 	
 	
 </script>
+
 </body>
 </html>
