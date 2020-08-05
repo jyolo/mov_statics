@@ -69,13 +69,14 @@
        position: fixed;
        z-index: -1;
        width: 100%;
+       height: 100%;
    }
   </style>
 </head>
 <body class="fly-full " style="overflow: hidden">
 
   <div style="height: 100%">
-    <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/images/bg.jpg" class="_background-image">
+    <img src="./static/images/bg_01.png" class="_background-image">
   </div>
 
   <div class="layui-row " style="padding-left: 0.5rem;padding-right: 0.5rem" >
@@ -499,8 +500,8 @@
 			//清楚4个选项卡里面的所有li
 			$('.fly-case-list').find('li').remove()
             // 搜索结果区最小高 ，否则不够高度向上滚动
-			$('#search_result_swpier').css('min-height','800px')
-			
+			$('#search_result_swpier').css('min-height','2000px')
+	
             $('html,body').animate({scrollTop: animate_scrollTop_height},500);
 
 			getListData()
