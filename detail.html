@@ -39,7 +39,7 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo go_back" href="javascript:;"  onclick="go_back()">
+    <a class="fly-logo go_back" href="javascript:;" >
         <i class="layui-icon layui-icon-left" style="font-size: 20px;color: #009688;line-height: 41px"></i>
         <!--        <img src="static/images/logo.png" alt="layui">-->
     </a>
@@ -119,7 +119,10 @@
 <script src="./static/player/hls.min.js"></script>
 <script src="./static/player/DPlayer.min.js"></script>
 <script>
-
+	mui.plusReady(function () {
+		  mui.init()
+	})
+	
 	window.dp = new DPlayer({
 	    container: document.getElementById('playbox'),
 	    autoplay: true,
@@ -149,7 +152,6 @@
 		
 	});
 
-
 	
 	layui.config({
 	  version: "3.0.0"
@@ -157,7 +159,8 @@
 	}).extend({
 	  fly: 'index'
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
-		mui.init()
+		
+		
 		var $ = layui.jquery
 		var laytpl = layui.laytpl
 		var custom = layui.custom
@@ -166,25 +169,16 @@
 		
 		var isopen_ws = false
 		
-		//固定Bar
-		// util.fixbar({
-		//   bar1: '&#xe603;'
-		//   ,bgcolor: '#009688'
-		//   ,click: function(type){
-		// 	if(type === 'bar1'){
-		// 	  mui.back()
-		// 	}
-		//   }
-		// });
 
+		
         // 修改播放器样式
         $('.dplayer-bar').css('height','7px')
         $('.dplayer-loaded').css('height','7px')
         $('.dplayer-played').css('height','7px')
         $('.dplayer-thumb').css('margin-top','-2px')
-
-
-
+		
+		
+		
 		window.render_login_status = function(){
 			laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
 				$('.fly-nav-user').find('li').remove()
@@ -193,15 +187,21 @@
 			    $('.fly-nav-user').find('a').on(click_event_type,function(){
 			        switch ($(this).attr('lay-type')) {
 			            case 'auth':
-							if((localStorage.authToken != undefined) == false){
+							if((localStorage.authToken == undefined) == true){
 
 								mui.openWindow({
 								    id:'auth' ,
 								    url:'user/auth.html'
 								});
+								
 							}else{
-								home_webview = plus.webview.getWebviewById('home')
-								mui.fire(home_webview,'checkLogin');
+								if(window.plus != undefined){
+									home_webview = plus.webview.getWebviewById('home')
+									mui.fire(home_webview,'checkLogin');
+									mui.fire(home_webview,'getSearchHistory');
+									mui.fire(home_webview,'getWatchLoggerList');
+								}
+								
 								dp.pause()
 								mui.openWindow({
 								    id:'home' ,
@@ -233,66 +233,102 @@
 			
 		}
 		render_login_status()
-        if (custom.params == false){
-            layer.open({
-                title: '友情提醒',
-                btn:[],
-                closeBtn:0,
-                content: '参数缺失！'
-            });
-            return false
-        }
+        
         var headers = {};
         if(isLogin == true){
             var headers = {'Authorization':localStorage.authToken}
         }
+		
+		
+		window.startPlay = function(){
+			
+			if (window.plus == undefined){
+				window.detail_id = custom.params.id
+				console.log('h5: ' + detail_id)
+			}else{
+				window.detail_id = localStorage.getItem('play_detail_id')
+				console.log('app id :' + detail_id)
+			}
+			
+			console.log('startPlay')
+			if (!window.detail_id || window.detail_id == undefined){
+			  layer.open({
+				  title: '友情提醒',
+				  btn:[],
+				  closeBtn:0,
+				  content: '参数缺失！'
+			  });
+			  return false
+			}
+			
+			
+			mui.ajax(conf.host + '/v1/getWatchLoggerDetail', {
+			    data: {detail_id: detail_id},
+			    dataType: 'json',//服务器返回json格式数据
+			    type: 'get',//HTTP请求类型
+			    timeout: 10000,//超时时间设置为10秒；
+			    headers: headers,
+			    success: function (msg) {
+			
+			        if(msg.code == 1){
+			            watch_log_info = msg.data
+			            layui.cache.play_info = {
+			                'play_detail_id':watch_log_info.play_detail_id,
+			                'play_line_index': watch_log_info.play_line_index,
+			                'play_item_index' : watch_log_info.play_item_index ,
+			                'play_time':watch_log_info.play_time,
+			                'video_total_time' : watch_log_info.video_total_time,
+			            }
+			
+			        }else{
+			            watch_log_info = undefined
+			            layui.cache.play_info = {
+			                'play_detail_id':detail_id,
+			                'play_line_index': 0,
+			                'play_item_index' : 0 ,
+			                'play_time':0,
+			                'video_total_time' : 0,
+			            }
+			        }
+			
+			        getDetail()
+			        
+			    }
+			})
+			
+			
+		}
+		
+		window.addEventListener('startPlay',startPlay)
+		
 
+		//延迟100ms 检查 window.plus
+		setTimeout(function(){
+			// if(window.plus != undefined){
+			// 	// curren_webview = plus.webview.currentWebview()
+			// 	// console.log('detail : ' + curren_webview.detail_id)
+			// 	startPlay()
+				
+			// }else{
+			// 	startPlay()
+			// }
+			startPlay()
+		},200)
+		
 
-        mui.ajax(conf.host + '/v1/getWatchLoggerDetail', {
-            data: {detail_id: custom.params.id},
-            dataType: 'json',//服务器返回json格式数据
-            type: 'get',//HTTP请求类型
-            timeout: 10000,//超时时间设置为10秒；
-            headers: headers,
-            success: function (msg) {
-
-                if(msg.code == 1){
-                    watch_log_info = msg.data
-                    layui.cache.play_info = {
-                        'play_detail_id':watch_log_info.play_detail_id,
-                        'play_line_index': watch_log_info.play_line_index,
-                        'play_item_index' : watch_log_info.play_item_index ,
-                        'play_time':watch_log_info.play_time,
-                        'video_total_time' : watch_log_info.video_total_time,
-                    }
-
-                }else{
-                    watch_log_info = undefined
-                    layui.cache.play_info = {
-                        'play_detail_id':custom.params.id,
-                        'play_line_index': 0,
-                        'play_item_index' : 0 ,
-                        'play_time':0,
-                        'video_total_time' : 0,
-                    }
-                }
-
-                getDetail()
-                
-            }
-        })
-
-
+		
+		var playitem_tpl = playitem.innerHTML
+		
         window.getDetail = function () {
 
-
             mui.ajax(conf.host + '/v1/getDetail',{
-                data:{id:custom.params.id},
+                data:{id:detail_id},
                 dataType:'json',//服务器返回json格式数据
                 type:'get',//HTTP请求类型
                 timeout:10000,//超时时间设置为10秒；
                 headers:headers,
                 success:function(msg){
+					
 					if(msg.code == 0){
 						layer.alert('暂无数据',{closeBtn:0}, function(index){
 						  //do something
@@ -302,11 +338,12 @@
 						return false
 					}
                     if(msg.data.length > 0){
+						$('#mov_title').html('')
                         $('#mov_title').append(msg.data[0]['title'])
                     }
-                    let getTpl = playitem.innerHTML
+                    
                     let view = document.getElementById('playwrapper');
-                    layui.laytpl(getTpl).render(msg.data, function(html){
+                    layui.laytpl(playitem_tpl).render(msg.data, function(html){
                         view.innerHTML = html;
                     });
                     //遍历线路
@@ -386,7 +423,7 @@
 
                         playurl = this.getAttribute('data')
 
-                        layui.cache.play_info['play_detail_id'] = custom.params.id
+                        layui.cache.play_info['play_detail_id'] = detail_id
                         layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
 
                         dp.switchVideo({

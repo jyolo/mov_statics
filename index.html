@@ -148,7 +148,7 @@
           <div class="layui-row search" >
               <form action="" class="layui-form search-form" >
                   <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
-                      <input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword">
+                      <input type="text" name="kw" required lay-verify="required" placeholder="开始搜搜吧" autocomplete="off" class="layui-input keyword" onfocusin="javascript:void(0);" onfocusout="javascript:void(0);" onfocus="javascript:void(0);" onblur="javascript:void(0);">
                   </div>
                   <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                       <button  class="layui-btn layui-btn-fluid submit" lay-submit lay-filter="seachSubmit" style="opacity:0.8;">搜索</button>
@@ -246,9 +246,7 @@
 <script src="./static/layui/layui.js"></script>
 <script src="./static/swiper/swiper.min.js"></script>
 <script>
-    window.removeEventListener('focusin',function () {
-        alert('123123')
-    })
+
 	layui.config({
 	  version: "3.0.0"
 	  ,base: './static/mods/' //这里实际使用时，建议改成绝对路径
@@ -262,7 +260,8 @@
 		var util = layui.util
 		var custom = layui.custom
 
-       
+
+
         $('.top_menu_icon').on(click_event_type,function(){
             if($('.top_menu_content').css('display') == 'block'){
                 $('.top_menu_content').slideUp()
@@ -280,7 +279,7 @@
 			
         })
 
-		$('input').unbind('focusin')
+
 
         window.render_login_status = function(){
 
@@ -415,7 +414,7 @@
 		util.fixbar({
 		  bgcolor: '#009688',
 		  click: function(type){
-			  console.log('zzzzzzzzzzzz')
+			  
 		  }
 		});
 
@@ -517,22 +516,61 @@
 			
 
 			mui('#search_result_swpier').on(click_event_type,'.vlist',function(){
-				console.log(1111)
-				return false
+				
 			    detail_id = this.getAttribute('data')
 			    // localStorage.removeItem('watch_log_info')
 			    setWatchLogger(detail_id ,function(msg){
-			
+					
+					// if(window.plus != undefined){
+					// 	detail_webview = plus.webview.getWebviewById('detail')
+					// 	if(detail_webview != null){
+					// 		mui.fire(detail_webview,'checkLogin')
+					// 		mui.fire(detail_webview,'startPlay');
+					// 		console.log(1111111)
+					// 		mui.openWindow({
+					// 			id:'detail' ,
+					// 			url:'detail.html',
+					// 		});
+					// 	}else{
+					// 		mui.openWindow({
+					// 			id:'detail' ,
+					// 			url:'detail.html',
+					// 			extras:{
+					// 				frist_enter:1
+					// 			}
+					// 		});
+					// 	}
+															
+					// }else{
+					// 	  mui.openWindow({
+					// 		  id:'detail' ,
+					// 		  url:'detail.html?id=' + detail_id
+					// 	  });
+					// }
+														 
+					
+					
 			        if(window.plus != undefined){
+						
+						localStorage.setItem('play_detail_id',detail_id)
+						
 			            detail_webview = plus.webview.getWebviewById('detail')
-			            console.log(detail_webview)
+						
 			            mui.fire(detail_webview,'checkLogin');
-			        }
+						mui.fire(detail_webview,'startPlay');
+						mui.openWindow({
+						    id:'detail' ,
+						    url:'detail.html',
+						});
+			        }else{
+						mui.openWindow({
+						    id:'detail' ,
+						    url:'detail.html?id=' + detail_id,
+						});
+					}
 			
-			        mui.openWindow({
-			            id:'detail' ,
-			            url:'detail.html?id=' + detail_id
-			        });
+			        
+					
 			    })
 				
 				return false
@@ -562,8 +600,7 @@
 			//确保每个webview 的 window.isLogin 是 最新的状态
 		
 			var self = plus.webview.currentWebview();
-			console.log(self.id)
-			console.log(event.detail.search_tag_value)
+			
 			$('.keyword').val(event.detail.search_tag_value)
 			
 			
@@ -603,20 +640,13 @@
 
 				}
 
-                
 			}
 		);
 
-
-	   
 		
 	});
-	
 
-	
-	
-	
-	
+
 </script>
 
 </body>

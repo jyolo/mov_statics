@@ -94,6 +94,16 @@
       </div>
     </div>
   </div>
+  
+  <div class="hidden" id="searchTpl_from_div">
+	  {{# if(d.length > 0){ }}
+	  {{#  layui.each(d, function(index, item){ }}
+	  <div class="search-tag"><button type="button" class="layui-btn layui-btn-sm layui-btn-radius" data="{{ item }}">{{ item }}</button></div>
+	  {{# }) }}
+	  {{# }else{ }}
+	  <div class="layui-flow-more">暂无数据</div>
+	  {{# } }}
+  </div>
 
 
   <div class="layui-row" style="margin-top: 20px;margin-bottom: 20px;">
@@ -153,8 +163,13 @@ layui.config({
 	            return v.toString(16);
 	        });
 	}
+	
+	window.searchTpl = searchTpl.innerHTML
+	
   //获取搜索历史
   window.getSearchHistory = function(){
+	  
+	  
   	if(isLogin == false){
           $('.search-history-content').append('<div class="notic-login" style="text-align: center"><span  class="layui-btn" onclick="window.gotoLogin()">请登录</span></div>')
       }else{
@@ -166,11 +181,12 @@ layui.config({
               headers:{'Authorization':localStorage.authToken},
               beforeSend:function(){
                 $('.search-history-content').removeClass('hidden')
+                $('.search-history-content').find('.search-tag').remove()
                 $('.search-history-content').append(loading_dom)
               },
               success:function(msg){
                   $('.search-history-content').find('.layui-flow-more').remove()
-                  laytpl(searchTpl.innerHTML).render(msg.data, function(html){
+                  laytpl(searchTpl).render(msg.data, function(html){
                       document.getElementById('search-history-box').innerHTML = html
                   });
 
@@ -179,7 +195,6 @@ layui.config({
 					 
 					  if(window.plus != undefined){
 					  	index_webview = plus.webview.getWebviewById('HBuilder')
-						console.log(index_webview)	
 					  	mui.fire(index_webview,'fromSearchHistory',{search_tag_value:searchTagvalue});
 						
 					  }
@@ -211,8 +226,8 @@ layui.config({
               headers:{'Authorization':localStorage.authToken},
               beforeSend:function(){
                 $('.watch-log-content').addClass('layui-show')
+                $('.watch-log-content').find('.swiper-slide').remove()
                 $('.watch-log-content').append(loading_dom)
-
               },
               success:function(msg){
                   if(msg.data.length > 0){
@@ -243,45 +258,80 @@ layui.config({
 
                           _list.push(_dom)
                       })
-                      window.swiper_watchlog = new Swiper('.watchlog', {
-                          slidesPerView: 3,
-                          slidesPerGroup:3,
-                          centeredSlides: false,
-                          spaceBetween: 1,
-                          virtual: {
-                              slides: [],
-                          },
-                          on:{
-                              slideChange: function(){
-                                  bind_tap_on_history_item()
-                                  element.init()
-                                  window.Echo.init()
-                              },
-                          },
-                      });
+					  if(window.swiper_watchlog == undefined){
+						  window.swiper_watchlog = new Swiper('.watchlog', {
+						      slidesPerView: 3,
+						      slidesPerGroup:3,
+						      centeredSlides: false,
+						      spaceBetween: 1,
+						      virtual: {
+						          slides: [],
+						      },
+						      on:{
+						          slideChange: function(){
+						              bind_tap_on_history_item()
+						              element.init()
+						              window.Echo.init()
+						          },
+						      },
+						  });
+					  }
+                      
                       window.swiper_watchlog.virtual.removeAllSlides()
                       window.swiper_watchlog.virtual.appendSlide(_list)
                       window.swiper_watchlog.virtual.update()
-
+					  
+					  
                       //初始化 进度条 绑定 点击事件
-                      window.bind_tap_on_history_item = function(){
-                          mui('.swiper-slide').on(click_event_type,'a',function(){
-                              detail_id = this.getAttribute('data')
-
-                              setWatchLogger(detail_id,function (msg) {
-								  if(window.plus != undefined){
-								  	detail_webview = plus.webview.getWebviewById('detail')
-								  	mui.fire(detail_webview,'checkLogin');
-								  }
-								  
-                                  mui.openWindow({
-                                      id:'detail' ,
-                                      url:'../detail.html?id=' + detail_id
-                                  });
-                              })
-                          })
-                      }
-
+					  if(window.bind_tap_on_history_item == undefined){
+						  
+						  window.bind_tap_on_history_item = function(){
+							  
+							  // 先解绑 再 bind 否则事件会触发多次
+						      // mui('.swiper-slide').on(click_event_type,'a',function(){
+						      $('.swiper-slide').find('a').unbind(click_event_type).bind(click_event_type,function(){
+						          detail_id = this.getAttribute('data')
+									
+						          setWatchLogger(detail_id,function (msg) {
+									 console.log('setWatchLogger: '+ detail_id)
+									 // app 中用 localStorage 传值
+									  if(window.plus != undefined){
+										  
+										localStorage.setItem('play_detail_id',detail_id)
+										
+										detail_webview = plus.webview.getWebviewById('detail')
+										if(detail_webview != null){
+											mui.fire(detail_webview,'checkLogin')
+											mui.fire(detail_webview,'startPlay');
+											mui.openWindow({
+											    id:'detail' ,
+											    url:'../detail.html',
+											});
+											
+										}else{
+											mui.openWindow({
+											    id:'detail' ,
+											    url:'../detail.html',
+											});
+										}
+										
+										
+									  }else{
+										  mui.openWindow({
+										      id:'detail' ,
+										      url:'../detail.html?id='+detail_id,
+										  });
+									  }
+									 
+						              
+									  
+						          })
+						      })
+						  
+						  }
+						  
+					  }
+                      
                       bind_tap_on_history_item()
                       element.init()
                       window.Echo.init()
@@ -299,6 +349,7 @@ layui.config({
           });
       }
   }
+  
   window.addEventListener('getWatchLoggerList',getWatchLoggerList)
 
 

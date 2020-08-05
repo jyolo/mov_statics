@@ -152,9 +152,10 @@
 		  click: function(type){
 		  }
 		});
-
+		
+		
         window.getWatchLoggerListByTimeLine = function(){
-
+			console.log('zzzz')
           page = layui.cache.page
           mui.ajax(conf.host + '/v1/getWatchLoggerListByTimeLine',{
             data:{page:page},
@@ -163,6 +164,7 @@
             timeout:10000,//超时时间设置为10秒；
             headers:{'Authorization':localStorage.authToken},
             beforeSend:function(){
+			  $('.layui-timeline').html()
               $('.layui-timeline').append('<li style="padding-bottom: 20px">' + loading_dom + '</li>')
             },
             success:function(msg){
@@ -184,19 +186,39 @@
 
         }
 
-
+		window.addEventListener('getWatchLoggerListByTimeLine',getWatchLoggerListByTimeLine)
 
         getWatchLoggerListByTimeLine()
 
         window.continue_play = function(obj){
 
           var detail_id = $(obj).attr('data')
-          setWatchLogger(detail_id ,function(msg){
-            mui.openWindow({
-              id:'detail' ,
-              url:'../detail.html?id=' + detail_id
-            });
-          })
+		  setTimeout(function(){
+			  if(window.plus != undefined){
+				  localStorage.setItem('play_detail_id',detail_id)
+				  
+				  setWatchLogger(detail_id ,function(msg){
+				    detail_webview = plus.webview.getWebviewById('detail')
+				    mui.fire(detail_webview,'checkLogin');
+				    mui.fire(detail_webview,'startPlay');
+				    mui.openWindow({
+				        id:'detail' ,
+				        url:'../detail.html',
+				    });
+				  })
+				  
+			  }else{
+				  setWatchLogger(detail_id ,function(msg){
+				    mui.openWindow({
+				      id:'detail' ,
+				      url:'../detail.html?id=' + detail_id
+				    });
+				  })
+			  }
+			  
+		  },200)
+          
+		  
         }
 
         $(window).scroll(

@@ -65,8 +65,8 @@ mui.plusReady(function () {
 			
 	        // console.log('对象' + JSON.stringify(prev_webview))
 	        // console.log('是否登陆：' + isLogin)
-	        // console.log('上一页id：' + prev_webview.id)
-	        // console.log('当前页id：' + curren_webview.id)
+	        console.log('上一页id：' + prev_webview.id)
+	        console.log('当前页id：' + curren_webview.id)
 			
 			// 上一页是 登陆页面 但是以及登陆 返回这 直接跳到首页
 	        if(prev_webview.id  == 'auth' && isLogin == true){
@@ -90,8 +90,25 @@ mui.plusReady(function () {
 	            });
 	            return false
 	        }
+			// 详情页返回 触发 个人中心里面的 两个事件
+			if(curren_webview.id == 'detail' && isLogin == true){
+				home_webview = plus.webview.getWebviewById('home')
+				mui.fire(home_webview,'getSearchHistory');
+				mui.fire(home_webview,'getWatchLoggerList');
+			}
 			
+			if(curren_webview.id == 'watch_history' && prev_webview.id == 'home'){
+				home_webview = plus.webview.getWebviewById('home')
+				mui.fire(home_webview,'getSearchHistory');
+				mui.fire(home_webview,'getWatchLoggerList');
+				
+			}
 			
+			if(curren_webview.id == 'detail' && prev_webview.id == 'watch_history' && isLogin == true){
+				watch_history_webview = plus.webview.getWebviewById('watch_history')
+				mui.fire(watch_history_webview,'getWatchLoggerListByTimeLine');
+				console.log('123123123123')
+			}
 			
 			// auth_page = plus.webview.getWebviewById('auth');
 			// mui.fire(auth_page,'checkLogin');
