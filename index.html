@@ -275,7 +275,8 @@
             $('.top_menu_content').slideUp()
             $('.top_menu_icon').fadeIn()
         })
-        mui('.top_menu_content').on(click_event_type,'.layui-card',function(){
+		
+        $('.top_menu_content').find('.layui-card').unbind(click_event_type).bind(click_event_type,function(){
             layer.msg('尽请期待！');
 			
         })
@@ -288,7 +289,8 @@
 
                 $('.user_login_status').find('.layui-btn').remove()
                 $('.user_login_status').append(html)
-                mui('.user_login_status').on(click_event_type,'.layui-btn',function(){
+				
+                $('.user_login_status').find('.layui-btn').unbind(click_event_type).bind(click_event_type,function(){
                    
                     switch ($(this).attr('lay-type')) {
                         case 'auth':
@@ -384,22 +386,20 @@
 					
                     }else{
 						
-
+						if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
+							$('html,body').animate({scrollTop: animate_scrollTop_height},100);
+						}else{
+							// 不能小于298 否则贴不到 顶上
+							if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop < animate_scrollTop_height){
+								layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop = animate_scrollTop_height
+							}
+							$('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
+							
+						}
                     }
 
                 },
                 slideChangeTransitionEnd:function(){
-                    if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop == undefined){
-                    	$('html,body').animate({scrollTop: animate_scrollTop_height},100);
-                    }else{
-                    	// 不能小于298 否则贴不到 顶上
-                    	if(layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop < animate_scrollTop_height){
-                    		layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop = animate_scrollTop_height
-                    	}
-                    	$('html,body').animate({scrollTop: layui.cache.getListDataFuncArgs[layui.cache.current_data_type].scrollTop},10);
-                    
-                    }
-					
                     this.update()
                 }
             }
@@ -468,15 +468,58 @@
 					window.Echo.init()
                     search_result_swpier.update()
 					
+					play_item_bind_click_event()
+				
 
                 },
 				error:function(xhr,type,errorThrown){
-					console.log(xhr)
+					console.log('--------getListData request error retrying--------')
+					window.getListData()
 				}
 			});
 		}
-
-
+		
+		
+		// 加载出来的数据 绑定点击/tap 事件
+		window.play_item_bind_click_event = function(){
+			console.log(play_item_bind_click_event)
+			$('#search_result_swpier').find('.vlist').unbind(click_event_type).bind(click_event_type,function(){
+				
+			    detail_id = this.getAttribute('data')
+			    // localStorage.removeItem('watch_log_info')
+			    setWatchLogger(detail_id ,function(msg){
+						
+			        if(window.plus != undefined){
+						
+						localStorage.setItem('play_detail_id',detail_id)
+						
+			            detail_webview = plus.webview.getWebviewById('detail')
+						
+			            mui.fire(detail_webview,'checkLogin');
+						mui.fire(detail_webview,'startPlay');
+						mui.openWindow({
+						    id:'detail' ,
+						    url:'detail.html',
+						});
+			        }else{
+						mui.openWindow({
+						    id:'detail' ,
+						    url:'detail.html?id=' + detail_id,
+						});
+					}
+				        
+					
+			    })
+				
+				return false
+			
+			})
+			
+		}
+		
+		
+		window.addEventListener('play_item_bind_click_event',play_item_bind_click_event)
+		
         // console.log(window.screen.height)
 
 		window.form_submit = function(formData){
@@ -519,68 +562,6 @@
 			}
 			
 
-			mui('#search_result_swpier').on(click_event_type,'.vlist',function(){
-				
-			    detail_id = this.getAttribute('data')
-			    // localStorage.removeItem('watch_log_info')
-			    setWatchLogger(detail_id ,function(msg){
-					
-					// if(window.plus != undefined){
-					// 	detail_webview = plus.webview.getWebviewById('detail')
-					// 	if(detail_webview != null){
-					// 		mui.fire(detail_webview,'checkLogin')
-					// 		mui.fire(detail_webview,'startPlay');
-					// 		console.log(1111111)
-					// 		mui.openWindow({
-					// 			id:'detail' ,
-					// 			url:'detail.html',
-					// 		});
-					// 	}else{
-					// 		mui.openWindow({
-					// 			id:'detail' ,
-					// 			url:'detail.html',
-					// 			extras:{
-					// 				frist_enter:1
-					// 			}
-					// 		});
-					// 	}
-															
-					// }else{
-					// 	  mui.openWindow({
-					// 		  id:'detail' ,
-					// 		  url:'detail.html?id=' + detail_id
-					// 	  });
-					// }
-														 
-					
-					
-			        if(window.plus != undefined){
-						
-						localStorage.setItem('play_detail_id',detail_id)
-						
-			            detail_webview = plus.webview.getWebviewById('detail')
-						
-			            mui.fire(detail_webview,'checkLogin');
-						mui.fire(detail_webview,'startPlay');
-						mui.openWindow({
-						    id:'detail' ,
-						    url:'detail.html',
-						});
-			        }else{
-						mui.openWindow({
-						    id:'detail' ,
-						    url:'detail.html?id=' + detail_id,
-						});
-					}
-			
-			        
-					
-			    })
-				
-				return false
-			
-			})
-			
 
 		
 		}

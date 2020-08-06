@@ -80,6 +80,16 @@
 </div>
 
 <div class="fly-main" style="overflow: hidden;">
+	<div class="layui-row tips">
+		<script type="text/html" id="login_tips">
+		    {{#  if(d.islogin != true){ }}
+		    <blockquote class="layui-elem-quote">登录后即可保存播放记录 <span class="to_login" style="float: right;padding-right: 1rem">登录 <i class="layui-icon layui-icon-right" style="line-height: 12px"></i>   </span></blockquote>
+		    {{# }else{ }}
+			
+			{{# } }}
+		</script>
+	</div>
+    
 
 	<div class="layui-row" >
 		<!-- <blockquote class="layui-elem-quote  swiper-pagination" style="position: unset;">引用区域的文字</blockquote> -->
@@ -230,6 +240,19 @@
 			    })
 			
 			});
+			
+			console.log('render_login_status222222222222222222222222222222222222222')
+			laytpl(login_tips.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
+				$('.tips').html()
+				$('.tips').append(html)
+				
+				$('.tips').find('.to_login').unbind(click_event_type).bind(click_event_type,function(){
+					mui.openWindow({
+					    id:'auth' ,
+					    url:'user/auth.html'
+					});
+				})
+			})
 			
 		}
 		render_login_status()
@@ -417,7 +440,7 @@
                     $(window.swiper_play_line.slides[pli]).find('.play-botton').eq(pii).addClass('layui-btn-disabled')
 
                     //切换线路播放 只更新 play_line_index 和 play_item_index
-                    mui('#playwrapper').on(click_event_type,'.play-botton',function(){
+                    $('#playwrapper').find('.play-botton').unbind(click_event_type).bind(click_event_type,function(){
                         if($(this).hasClass('layui-btn-disabled')) {
                             return
                         }else{
