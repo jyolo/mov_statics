@@ -369,15 +369,20 @@
 
 
                     // 有播放记录
-                    if(watch_log_info != undefined && watch_log_info.play_time > 0){
+                    if(
+                        watch_log_info != undefined &&
+                        watch_log_info.play_time > 0 &&
+                        (msg.data[watch_log_info.play_line_index]['play_m3u8'][watch_log_info.play_item_index] != undefined)
+                    ){
                         layer.msg('开始继续播放')
+
                         // 预加载播放记录中的线路 和 item
                         dp.switchVideo({
                             url: msg.data[watch_log_info.play_line_index]['play_m3u8'][watch_log_info.play_item_index]['value'],
                             type: 'customHls',
                             pic: 'http://images.shejidaren.com/wp-content/uploads/2018/03/134715wPw.jpg',
-
                         })
+
                         dp.seek(watch_log_info.play_time); //跳转到指定时间位置
 
                         pli = watch_log_info.play_line_index
