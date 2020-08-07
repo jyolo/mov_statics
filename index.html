@@ -34,11 +34,40 @@
   @media screen and (min-width: 960px){
       .layui-card-body{height: 22rem;}
       .layui-card-body img{width: 100%;height: 21rem;display: block;}
+      .main_content{padding-left: 20rem;padding-right: 20rem}
+      .fly-case-list li{width: 339px;margin: 0 15px 15px 0;padding: 10px;}
+      .top_menu_content .layui-card{margin-bottom: 0px;width: 100%}
+      .top_menu_content .auth{margin-left: 2.3%;padding:0px;width: 95%}
 
+      .top_menu_content {
+          background: #FFFFFF;
+          height: 100%;
+          position: absolute;
+          width: 96%;
+          height: auto;
+          Opacity: 0.9;
+          padding-top: 10px;
+          z-index: 1000;
+          left: 2%;
+      }
   }
   @media screen and (max-width: 768px){
       .layui-card-body img{width: 100%;height: 7.01rem;display: block;}
       .vlist img{width: 100%;height: 10.66rem;display: block;}
+      .main_content{padding-left: 0.5rem;padding-right: 0.5rem}
+      .top_menu_content .layui-card{margin-bottom: 0px;width: 100%}
+      .top_menu_content .auth{margin-left: 2.3%;padding:0px;width: 95%}
+
+      .top_menu_content{
+          background: #FFFFFF;
+          height: 100%;
+          position: absolute;
+          width: 96%;
+          height: auto;
+          Opacity:0.9;
+          padding-top: 10px;
+          z-index: 1000;
+      }
   }
 
   .layui-card-body a{display: block;}
@@ -52,18 +81,7 @@
        left: 0px;
    }
 
-   .top_menu_content{
-       background: #FFFFFF;
-       height: 100%;
-       position: absolute;
-       width: 96%;
-       height: auto;
-       Opacity:0.9;
-       padding-top: 10px;
-       z-index: 1000;
-   }
-    .top_menu_content .layui-card{margin-bottom: 0px;width: 100%}
-    .top_menu_content .auth{margin-left: 2.3%;padding:0px;width: 95%}
+
 
    ._background-image {
        position: fixed;
@@ -71,6 +89,9 @@
        width: 100%;
        height: 100%;
    }
+
+
+
   </style>
 </head>
 <body class="fly-full " style="overflow: hidden">
@@ -79,7 +100,7 @@
     <img src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@14788b1698e813193e7fbae1b3609e25fbc82ddb/static/images/bg_01.png" class="_background-image">
   </div>
 
-  <div class="layui-row " style="padding-left: 0.5rem;padding-right: 0.5rem" >
+  <div class="layui-row main_content" style="" >
 
       <div class="layui-row " id="top_menu" >
           <div class="layui-box top_menu_content hidden"  >

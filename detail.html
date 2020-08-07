@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/player/video-js.min.css">
 
   <style>
-
+  .tips {font-size: 12px; color: #9F9F9F}
   @media screen and (min-width: 960px){
       #playbox{width: 100%;height: 33rem;}
 
@@ -80,16 +80,22 @@
 </div>
 
 <div class="fly-main" style="overflow: hidden;">
-	<div class="layui-row tips">
-		<script type="text/html" id="login_tips">
-		    {{#  if(d.islogin != true){ }}
-		    <blockquote class="layui-elem-quote">登录后即可保存播放记录 <span class="to_login" style="float: right;padding-right: 1rem">登录 <i class="layui-icon layui-icon-right" style="line-height: 12px"></i>   </span></blockquote>
-		    {{# }else{ }}
-			
-			{{# } }}
-		</script>
-	</div>
-    
+    <div class="layui-row tips">
+        <script type="text/html" id="login_tips">
+            {{#  if(d.islogin != true){ }}
+            <blockquote class="layui-elem-quote">
+                友情提醒：
+                <p>1：登录后即可保存播放记录 </p>
+                <p>2：当前线路速度不佳的时候，不妨切换一下其它线路试试</p>
+            </blockquote>
+            {{# }else{ }}
+            <blockquote class="layui-elem-quote">
+                友情提醒：
+                <p>1：当前线路速度不佳的时候，不妨切换一下其它线路试试</p>
+            </blockquote>
+            {{# } }}
+        </script>
+    </div>
 
 	<div class="layui-row" >
 		<!-- <blockquote class="layui-elem-quote  swiper-pagination" style="position: unset;">引用区域的文字</blockquote> -->
@@ -190,7 +196,9 @@
 		
 		
 		window.render_login_status = function(){
-			laytpl(user_login_status.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
+            islogin = (localStorage.authToken != undefined)
+
+			laytpl(user_login_status.innerHTML).render({'islogin': islogin }, function(html){
 				$('.fly-nav-user').find('li').remove()
 			    $('.fly-nav-user').append(html)
 				
@@ -240,23 +248,17 @@
 			    })
 			
 			});
-			
-			console.log('render_login_status222222222222222222222222222222222222222')
-			laytpl(login_tips.innerHTML).render({'islogin': (localStorage.authToken != undefined) }, function(html){
+
+			laytpl(login_tips.innerHTML).render({'islogin': islogin }, function(html){
 				$('.tips').html()
 				$('.tips').append(html)
-				
-				$('.tips').find('.to_login').unbind(click_event_type).bind(click_event_type,function(){
-					mui.openWindow({
-					    id:'auth' ,
-					    url:'user/auth.html'
-					});
-				})
+
 			})
 			
 		}
 		render_login_status()
-        
+
+
         var headers = {};
         if(isLogin == true){
             var headers = {'Authorization':localStorage.authToken}
@@ -327,19 +329,10 @@
 
 		//延迟100ms 检查 window.plus
 		setTimeout(function(){
-			// if(window.plus != undefined){
-			// 	// curren_webview = plus.webview.currentWebview()
-			// 	// console.log('detail : ' + curren_webview.detail_id)
-			// 	startPlay()
-				
-			// }else{
-			// 	startPlay()
-			// }
 			startPlay()
-		},200)
+		},100)
 		
 
-		
 		var playitem_tpl = playitem.innerHTML
 		
         window.getDetail = function () {
@@ -547,7 +540,6 @@
 		
 		dp.on('loadstart',function(a,b){
 			console.log('loadstart----------s')
-            dp.play()
 			console.log('loadstart----------e')
 		})
 		
