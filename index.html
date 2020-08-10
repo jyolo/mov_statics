@@ -492,7 +492,8 @@
                     search_result_swpier.update()
 					
 					play_item_bind_click_event()
-				
+                    // 请求成功清零
+                    window.getListData_max_retry_start = 0
 
                 },
 				error:function(xhr,type,errorThrown){
@@ -510,7 +511,6 @@
 		
 		// 加载出来的数据 绑定点击/tap 事件
 		window.play_item_bind_click_event = function(){
-			console.log(play_item_bind_click_event)
 			$('#search_result_swpier').find('.vlist').unbind(click_event_type).bind(click_event_type,function(){
 				
 			    detail_id = this.getAttribute('data')
