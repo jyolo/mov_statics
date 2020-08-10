@@ -81,8 +81,6 @@
        left: 0px;
    }
 
-
-
    ._background-image {
        position: fixed;
        z-index: -1;
@@ -232,7 +230,8 @@
               <div class="layui-row" >
                   <div class="layui-tab layui-tab-brief" lay-filter="mov_category" id="mov_category">
                       <ul class="layui-tab-title hidden" >
-                          <li class="layui-this">电影</li>
+                          <li class="layui-this">全部</li>
+                          <li>电影</li>
                           <li>电视剧</li>
                           <li>综艺</li>
                           <li>动漫</li>
@@ -245,6 +244,7 @@
               <div class="layui-row">
                   <div id="search_result_swpier" class="swiper-container hidden" >
                       <div class="swiper-wrapper">
+                          <div class="swiper-slide" id="all"><ul class="fly-case-list"></ul></div>
                           <div class="swiper-slide" id="dy"><ul class="fly-case-list"></ul></div>
                           <div class="swiper-slide" id="dsj"><ul class="fly-case-list"></ul></div>
                           <div class="swiper-slide" id="zy"><ul class="fly-case-list"></ul></div>
