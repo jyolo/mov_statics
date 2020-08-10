@@ -441,7 +441,7 @@
 		});
 
 		
-		var getListData = function(){
+		window.getListData = function(){
 
             let params = layui.cache.form_data
             params.page = layui.cache.getListDataFuncArgs[layui.cache.current_data_type].page
@@ -467,7 +467,7 @@
 
 				},
 				success:function(msg){
-
+                    console.log(msg)
 					if(msg.data.list.length > 0){
 
 						layui.laytpl(list_tpl).render(msg.data.list, function(html){
