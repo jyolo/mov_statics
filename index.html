@@ -440,7 +440,9 @@
 		  }
 		});
 
-		
+
+        window.getListData_max_retry_times = 5;
+        window.getListData_max_retry_start = 0;
 		window.getListData = function(){
 
             let params = layui.cache.form_data
@@ -495,7 +497,12 @@
                 },
 				error:function(xhr,type,errorThrown){
 					console.log('--------getListData request error retrying--------')
-					window.getListData()
+					if(window.getListData_max_retry_start < window.getListData_max_retry_times){
+                        window.getListData()
+                        window.getListData_max_retry_start++
+                    }
+
+
 				}
 			});
 		}
