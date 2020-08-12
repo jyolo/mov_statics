@@ -572,20 +572,22 @@
 				layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
 				layui.cache.play_info['play_item_index'] = layui.cache.play_info.play_item_index + 1
 
+                // 登录才发送播放记录的请求
                 var headers = {}
                 if(isLogin == true){
                     var headers = {'Authorization':localStorage.authToken}
+                    mui.ajax(conf.host + '/v1/setWatchLog',{
+                        data:layui.cache.play_info,
+                        dataType:'json',//服务器返回json格式数据
+                        type:'post',//HTTP请求类型,
+                        timeout:10000,//超时时间设置为10秒；
+                        headers:headers,
+                        success:function(msg){
+                            // console.log(msg.msg)
+                        },
+                    });
                 }
-				mui.ajax(conf.host + '/v1/setWatchLog',{
-				    data:layui.cache.play_info,
-				    dataType:'json',//服务器返回json格式数据
-				    type:'post',//HTTP请求类型,
-				    timeout:10000,//超时时间设置为10秒；
-				    headers:headers,
-				    success:function(msg){
-				        // console.log(msg.msg)
-				    },
-				});
+
 				
 			}else{
 				layer.msg('播放结束',{'time':3000})
