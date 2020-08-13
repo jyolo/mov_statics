@@ -30,8 +30,7 @@ if(isLogin && window.location.href.indexOf('auth') > -1){
 
 
 // 用户没有登陆 进入 不是 登陆页面的 用户页面
-if(isLogin == false && (window.location.href.indexOf('user') > -1) && !(window.location.href.indexOf('user/auth') > -1)){
-	mui.alert('请先登陆')
+if(isLogin == false && (window.location.href.indexOf('user') > -1) && !(window.location.href.indexOf('user/auth') > -1) && !(window.location.href.indexOf('user/forget') > -1) ){
 	mui.openWindow({
 	    id:'auth' ,
 	    url:'../user/auth.html'
