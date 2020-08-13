@@ -8,10 +8,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>有影</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/layui/css/layui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/css/global.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/swiper/swiper.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/player/video-js.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/layui/css/layui.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/css/global.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/swiper/swiper.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/player/video-js.min.css">
 
   <style>
   .tips {font-size: 12px; color: #9F9F9F}
@@ -128,12 +128,12 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/mui/mui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/js/global.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/layui/layui.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/swiper/swiper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/player/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/player/DPlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/mui/mui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/layui/layui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/swiper/swiper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/player/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/player/DPlayer.min.js"></script>
 <script>
 	mui.plusReady(function () {
 		  mui.init()
@@ -171,11 +171,8 @@
 	
 	layui.config({
 	  version: "3.0.0"
-	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/mods/' //这里实际使用时，建议改成绝对路径
-	}).extend({
-	  fly: 'index'
+	  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/mods/' //这里实际使用时，建议改成绝对路径
 	}).use(['element','laytpl','custom','layer','jquery','util'],function(){
-		
 		
 		var $ = layui.jquery
 		var laytpl = layui.laytpl
