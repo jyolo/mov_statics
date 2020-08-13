@@ -50,7 +50,9 @@
 </div>
 <div class="fly-home fly-panel " >
   <i class="layui-icon layui-icon-username" style="font-size: 25px; color: #009688;line-height: 61px"></i>
-  <p style="padding: 10px 0; color: #5FB878;">用户：159*****653</p>
+  <p style="padding: 10px 0; color: #5FB878;" id="user_info"></p>
+
+
 </div>
 
 <div class="layui-container">
@@ -122,13 +124,13 @@
 
 
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/mui/mui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/js/global.js"></script>
+<script src="../static/js/global.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/layui/layui.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/swiper/swiper.min.js"></script>
 <script>
 layui.config({
   version: "3.0.0"
-  ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@d68c94e3a77ab06e4bb6e96c14cdbdeb170adff5/static/mods/'
+  ,base: '../static/mods/'
 }).extend({
   fly: 'index'
 }).use(['element','custom','laytpl','jquery'],function(){
@@ -165,7 +167,31 @@ layui.config({
 	}
 	
 	window.searchTpl = searchTpl.innerHTML
-	
+
+  window.getUserInfo = function(){
+    mui.ajax(conf.host + '/v1/getUserInfo',{
+      dataType:'json',//服务器返回json格式数据
+      type:'post',//HTTP请求类型
+      timeout:10000,//超时时间设置为10秒；
+      headers:{'Authorization':localStorage.authToken},
+      beforeSend:function(){
+        $('#user_info').append(loading_dom)
+      },
+      success:function(msg){
+        if(msg.code == 1){
+          $('#user_info').html('用户：' + msg.data['mobile'])
+          getWatchLoggerList()
+          getSearchHistory()
+        }
+      },
+      error:function(xhr,type,errorThrown){
+        custom.ajaxErrorHandler(xhr)
+      }
+
+    })
+  }();
+
+
   //获取搜索历史
   window.getSearchHistory = function(){
 	  
@@ -353,8 +379,7 @@ layui.config({
   window.addEventListener('getWatchLoggerList',getWatchLoggerList)
 
 
-  getWatchLoggerList()
-  getSearchHistory()
+
 
   $('.more').on(click_event_type,function(){
     switch ($(this).attr('lay-type')) {
@@ -374,23 +399,47 @@ layui.config({
   })
 
   $('.logout').on(click_event_type,function () {
-    localStorage.removeItem('authToken');
-    if(window.plus != undefined){
-      alert('退出成功')
-	  HBuilder_webview = plus.webview.getWebviewById('HBuilder')
-	  mui.fire(HBuilder_webview,'refresh_login_status');
-      mui.openWindow({
-        id:'HBuilder' ,
-        url:'../index.html'
-      });
-    }else{
-      layer.alert('确定退出？',function () {
-        mui.openWindow({
-          id:'HBuilder' ,
-          url:'../index.html'
-        });
+
+    layer.alert('确定退出？',function () {
+
+      mui.ajax(conf.host + '/v1/auth/loginout',{
+        dataType:'json',//服务器返回json格式数据
+        type:'post',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        headers:{'Authorization':localStorage.authToken},
+        beforeSend:function(){
+          // $('#user_info').append(loading_dom)
+        },
+        success:function(msg){
+          if(msg.code == 1){
+            localStorage.removeItem('authToken');
+            layer.alert('退出成功',{closeBtn:0},function(){
+              if(window.plus != undefined){
+                HBuilder_webview = plus.webview.getWebviewById('HBuilder')
+                mui.fire(HBuilder_webview,'refresh_login_status');
+                mui.openWindow({
+                  id:'HBuilder' ,
+                  url:'../index.html'
+                });
+              }else{
+                mui.openWindow({
+                  id:'HBuilder' ,
+                  url:'../index.html'
+                });
+              }
+            })
+
+          }
+        },
+        error:function(xhr,type,errorThrown){
+          custom.ajaxErrorHandler(xhr)
+        }
+
       })
-    }
+
+    })
+
+
 
   })
 	

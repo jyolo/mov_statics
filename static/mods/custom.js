@@ -97,20 +97,20 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 			});
 			break;
 			case 401:
-				// layer.open({
-				//   title: '友情提醒',
-				//   btn:[],
-				//   closeBtn:1,
-				//   content: '登录凭证已过期！请重新登录',
-				//   cancel: function(index, layero){
-				// 	  delete localStorage.authToken
-				// 		mui.openWindow({
-				// 		   id:'auth' ,
-				// 		   url:'./user/auth.html'
-				// 		  });
-				//     return false;
-				//   }
-				// });
+				layer.open({
+				  title: '友情提醒',
+				  btn:[],
+				  closeBtn:1,
+				  content: '登录凭证已过期！请重新登录',
+				  cancel: function(index, layero){
+					  delete localStorage.authToken
+						mui.openWindow({
+						   id:'auth' ,
+						   url:'../user/auth.html'
+						  });
+				    return false;
+				  }
+				});
 			default:
 				console.log(xhr)
 			
