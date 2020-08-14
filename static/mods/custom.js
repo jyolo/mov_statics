@@ -1,11 +1,11 @@
 
 layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	href = window.location.href.split('?') 
-	var flow = layui.flow
+
 	var custom = {}
 	device = layui.device()
 	var $ = layui.jquery
-	var laytpl = layui.laytpl
+
 
 	
 	let params = {},arg = []
@@ -21,66 +21,13 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 		params = false
 	}
 	
-	window.loginOut = function(){
-		mui.ajax(conf.host + '/v1/auth/loginOut',{
-			dataType:'json',//服务器返回json格式数据
-			type:'post',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			headers:{'Authorization':localStorage.authToken},
-			success:function(msg){
-				
-				if(msg.code == 1){
-					localStorage.removeItem('authToken')
-					mui.openWindow({
-					    id:'auth' ,
-					    url:'./user/auth.html' 
-					  });
-					// window.location.reload()
-				}
-			},
-			error:function(xhr,type,errorThrown){
-				console.log(xhr)
-				
-			}
-		});
-	}
-	
+
 	custom.params = params
-	custom.flow = function flowload(ListTpl,requestUrl ,paramField = {} ){
-			flow.load({
-				elem: '#vlistView' ,//指定列表容器
-				isLazyimg:false, // 图片懒加载
-				mb:200,
-				done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
-				  var lis = [];
-				  console.log('to the end')
-				  p = $.extend(paramField ,{'page':page})
-				  mui.ajax(conf.host + requestUrl,{
-					data:p,
-					dataType:'json',//服务器返回json格式数据
-					type:'get',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
-					headers:{'Authorization':localStorage.authToken},
-					success:function(msg){
-						
-						layui.laytpl(ListTpl).render(msg.data.list, function(html){
-							next(html, page < msg.data.max_page	);    
-						});
-					},
-					error:function(xhr,type,errorThrown){
-						console.log(xhr)
-						
-					}
-				  });
-				 
-				}
-			});
-			
-		}
-	
-	
+
+
+
 	custom.ajaxErrorHandler = function(xhr){
-		console.log(xhr)
+
 		switch(xhr.status){
 			case 0:
 			layer.open({
@@ -118,24 +65,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 		}
 	}
 
-	var markWrongLine = function () {
-		var headers = {}
-		if(isLogin == true){
-			var headers = {'Authorization':localStorage.authToken}
-		}
-		// 发送后台播放错误的线路
-		mui.ajax(conf.host + '/v1/markWrongLine',{
-			data:{'detail_id':custom.params.id,'play_line_index':layui.cache.play_info.play_line_index},
-			dataType:'json',//服务器返回json格式数据
-			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			headers:headers,
-			success:function(msg){
-				console.log(msg)
-			},
-		});
-	}
-	
+
 	var retry_max_times = 3 
 	var retry_times = 0 
 	custom.hlsNetWrokerErrorHandler = function(msg){
@@ -212,17 +142,7 @@ layui.define(['flow','jquery','laytpl','layer'] ,function(exports){
 	}
 	
 	
-	mui('.user_info').on('tap','.fly-nav-avatar',function(){
-		if ($(this).next().hasClass('layui-show')){
-			$(this).next().removeClass('layui-anim layui-anim-upbit layui-show')
-		}else{
-			$(this).next().addClass('layui-anim layui-anim-upbit layui-show')
-		}
-	})
-	
-	mui('.user_info').on('tap','.loginOut',function(){
-		loginOut()
-	})
+
 	
 	
 	// $('html').on('tap',function(){
