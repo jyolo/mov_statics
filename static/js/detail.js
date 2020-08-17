@@ -480,6 +480,7 @@ layui.config({
     dp.on('loadstart',function(a,b){
         layer.msg('开始加载视频.....');
         console.log('loadstart----------s')
+        dp.play()
         console.log('loadstart----------e')
     })
 
