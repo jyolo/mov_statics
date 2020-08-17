@@ -1,7 +1,7 @@
 
 layui.config({
     version: "3.0.0"
-    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/mods/' //这里实际使用时，建议改成绝对路径
+    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/mods/' //这里实际使用时，建议改成绝对路径
 }).use(['element','jquery','util','laytpl'],function(){
 
     var $ = layui.jquery
@@ -18,6 +18,7 @@ layui.config({
             $(this).fadeOut()
         }
     })
+
     $('.slide_up').on(click_event_type,function () {
         $('.top_menu_content').slideUp()
         $('.top_menu_icon').fadeIn()

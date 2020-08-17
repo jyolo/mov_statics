@@ -1,6 +1,6 @@
 layui.config({
     version: "3.0.0"
-    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/mods/'
+    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/mods/'
 }).use(['custom','form','jquery','layer'],function(){
     var form = layui.form
     var $ = layui.jquery

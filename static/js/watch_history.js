@@ -1,6 +1,6 @@
 layui.config({
     version: "3.0.0"
-    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics@f3a7fd33aec1021822e5a0d4c83cabcd112eb8bb/static/mods/' //这里实际使用时，建议改成绝对路径
+    ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics/static/mods/' //这里实际使用时，建议改成绝对路径
 }).use(['element','jquery','laytpl','util'],function(){
 
     var $ = layui.jquery
