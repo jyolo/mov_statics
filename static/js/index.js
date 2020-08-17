@@ -196,7 +196,7 @@ layui.config({
 
             },
             success:function(msg){
-                console.log(msg)
+
                 if(msg.data.list.length > 0){
 
                     layui.laytpl(list_tpl).render(msg.data.list, function(html){
@@ -255,7 +255,7 @@ layui.config({
                 });
                 return false
             }else{
-                console.log('1111111111')
+
                 return true
             }
 
