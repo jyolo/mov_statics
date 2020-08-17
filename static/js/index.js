@@ -210,7 +210,7 @@ layui.config({
                     layui.cache.getListDataFuncArgs[layui.cache.current_data_type].toend = false
 
                     $('#' + layui.cache.current_data_type).find('.layui-flow-more').remove()
-                    $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more" style="margin-top: 10rem"><i class="layui-icon layui-icon-left" style=""></i>  暂无数据,左右滑动切换其它板块试试  <i class="layui-icon layui-icon-right" style=""></i>  </div>')
+                    $('#' + layui.cache.current_data_type).append('<div class="layui-flow-more" style="margin-top: 1.5rem"><i class="layui-icon layui-icon-left" style=""></i>  暂无数据,左右滑动切换其它板块试试  <i class="layui-icon layui-icon-right" style=""></i>  </div>')
                 }
 
 
