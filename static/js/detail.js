@@ -341,7 +341,6 @@ layui.config({
                     pii = watch_log_info.play_item_index
                 }else{
                     // 预加载第一个
-                    console.log('预加载第一个')
                     dp.switchVideo({
                         url: msg.data[0]['play_m3u8'][0]['value'],
                         type: 'customHls',
