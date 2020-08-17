@@ -1,11 +1,10 @@
 layui.config({
     version: "3.0.0"
     ,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics//static/mods/'
-}).use(['element','custom','laytpl','jquery'],function(){
+}).use(['element','laytpl','jquery'],function(){
     var $ = layui.jquery
     var element = layui.element
     var laytpl = layui.laytpl
-    var custom = layui.custom
 
     mui.plusReady(function () {
         mui.init({
@@ -53,7 +52,7 @@ layui.config({
                 }
             },
             error:function(xhr,type,errorThrown){
-                custom.ajaxErrorHandler(xhr)
+                ajaxErrorHandler(xhr)
             }
 
         })
@@ -100,7 +99,7 @@ layui.config({
                     })
                 },
                 error:function(xhr,type,errorThrown){
-                    custom.ajaxErrorHandler(xhr)
+                    ajaxErrorHandler(xhr)
                 }
             });
         }
@@ -229,7 +228,7 @@ layui.config({
 
                 },
                 error:function(xhr,type,errorThrown){
-                    custom.ajaxErrorHandler(xhr)
+                    ajaxErrorHandler(xhr)
                 }
             });
         }
@@ -291,7 +290,7 @@ layui.config({
                     }
                 },
                 error:function(xhr,type,errorThrown){
-                    custom.ajaxErrorHandler(xhr)
+                    ajaxErrorHandler(xhr)
                 }
 
             })

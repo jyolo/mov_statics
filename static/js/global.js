@@ -15,6 +15,11 @@ var loading_dom = '<div class="layui-flow-more"><a href="javascript:;"><i class=
 var isApp = false
 
 
+layui.config({
+	version: "3.0.0"
+	,base: 'https://cdn.jsdelivr.net/gh/jyolo/mov_statics//static/mods/'
+}).use(['layer'],function(){})
+
 if(localStorage.authToken != undefined){
     window.isLogin = true
 }else{
