@@ -383,13 +383,26 @@ layui.config({
 
                     playurl = this.getAttribute('data')
 
-                    layui.cache.play_info['play_detail_id'] = detail_id
-                    layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
-
                     dp.switchVideo({
                         url: playurl,
                         type: 'customHls',
                     })
+
+                    layui.cache.play_info['play_detail_id'] = detail_id
+                    //切换了线路
+                    if(window.swiper_play_line.activeIndex != layui.cache.play_info['play_line_index'])
+                    {
+                        layui.cache.play_info['play_line_index'] = window.swiper_play_line.activeIndex
+                    }
+                    else
+                    {
+                        // 同线路 比如下一集 从头开始
+                        dp.seek(0.00)
+                    }
+
+
+
+
                     // 捕获hls 错误
                     // hls error info https://github.com/video-dev/hls.js/blob/master/docs/API.md#Errors
                     hls.on(Hls.Events.ERROR,function(event,data){
