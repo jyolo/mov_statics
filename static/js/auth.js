@@ -140,6 +140,7 @@ layui.config({
             timeout:10000,//超时时间设置为10秒；
             beforeSend:function(){loading = layer.load()},
             success:function(msg){
+                console.log(msg)
                 if(msg.data.login == 'ok'){
                     localStorage.authToken = msg.data.Authorization
                     if(window.plus != undefined){
@@ -165,6 +166,7 @@ layui.config({
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 layer.msg('系统繁忙！请稍后再试')
+
                 layer.close(loading)
             }
         });
